@@ -1,0 +1,125 @@
+---
+title: "IRT for beginners"
+institute: "Univerisity of Padova (IT)"
+output: 
+  beamer_presentation: 
+    theme: metropolis
+    highlight: haddock
+    toc: yes
+    slide_level: 3
+header-includes:
+    - \usepackage{graphicx} 
+    - \usepackage{setspace}
+    - \usepackage{tabularx}
+    - \usepackage[english]{babel}
+    - \usepackage{tikzsymbols}
+    - \usepackage{subcaption}
+    - \usepackage{tikz}
+    - \usepackage{spot}
+    - \usepackage{tabularx}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{booktabs}
+    - \setbeamertemplate{navigation symbols}{}
+    - \newcommand\Factor{1.2}
+    - \setbeamerfont{subtitle}{size=\large, series=\bfseries}
+    - \useinnertheme{circles}
+    - \useoutertheme{smoothbars}
+    - \definecolor{template}{RGB}{54, 114, 89}
+    - \definecolor{background}{RGB}{251, 251, 251}
+    - \setbeamercolor{frametitle}{bg=background}
+    - \setbeamertemplate{frametitle}[default][center]
+    - \AtBeginSection{\frame{\tableofcontents[currentsection,currentsubsection]}}
+    - \AtBeginSubsection{\frame{\tableofcontents[currentsection,currentsubsection]}}
+    - \setbeamercolor{section name}{fg=white}
+    - \setbeamersize{text margin left=5mm,text margin right=5mm} 
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center")
+```
+
+# Get started
+
+
+## Pacchetti
+
+
+::: columns 
+
+:::: column
+
+\begin{center}
+Installazione:
+
+\end{center}
+
+\vspace{5mm}
+
+\small
+
+```{r, eval = F}
+install.packages("lavaan")
+
+install.packages("TAM")
+
+install.packages("mokken")
+
+install.packages("difR")
+
+
+```
+
+::::
+
+
+:::: column
+
+\begin{center}
+Caricamento nell'ambiente:
+\end{center}
+
+\vspace{5mm}
+\small
+
+```{r, eval = F}
+library("lavaan")
+
+library("TAM")
+
+library("mokken")
+
+library("difR")
+
+
+```
+
+
+
+::::
+
+:::
+
+# Slide with Bullets
+
+##
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
