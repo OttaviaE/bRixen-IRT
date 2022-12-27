@@ -1,0 +1,781 @@
+---
+title: "Dalla parte degli item"
+subtitle: "Georg Rasch e i modelli dell'Item Response Theory"
+author: "Ottavia M. Epifania"
+date: ''
+output: ioslides_presentation
+runtime: shiny
+---
+<style type="text/css">
+
+<!-- body, td { -->
+<!--    font-size: 14px; -->
+<!-- } -->
+code.r{
+  font-size: 14px;
+}
+pre {
+  font-size: 12.5px
+}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff=80), tidy= TRUE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = NA, 
+  echo = FALSE, 
+  warning = FALSE
+)
+library(ggplot2)
+library(sjPlot)
+library(corrplot)
+library(nnet)
+library(formatR)
+library(kableExtra)
+library(shiny)
+```
+
+Il codice usato per la presentazione è disponibile sulla mia pagina [GitHub](https://github.com/OttaviaE/irt).
+
+## Prova
+
+```{r}
+shiny::shinyApp(
+  ui <- fluidPage(
+tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: royalblue}")),
+  tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: magenta}")),
+  tags$style(HTML(".js-irs-2 .irs-single, .js-irs-2 .irs-bar-edge, .js-irs-2 .irs-bar {background: seagreen}")),
+tags$style(HTML(".js-irs-3 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-3 .irs-bar {background: royalblue}")),
+  tags$style(HTML(".js-irs-4 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-4 .irs-bar {background: magenta}")),
+  tags$style(HTML(".js-irs-5 .irs-single, .js-irs-5 .irs-bar-edge, .js-irs-5 .irs-bar {background: seagreen}")),
+  # Sidebar layout with input and output definitions ----
+  verticalLayout(
+      # App title ----
+    # Sidebar to demonstrate various slider options ----
+    wellPanel(
+      # Input: Decimal interval with step value ----
+      fluidRow(
+        column(4, div(style="height: 20px;", 
+                      sliderInput("b1", "b1",
+                  min = -3, max = 3,
+                  value = 0, step = 0.1))),
+              column(4,   sliderInput("b2", "b2",
+                  min = -3, max = 3,
+                  value = 0, step = 0.1)),
+        column(4,   sliderInput("b3", "b3",
+                  min = -3, max = 3,
+                  value = 0, step = 0.1))), 
+      fluidRow( 
+        column(4,    sliderInput("a1", "a1",
+                  min = 0.20, max = 3,
+                  value = 1, step = 0.1)), 
+                column(4,  sliderInput("a2", "a2",
+                  min = 0, max = 3,
+                  value = 0.70, step = 0.1)), 
+        column(4,    sliderInput("a3", "a3",
+                  min = 0, max = 3,
+                  value = 1.90, step = 0.1)))
+    ),
+fluidRow(
+  column(6,
+         div(style = "height=20px", 
+             plotOutput("plot", height = "250px"))), 
+  column(6, 
+         div(style = "height=20px", 
+             plotOutput("tif", height = "250px")))
+)
+  )
+),
+server <- function(input, output) {
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+i_info <- function(b, a=1,c=0, theta = seq(-5,5,length.out=1000)){
+ 
+P <- NULL 
+Q <- NULL
+Ii <- NULL
+for(i in 1:1000){
+  P[i] <- 1/(1+ exp (-a*(theta[i] - b)))
+  Q[i]= 1-P[i]
+  Ii[i] =(a*Q[i]*(P[i]-c)^2)/(P[i]*((1-c)^2)) # (3PL)
+   }
+return(Ii)
+}
+# Function to get all item information
+item_info <- function(b,a=1){
+item <- NULL
+  for(i in 1:length(b)){
+  item[[i]] <- i_info(b[i],a[i])
+  }
+return(item)
+}
+ output$plot <- renderPlot({
+   theta <- theta <- seq(-7, 7, .001)
+  par(mar = c(5,7,4,2) + 0.1)
+  b = c(input$b1, input$b2, input$b3)
+  a = c(input$a1, input$a2, input$a3)
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta,
+                    item_info = c[[1]],
+                    item_info2 = c[[2]],
+                    item_info3 = c[[3]])
+d1 <- do.call('cbind',c)
+sum_info2 <- rowSums(d1)
+plot(check$Theta, check$item_info, cex.lab= 2, main = "IIF",
+      cex.axis =1.5,
+        xlab = expression(theta), ylab = expression(paste("I(", theta, ")")),
+ type = "l", lwd =2,
+      col = "royalblue", ylim = c(0,1))
+ lines(check$Theta, check$item_info2, lwd =2,
+       col = "magenta", lty = 4)
+ lines(check$Theta, check$item_info3, lwd =2,
+       col = "seagreen", lty = 2)
+  })
+ 
+ output$tif <- renderPlot({
+   theta <- theta <- seq(-7, 7, .001)
+  par(mar = c(5,7,4,2) + 0.1)
+  b = c(input$b1, input$b2, input$b3)
+  a = c(input$a1, input$a2, input$a3)
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta,
+                    item_info = c[[1]],
+                    item_info2 = c[[2]],
+                    item_info3 = c[[3]])
+d <- do.call('cbind',c)
+sum_info1 <- rowSums(d)
+d1 <- do.call('cbind',c)
+sum_info2 <- rowSums(d1)
+   
+   Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, sum_info1, sum_info2)
+plot(check$Theta, check$sum_info2,
+       type = "l", lwd =2,
+     col = "red",
+       xlab = expression(theta), 
+     ylab = expression(paste("I(", theta, ")")), cex.lab= 2, 
+     cex.axis=1.5, main = "TIF")
+ })
+},      
+options = list(height = 400)    
+)
+```
+
+# Georg Rasch 
+
+## Dalla base {.build}
+
+a) $1 + 2$
+
+b) $\frac{2}{3} + \frac{3}{5}$
+
+c) $2x^2 + 3x + 4 = 0$
+
+$\frac{A_{soggetto}}{D_{item}}$: 
+
+- $A_{soggetto} > D_{item} \rightarrow > 1$
+
+- $A_{soggetto} < D_{item} \rightarrow < 1$
+
+## Qualche trasformazione dopo... {.build}
+
+$$P(x_{si} = 1|\theta_s, b_i) = \frac{exp(\theta_s - b_i)}{1 + exp(\theta_s - b_i)}$$
+
+<div style="position: float; top:40%;  left:35%;">
+<h3> Generalized Linear Model </h3>
+
+</div>
+
+
+<div style="position: float; top:50%;  left:25%;">
+
+$logit = \ln\left(\frac{P(x=1)}{1- P(x=1)}\right)$
+
+</div>
+
+<div style="position: float; top:50%;  left:50%;">
+
+$P(x=1) = \frac{\exp(\eta)}{1 + exp(\eta)}$
+
+</div>
+
+<div style="position: float; top:60%;  left:35%;">
+<h4> where </h4>
+
+$\eta = \alpha + \beta X$
+
+</div>
+
+## $\theta_s$, $b_i$ e il tratto latente
+
+```{r eval=TRUE, fig.align='center'}
+par(mar = c(5,7,4,2) + 0.1) 
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+difficulty <- c(-3,0, 3)
+theta <- theta <- seq(-7, 7, .001)
+# item a
+plot(theta, IRT(theta, b=difficulty[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+abline(v = difficulty[1], lty = 2, col = "royalblue")
+text(x = difficulty[1] -1.5, y =0.3, "item a", 
+     col = "royalblue", cex = 2)
+#item B
+lines(theta, IRT(theta, b = difficulty[2]), lty = 4, lwd=3, col = "magenta")
+abline(v = difficulty[2], lty = 2, col = "magenta")
+text(x = difficulty[2] -1.5, y =0.3, "item b", 
+     col = "magenta",  cex = 2)
+# item C
+  lines(theta, IRT(theta, b = difficulty[3]), lty = 2, lwd=3, col = "seagreen")
+  
+ abline(v = difficulty[3], lty = 2, col = "seagreen")
+text(x = difficulty[3] -1.5, y =0.3, "item c", 
+     col = "seagreen", cex = 2)
+  
+```
+
+
+
+<!-- ## Le statistiche sufficienti  -->
+
+<!-- ```{r} -->
+<!-- data <- data.frame(item_a = rbinom(5, 1, .70),  -->
+<!--                    item_b = rbinom(5, 1, .50),  -->
+<!--                    item_c = rbinom(5, 1, .40)) -->
+<!-- rownames(data) <- paste0("sogg", 1:nrow(data)) -->
+<!-- data$r_s <- rowSums(data) -->
+
+<!-- data <- rbind(data, colSums(data)) -->
+<!-- rownames(data)[6] <- "r_i" -->
+
+<!-- data[6, 4] <- "" -->
+
+<!-- column_spec(kable_paper(kable(data),   -->
+<!--               full_width = FALSE),  -->
+<!--             5,  color = "blue") -->
+
+
+<!-- ``` -->
+
+
+
+## Rasch in pillole
+
+- I marginali di riga (colonna) sono statistiche sufficienti
+
+- Sono i dati che si adattano al modello 
+
+- La triade: 
+1. Indipendenze locale
+
+2. Oggettività specifica
+
+3. Invarianza di misurazione
+
+
+# Item Response Theory
+
+## Così simili e così diversi
+
+- I parametri degli item 
+
+- Il modello si adatta ai dati 
+
+- I marginali di riga (colonna) non sono più statistiche sufficienti
+
+## 1Pl
+
+- Confuso con il modello di Rasch 
+
+- Il parametro $a$ che c'è e non c'è (dipende a chi chiedi)
+
+- 1 parametro e mezzo 
+
+<!-- <div style="float: left; width: 48%;"> -->
+<h3 style="text-align: center;"> e.g. De Mars (2010)</h3>
+
+$P(x = 1|\theta, b,a) = \frac{exp[a(\theta_s - b_i)]}{1 +exp[a(\theta_s - b_i)]}$
+
+<!-- </div> -->
+
+<!-- <div style="float: right; width: 48%;"> -->
+<h3 style="text-align: center;"> Da altre parti </h3>
+
+
+$P(x = 1|\theta, b) = \frac{exp(\theta_s - b_i)}{1 +exp(\theta_s - b_i)}$
+
+<!-- </div> -->
+
+## 2PL (cambia la pendenza)
+
+$a$ (*discrimination*): 
+
+$$P(x=1|\theta, b,a) = \frac{exp [a_i(\theta_p - b_i)]}{1 + exp [a_i(\theta_p - b_i)]}$$
+
+
+```{r, out.width="70%", fig.align='center'}
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+difficulty <- c(0,0, 0)
+disc <- c(0.20, .70, 1.90)
+theta <- theta <- seq(-7, 7, .001)
+par(mar = c(5,7,4,2) + 0.1) 
+# item a
+plot(theta, IRT(theta, b=difficulty[1], a = disc[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+abline(v = -2, lty = 2)
+abline(v = 2, lty = 2)
+text(x = difficulty[2] -1.5, y =0.3, "item a", 
+     col = "royalblue",  cex = 2)
+#item B
+lines(theta, IRT(theta, b = difficulty[2], a =disc[2]), lty = 4, lwd=3, col = "magenta")
+text(x = difficulty[2]-1 , y =0.5, "item b", 
+     col = "magenta",  cex = 2)
+# item C
+  lines(theta, IRT(theta, b = difficulty[3], a = disc[3]), lty = 2, lwd=3, col = "seagreen")
+  text(x = difficulty[2]+1 , y =0.7, "item c", 
+     col = "seagreen",  cex = 2)
+  
+```
+
+## Spostando gli asintoti 
+### 3PL (alza in basso)
+
+$c$ (*lucky guess*): 
+
+$P(x = 1|\theta, b,a, c) = c_i+ (1 - c_i) + \frac{exp[a(\theta_s - b_i)]}{1 +exp[a(\theta_s - b_i)]}$
+
+```{r, out.width="70%", fig.align='center'}
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+difficulty <- 0
+guessing <- c(0.10, 0.25, 0.50)
+theta <- theta <- seq(-7, 7, .001)
+par(mar = c(5,7,4,2) + 0.1) 
+# item a
+plot(theta, IRT(theta, b=difficulty, c = guessing[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+text(x = difficulty -1.5, y =0.3, "item a", 
+     col = "royalblue",  cex = 2)
+#item B
+lines(theta, IRT(theta, b = difficulty, c =guessing[2]), lty = 4, lwd=3, col = "magenta")
+text(x = difficulty -1, y =0.5, "item b", 
+     col = "magenta",  cex = 2)
+# item C
+  lines(theta, IRT(theta, b = difficulty, c =guessing[3]), lty = 2, lwd=3, col = "seagreen")
+  text(x = difficulty , y =0.7, "item c", 
+     col = "seagreen",  cex = 2)
+```
+
+## Spostando gli asintoti
+### 4PL (abbassa in alto)
+
+$e$ (*careless error*): 
+
+$P(x = 1|\theta, b,a, c, e) = c_i+ (e_i - c_i) + \frac{exp[a(\theta_s - b_i)]}{1 +exp[a(\theta_s - b_i)]}$
+
+```{r, echo = FALSE, out.width="70%", fig.align='center'}
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+par(mar = c(5,7,4,2) + 0.1) 
+difficulty <- 0
+guessing <-0
+theta <- theta <- seq(-7, 7, .001)
+careless <- c(0.98, 0.90, 0.80)
+# item a
+plot(theta, IRT(theta, b=difficulty, e = careless[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+#item B
+lines(theta, IRT(theta, b = difficulty, e = careless[2]), lty = 4, lwd=3, col = "magenta")
+# item C
+  lines(theta, IRT(theta, b = difficulty, e = careless[3]), lty = 2, lwd=3, col = "seagreen")
+  
+  text(x = difficulty -1.5, y =0.3, "item a", 
+     col = "royalblue",  cex = 2)
+text(x = difficulty + 1, y =0.5, "item b", 
+     col = "magenta",  cex = 2)
+  text(x = difficulty + 2 , y =0.7, "item c", 
+     col = "seagreen",  cex = 2)
+  
+```
+
+<!-- ## Tutti quanti -->
+
+<!-- ```{r} -->
+<!-- shiny::shinyApp( -->
+<!--   ui <- fluidPage( -->
+
+
+
+<!--   # Sidebar layout with input and output definitions ---- -->
+<!--   verticalLayout( -->
+<!--       # App title ---- -->
+
+<!--     # Sidebar to demonstrate various slider options ---- -->
+<!--     wellPanel( -->
+
+
+<!--       # Input: Decimal interval with step value ---- -->
+<!--       fluidRow( -->
+<!--         column(6, div(style="height: 20px;",  -->
+<!--                       sliderInput("b", "Difficulty:", -->
+<!--                   min = -5, max = 5, -->
+<!--                   value = 0, step = 0.1))), -->
+<!--               column(6,   sliderInput("lucky", "Lucky guess:", -->
+<!--                   min = 0, max = 0.5, -->
+<!--                   value = 0, step = 0.01))),  -->
+<!--       fluidRow(  -->
+<!--         column(6,    sliderInput("a", "Discrimination:", -->
+<!--                   min = 0, max = 5, -->
+<!--                   value = 1, step = 0.1)),  -->
+<!--                 column(6,  sliderInput("care", "Careless error:", -->
+<!--                   min = 0.5, max = 1, -->
+<!--                   value = 1, step = 0.01))) -->
+
+
+
+<!--     ), -->
+
+
+<!--       plotOutput("plot", height = "250px") -->
+<!--   ) -->
+<!-- ), -->
+
+
+<!-- server <- function(input, output) { -->
+<!-- IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) { -->
+<!--   y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b))) -->
+<!--   y[is.na(y)] = 1 -->
+<!--   return(y) -->
+<!-- } -->
+
+
+<!--  output$plot <- renderPlot({ -->
+<!--    theta <- theta <- seq(-7, 7, .001) -->
+<!--   par(mar = c(5,7,4,2) + 0.1) -->
+
+<!--  plot(theta, IRT(theta, b = 0, a = 1), -->
+<!--      cex.lab= 2,  -->
+<!--      cex.axis =1.5, -->
+<!--        xlab = expression(theta), ylab = bquote(.("P(x = 1)")), -->
+<!--        xlim = c(-5, 5), ylim = c(0, 1),  -->
+<!--      type = "l", lwd = 1, lty = 2,  -->
+<!--      col = "royalblue") -->
+<!--  lines(theta, IRT(theta, b=input$b,  -->
+<!--                  a=input$a,  -->
+<!--                  c= input$lucky,  -->
+<!--                  e= input$care),  -->
+<!--        type = "l", lwd = 3,  -->
+<!--      col = "seagreen") -->
+<!--   }) -->
+
+<!-- },       -->
+<!-- options = list(height = 400)     -->
+
+<!-- ) -->
+
+<!-- ``` -->
+
+## Differential Item Functioning {.build}
+
+"Il cat calling è una molestia": 
+
+- Si 
+- No
+
+
+
+
+<div style="float: left; width: 50%;">
+<h3 style="text-align:center;"> Uniforme </h3>
+
+```{r, out.width = '100%', fig.align='center'}
+difficulty <- c(-1, 1)
+par(mar = c(5,7,4,2) + 0.1) 
+ theta <- theta <- seq(-7, 7, .001)
+plot(theta, IRT(theta, b=difficulty[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+abline(v = difficulty[1], lty=2, col = "royalblue")
+#item B
+lines(theta, IRT(theta, b = difficulty[2]), 
+      lty = 4, lwd=3, col = "magenta")
+abline(v = difficulty[2], lty=2, col = "magenta")
+```
+
+</div>
+
+<div style="float: right; width: 50%;">
+
+<h3 style="text-align:center;">Non Uniforme </h3>
+
+
+```{r,  out.width = '100%', fig.align='center'}
+difficulty <- 0
+disc <- c(0.20, 1.50)
+par(mar = c(5,7,4,2) + 0.1) 
+plot(theta, IRT(theta, b=difficulty, 
+                a = disc[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("P(x = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+abline(h = 0.50, lty=2)
+abline(v = difficulty, lty=2, col = "royalblue")
+#item B
+lines(theta, IRT(theta, b=difficulty, 
+                a = disc[2]), 
+      lty = 4, lwd=3, col = "magenta")
+abline(v = difficulty, lty=2, col = "magenta")
+```
+
+</div>
+
+## Item Information Function - Rasch
+
+
+
+```{r, eval = TRUE}
+i_info <- function(b, a=1,c=0, theta = seq(-5,5,length.out=1000)){
+ 
+P <- NULL 
+Q <- NULL
+Ii <- NULL
+for(i in 1:1000){
+  P[i] <- 1/(1+ exp (-a*(theta[i] - b)))
+  Q[i]= 1-P[i]
+  Ii[i] =(a*Q[i]*(P[i]-c)^2)/(P[i]*((1-c)^2)) # (3PL)
+   }
+return(Ii)
+}
+# Function to get all item information
+item_info <- function(b,a=1){
+item <- NULL
+  for(i in 1:length(b)){
+  item[[i]] <- i_info(b[i],a[i])
+  }
+return(item)
+}
+b <- c(-3,0, 3)
+a <- rep(1, length(b))
+# Get all item information
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, 
+                    item_info = c[[1]], 
+                    item_info2 = c[[2]], 
+                    item_info3 = c[[3]])
+d <- do.call('cbind',c)
+sum_info1 <- rowSums(d)
+```
+<div style="float: right; width: 50%;">
+
+```{r}
+data.frame(item_a = c(b[1], 1), 
+           item_b = c(b[2], 1), 
+           item_c = c(b[3], 1), 
+           row.names = c("difficulty", "discrimination"))
+```
+
+</div> 
+
+<div style="float: left; width: 50%;">
+
+$I_i(\theta) = P_i(\theta)(1- P_i(\theta))$
+
+</div>
+
+
+```{r, out.width="70%", fig.align='center'}
+plot(check$Theta, check$item_info, ylim= c(0, 0.8), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("I", expression(theta))), 
+     type = "l", lwd =2, 
+     col = "royalblue")
+lines(check$Theta, check$item_info2, lwd =2, 
+      col = "magenta")
+lines(check$Theta, check$item_info3, lwd =2, 
+      col = "seagreen")
+abline(h = 0.25)
+text(x = -2.5, y = 0.30, "item a", cex = 2, col = "royalblue")
+text(x = -0.5, y = 0.30, "item b", cex = 2, col = "magenta")
+text(x = 2.5, y = 0.30, "item c", cex = 2, col = "seagreen")
+```
+
+## Item Information Function - 2PL
+
+```{r, out.width="70%", fig.align='center'}
+b <- c(-3,0, 3)
+a <- c(0.50, 1, 1.80)
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, 
+                    item_info = c[[1]], 
+                    item_info2 = c[[2]], 
+                    item_info3 = c[[3]])
+d1 <- do.call('cbind',c)
+sum_info2 <- rowSums(d1)
+```
+
+<div style="float: right; width: 50%;">
+
+```{r}
+data.frame(item_a = c(b[1], a[1]), 
+           item_b = c(b[2], a[2]), 
+           item_c = c(b[3], a[3]), 
+           row.names = c("difficulty", "discrimination"))
+```
+
+</div> 
+
+<div style="float: left; width: 50%;">
+
+$I_i(\theta) = a^2 P_i(\theta)(1- P_i(\theta))$
+
+
+</div>
+
+
+```{r, out.width="70%", fig.align='center'}
+plot(check$Theta, check$item_info, ylim= c(0, 0.8), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("I", expression(theta))), 
+     type = "l", lwd =2, 
+     col = "royalblue")
+lines(check$Theta, check$item_info2, lwd =2, 
+      col = "magenta")
+lines(check$Theta, check$item_info3, lwd =2, 
+      col = "seagreen")
+abline(h = 0.25)
+text(x = -2.5, y = 0.20, "item a", cex = 2, col = "royalblue")
+text(x = -0.5, y = 0.30, "item b", cex = 2, col = "magenta")
+text(x = 2.5, y = 0.50, "item c", cex = 2, col = "seagreen")
+```
+
+
+## Test Information Function (TIF)
+$I(\theta) = \displaystyle \sum_{i = 1}^{n} I_i(\theta)$
+
+```{r  fig.align='center'}
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, sum_info1, sum_info2)
+plot(check$Theta, check$sum_info1, ylim= c(0, 0.8), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = bquote(.("I", expression(theta))), 
+     type = "l", lwd =2, 
+     col = "royalblue")
+lines(check$Theta, check$sum_info2, 
+       type = "l", lwd =2, 
+     col = "seagreen")
+text(x = -1.5, y = 0.35, "Rasch", cex = 2, col = "royalblue")
+text(x = 1.5, y = 0.50, "2PL", cex = 2, col = "seagreen")
+```
+
+
+# Oltre il dicotomico 
+
+## Polytomous Rasch Model 
+
+$P(X = x, x > 0| \theta_s, \tau_{ic}) = \frac{exp \left(\sum_{c = 1}^{m} \theta_s - \tau_{ic}\right)}{1 + exp \left(\sum_{c = 1}^{m} \theta_s - \tau_{ic} \right)}$
+
+```{r, warning = FALSE, message=FALSE,  eval = TRUE, fig.align='center'}
+library(psych)
+library(ltm)
+set.seed(1234)
+data <- sim.poly(nvar = 4, n = 500, 
+                     low = -1, high = 2, mod = "logistic", 
+                     cat = 4, a = c(0.2, 0.7, 1.20, 1.90))
+prm <- gpcm(data$items, constraint = "rasch")
+par(mfrow=c(2,2))
+plot(prm, type = "ICC")
+```
+
+## Partial credit model
+
+$P(X = x, x > 0| \theta_s, \tau_{ic}, a) = \frac{exp \left[\sum_{c = 1}^{m} a (\theta_s - \tau_{ic})\right]}{1 + exp \left[\sum_{c = 1}^{m} a (\theta_s - \tau_{ic})\right]}$
+
+```{r fig.align='center'}
+pcm <- gpcm(data$items, constraint = "1PL")
+par(mfrow=c(2,2))
+plot(pcm, type = "ICC")
+```
+
+## Graded Response Model 
+
+$P(X = x, x > 0| \theta_s, \tau_{ic}, a_i) = \frac{exp \left[\sum_{c = 1}^{m} a_i (\theta_s - \tau_{ic})\right]}{1 + exp \left[\sum_{c = 1}^{m} a_i (\theta_s - \tau_{ic})\right]}$
+
+```{r, fig.align='center'}
+grm <- gpcm(data$items, constraint = "gpcm")
+par(mfrow=c(2,2))
+plot(grm, type = "ICC")
+```
+
+
+## PRM, PCM, GRM: TIF
+
+```{r,  out.width="60%", fig.align='center'}
+plot(prm, type = "IIC", items = 0,main = "PRM")
+```
+
+```{r fig.show="hold", out.width="50%"}
+plot(pcm, type = "IIC", items = 0, main = "PCM")
+plot(grm, type = "IIC", items = 0, main = "GRM")
+```
+
+## Ackoejkl nkjgnkg
+
+- Caterina Primi
+
+- Francesca Chiesi
+
+- Egidio Robusto

@@ -1,0 +1,688 @@
+---
+title: "IRT for beginners"
+institute: "Univerisity of Padova (IT)"
+output: 
+  beamer_presentation: 
+    theme: metropolis
+    highlight: haddock
+    toc: yes
+    slide_level: 3
+header-includes:
+    - \usepackage{graphicx} 
+    - \usepackage{setspace}
+    - \usepackage{tabularx}
+    - \usepackage[english]{babel}
+    - \usepackage{tikzsymbols}
+    - \usepackage{subcaption}
+    - \usepackage{tikz}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{spot}
+    - \usepackage{tabularx}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{booktabs}
+    - \setbeamertemplate{navigation symbols}{}
+    - \newcommand\Factor{1.2}
+    - \setbeamerfont{subtitle}{size=\large, series=\bfseries}
+    - \useinnertheme{circles}
+    - \useoutertheme{smoothbars}
+    - \definecolor{latenti}{RGB}{54, 114, 89}
+    - \definecolor{manifeste}{RGB}{179, 7, 27}
+    - \definecolor{background}{RGB}{251, 251, 251}
+    - \setbeamercolor{frametitle}{bg=background}
+    - \setbeamertemplate{frametitle}[default][center]
+    - \AtBeginSection{\frame{\tableofcontents[currentsection,currentsubsection]}}
+    - \AtBeginSubsection{\frame{\tableofcontents[currentsection,currentsubsection]}}
+    - \setbeamercolor{section name}{fg=white}
+    - \setbeamersize{text margin left=5mm,text margin right=5mm} 
+    - \def\tikzoverlay{\tikz[remember picture, overlay]\node[every overlay node]}
+    - \definecolor{person}{RGB}{33, 113, 181}
+    - \definecolor{question}{RGB}{181, 102, 33}
+    - \newcommand*{\sbj}[1]{\textcolor{person}{#1}}
+    - \newcommand*{\colit}[1]{\textcolor{question}{#1}}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center", 
+                      out.width = "90%")
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+
+i_info <- function(b, a=1,c=0, theta = seq(-5,5,length.out=1000)){
+ 
+P <- NULL 
+Q <- NULL
+Ii <- NULL
+for(i in 1:1000){
+  P[i] <- 1/(1+ exp (-a*(theta[i] - b)))
+  Q[i]= 1-P[i]
+  Ii[i] =(a*Q[i]*(P[i]-c)^2)/(P[i]*((1-c)^2)) # (3PL)
+   }
+return(Ii)
+}
+# Function to get all item information
+item_info <- function(b,a=1){
+item <- NULL
+  for(i in 1:length(b)){
+  item[[i]] <- i_info(b[i],a[i])
+  }
+return(item)
+}
+
+set.seed(999)
+
+theta = seq(-4,4,length.out=1000)
+library(xtable)
+
+```
+
+# Get started
+
+## `Rstudio` Project
+
+### Create a new project I
+
+New file $\rightarrow$ New project
+
+```{r, echo = F}
+knitr::include_graphics("img/project1.png")
+```
+
+
+### Create a new project II
+
+::: columns
+
+:::: column
+
+```{r echo = F, out.width = "80%"}
+knitr::include_graphics("img/project2.png")
+```
+
+
+::::
+
+:::: column
+
+```{r echo = F, out.width = "80%"}
+knitr::include_graphics("img/project3.png")
+```
+
+
+::::
+
+
+
+:::
+
+
+
+## Pacchetti
+
+
+::: columns 
+
+:::: column
+
+\begin{center}
+Installazione:
+
+\end{center}
+
+\vspace{5mm}
+
+\small
+
+```{r, eval = F}
+install.packages("lavaan")
+
+install.packages("TAM")
+
+install.packages("mokken")
+
+install.packages("difR")
+
+
+```
+
+::::
+
+
+:::: column
+
+\begin{center}
+Caricamento nell'ambiente:
+\end{center}
+
+\vspace{5mm}
+\small
+
+```{r, eval = F}
+library("lavaan")
+
+library("TAM")
+
+library("mokken")
+
+library("difR")
+
+
+```
+
+
+
+::::
+
+:::
+
+# Introduzione
+
+## Le variabili latenti 
+
+### Cosa sono 
+
+\vspace{5mm}
+
+- Sono variabili \color{latenti} non direttamente osservabili \normalcolor $\rightarrow$ **\color{latenti} variabili latenti**
+
+- Inferite a partire da indicatori \color{manifeste} direttamente  osservabili \normalcolor $\rightarrow$ **\color{manifeste} variabili manifeste**
+
+- Importanza dell'operazionalizzazione del costrutto 
+
+
+### Esempio 1
+
+Osserviamo Giorgio e vediamo che Giorgio:
+
+- ha tanti amici
+
+- è contento quando ha tante persone intorno 
+
+- cerca sempre di rimanere in contatto con le persone 
+
+- partecipa a tanti eventi sociali 
+
+- $\ldots$
+
+I comportamenti di Giorgio (\color{manifeste}**variabili manifeste**\normalcolor) possono essere spiegati sulla base del costrutto latente ***\color{latenti}estroversione*** 
+
+### Esempio 2
+
+Osserviamo Alessandra e vediamo che Alessandra:
+
+- è interessata a nuove culture
+
+- prova volentieri cibi nuovi  
+
+- è aperta alla possibilità di provare nuove esperienze
+
+- è creativa 
+
+- $\ldots$
+
+I comportamenti di Alessandra (\color{manifeste}**variabili manifeste**\normalcolor) possono essere spiegati sulla base del costrutto latente ***\color{latenti}apertura all'esperienza*** 
+
+
+## Modelli per variabili latenti 
+
+### 
+
+Modelli matematici che permettono di collegare le \color{latenti}variabili latenti\normalcolor con le \color{manifeste}variabili manifeste \normalcolor 
+
+Assunzioni: 
+
+- Le \color{latenti}variabili latenti \normalcolor sono la causa delle \color{manifeste}variabili manifeste \normalcolor 
+
+- *Indipendenza locale*: Una volta presa in considerazione l'effetto della \color{latenti}variabile latente\normalcolor, la correlazione tra le \color{manifeste}variabili manifeste \normalcolor  svanisce
+
+\vspace{3mm}
+
+```{r echo = F}
+knitr::include_graphics("img/latenti.png")
+```
+
+
+### Diversi modelli per diverse variabili 
+
+```{r out.width="80%", echo = F}
+knitr::include_graphics("img/mavl.png")
+```
+
+Modelli IRT e modello di Rasch $\rightarrow$ **Modelli di analisi per tratti latenti** 
+
+# Item Respone Theory
+
+## IRT vs. CTT
+
+### 
+
+Sia i modelli dell'IRT sia la Classical Test Theory (CTT) hanno come obiettivo la misurazione delle persone $\rightarrow$ stabilire la posizione delle persone sul tratto latente di interesse
+
+::: columns
+
+:::: column
+\begin{center}
+IRT
+\end{center}
+
+Focus $\rightarrow$ Gli item
+::::
+
+:::: column
+\begin{center}
+CTT
+\end{center}
+
+Focus $\rightarrow$ Il test
+::::
+
+:::
+
+
+## L'idea di base 
+
+### 
+
+La probabilità di una risposta osservata (\color{manifeste}variabile manifesta\normalcolor) dipende sia dalle caratteristiche della \sbj{persona} sia dalle caratteristiche dell'\colit{item}
+
+Le caratteristiche della \sbj{persona} sono descritte da un parametro relativo alla persona $\rightarrow$ \color{latenti} costrutto latente\normalcolor (e.g., intelligenza, autostima, estroversione, apertura all'esperienza ecc.)
+
+Le caratteristiche dell'\colit{item} possono essere descritte da uno o più parametri, quali la \textbf{difficoltà}, la \textbf{discriminatività}, lo \textbf{pseudo guessing} e il \textbf{careless error}
+
+
+### 
+
+
+\begin{minipage}{.20\textwidth}
+	\begin{figure}
+				\centering
+				\includegraphics[width=\linewidth]{img/lisa.png}
+			\end{figure}
+
+			\centering
+			\sbj{$A_\text{Lisa}$}
+			
+\end{minipage}
+\begin{minipage}{.25\textwidth}
+\begin{center}
+\textbf{Q1}
+
+$3 + 2 = ?$
+
+\colit{$d_{\text{Q1}}$}
+\end{center}
+\end{minipage}
+\begin{minipage}{.25\textwidth}
+\begin{center}
+\textbf{Q1}
+
+$3x - 2y + 4 = ?$
+
+\colit{$d_{\text{Q2}}$}
+\end{center}
+\end{minipage}
+\begin{minipage}{.20\textwidth}
+	\begin{figure}
+				\centering
+				\includegraphics[width=\linewidth]{img/bart.png}
+			\end{figure}
+
+			\centering
+			\sbj{$A_\text{Bart}$}
+			
+\end{minipage}
+
+### Diversi modelli IRT 
+
+A seconda: 
+
+1. Tratto latente: 
+
+  - modelli unidimensionali 
+  - modello multidimensionali
+  
+2. Categorie di risposta: 
+
+  - item dicotomici (due categorie di risposta, e.g., vero/falso, accordo/disaccordo)
+  - item politomici (almeno 3 categorie di risposta, e.g., item con scala di risposta tipo Likert)
+  
+# Modelli per item dicotomici
+
+### 
+
+Si distinguono in base al numerod parametri che descrivono le caratteristiche degli item: 
+
+- modello logistico a un parametro (one-parameter logistic model; 1PL)
+
+- modello logistico a due parametri (two-parameter logistic model; 2PL)
+
+- modello logistico a tre parametri (three-parameter logistic model; 3PL)
+
+- modello logistico a quattro parametri (four-parameter logistic model;
+4PL; usato raramente)
+
+### Caratteristiche generali 
+
+- Parametro del soggetto e parametri degli item si trovano sullo stesso latente 
+
+- Ad aumentare della distanza sul tratto latente tra i parametri degli item e il parametro del soggetto cambia la probabilità di rispondere correttamente
+
+- Quando il parametro del soggetto e il parametro di difficoltà dell'item coincidono, la probabilità di risposta corretta è del 50% (questo è vero solo per 1PL e 2PL)
+
+## 1PL
+
+
+### Response function
+
+La probabilità di rispondere correttamente (affermativamente) all'item $i$ da parte della persona $p$ è formalizzata come: 
+
+$$P(x_{v1} = 1| \theta_p, b_i) = \dfrac{exp(\theta_p - b_i)}{exp(\theta_p - b_i)}$$
+Dove: 
+
+$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_v$, maggiore il livello di tratto di $v$
+      
+$b_i$; difficoltà dell'item $i$ o location dell'item sul tratto latente $\rightarrow$ maggiore $b_i$,più è difficile rispondere correttamente a $i$
+
+
+
+### Item Charcteristic Curve 
+
+```{r echo = F, out.width = "100%"}
+par(mar = c(5,7,4,2) + 0.1) 
+plot(theta, IRT(theta, b = 1, a = 1),
+     cex.lab= 2.5, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente",
+       xlim = c(-4, 4), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+
+mtext("b = 1", side = 1, at = 1, cex = 2, padj = 1)
+
+segments(-7, 0.5, 
+         1, 0.5, 
+         col = "red", lty = 3, lwd = 3)
+segments(1, -0.5, 
+         1, 0.5, 
+         col = "red", lty = 3, lwd = 3)
+```
+
+### Item Response Function
+
+SI può ottenere una misura della precisione con cui ogni item misura determinate parti del tratto latente $\rightarrow$ \emph{Item Response Function}: 
+
+$$I_I = P_i(\theta, b_i)Q_i(\theta, b_i)$$
+
+dove $Q = 1- P_i(\theta_p, b_i)$ è la probabilità che di risposta errata all'item $i$
+
+###
+Valore massimo quando $\theta_v = b_i$ $\rightarrow$ in questo caso $P(x_{pi}=1) = P(x_{pi}=0) =0.50$ $\rightarrow$ $I_i = .25$
+
+```{r}
+b <- 1
+a <- rep(1, length(b))
+# Get all item information
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, 
+                    item_info = c[[1]])
+d <- do.call('cbind',c)
+sum_info1 <- rowSums(d)
+
+plot(check$Theta, check$item_info, ylim= c(0, 1), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "Informazione", 
+     type = "l", lwd =2, 
+     col = "royalblue")
+segments(-7, 0.25, 
+         1, 0.25, 
+         col = "red", lty = 3, lwd = 3)
+segments(1, -0.25, 
+         1, 0.25, 
+         col = "red", lty = 3, lwd = 3)
+
+lines(theta, IRT(theta, b=1, 
+                a = 1), 
+      lty = 2, lwd=3, col = "grey")
+```
+
+### 
+
+Qualsiasi item è più informativo per i soggetti con abilità uguale alla location dell'item $\rightarrow$ al crescere della distanza tra soggetto e item, cala l'informatività (i.e., precisione del soggetto)
+
+Tanti soggetti con livelli diversi di abilità $\rightarrow$ item con livelli di difficoltà distribuiti lungo tutto il continuum latente 
+
+::: columns
+
+:::: column
+
+\begin{center}
+IRT
+\end{center}
+
+Meglio item con difficoltà diverse, sparpagliate lungo tutto il tratto latente
+::::
+
+:::: column
+\begin{center}
+CTT
+\end{center}
+
+Meglio item con difficoltà omogenee
+::::
+
+
+:::
+
+### Item con diverse locations: ICC
+
+\vspace*{-15mm}
+
+```{r, out.width = "90%"}
+b = seq(-2.5, 2.5, length = 5)
+a = rep(1, length(b))
+
+my_colors <- RColorBrewer::brewer.pal(6, "Blues")[2:6]
+
+par(mar = c(5,7,4,2) + 0.1) 
+plot(theta, IRT(theta, b = b[1], a = a[1]),
+     cex.lab= 2.5, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente",
+       xlim = c(-4, 4), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = my_colors[1])
+  
+segments(-7, 0.5, 
+         b[1], 0.5, 
+         col = "red", lty = 3, lwd = 3)
+segments(b[1], -0.5, 
+         b[1], 0.5, 
+         col = "red", lty = 3, lwd = 3)
+
+si = data.frame(b1 = b[1], b2 = b[2], b3 = b[3], 
+                b4 = b[4], b5 = b[5])
+
+text(x= -2, y = 0.8, colnames(si)[1], col = my_colors[1], cex = 2)
+
+
+
+for ( i in 2:length(b)) {
+  lines(theta, IRT(theta, b=b[i], 
+                a = 1), 
+      lty = 1, lwd=3, col = my_colors[i])
+  segments(-7, 0.5, 
+         b[i], 0.5, 
+         col = "red", lty = 3, lwd = 3)
+segments(b[i], -0.5, 
+         b[i], 0.5, 
+         col = "red", lty = 3, lwd = 3)
+text(x= b[i] +.5, 
+     y = 0.8, colnames(si)[i], col = my_colors[i], cex = 2)
+
+}
+
+
+
+
+```
+
+\centering 
+
+```{r results='asis'}
+print(xtable(si), comment = FALSE, include.rownames=FALSE)
+```
+
+### Item con diverse locations: IIC
+
+\vspace*{-15mm}
+
+```{r}
+a <- rep(1, length(b))
+# Get all item information
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check = data.frame(theta = Theta)
+temp = NULL
+for (i in 1:length(c)) {
+  temp = cbind( temp, c[[i]])
+}
+
+check = cbind(check, temp)
+colnames(check)[2:ncol(check)] = paste0("item_info", 1:(ncol(check)-1))
+
+d <- do.call('cbind',c)
+sum_info <- rowSums(d)
+
+check$theta = NULL
+
+plot(Theta, check[, 1], ylim= c(0, 1), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "Informazione", 
+     type = "l", lwd =2, 
+     col = my_colors[1])
+segments(-7, 0.25, 
+         b[1], 0.25, 
+         col = "red", lty = 3, lwd = 3)
+segments(b[1], -0.25, 
+         b[1], 0.25, 
+         col = "red", lty = 3, lwd = 3)
+
+
+text(x= -2, y = 0.4, colnames(si)[1], col = my_colors[1], cex = 2)
+
+
+
+for ( i in 2:length(b)) {
+  lines(theta, check[, i], 
+      lty = 1, lwd=3, col = my_colors[i])
+  segments(-7, 0.25, 
+         b[i], 0.25, 
+         col = "red", lty = 3, lwd = 3)
+segments(b[i], -0.25, 
+         b[i], 0.25, 
+         col = "red", lty = 3, lwd = 3)
+text(x= b[i] +.5, 
+     y = 0.4, colnames(si)[i], col = my_colors[i], cex = 2)
+
+}
+
+for ( i in 2:length(b)) {
+  lines(theta, IRT(theta, b=b[i], 
+                a = 1), 
+      lty = 1, lwd=2, col = "grey")
+}
+
+
+```
+
+\centering 
+
+```{r results='asis'}
+print(xtable(si), comment = FALSE, include.rownames=FALSE)
+```
+
+### Test Information Function
+
+Restituisce una misura della precisione con cui il test misura complessivamente il tratto latente: 
+
+$$I(\theta) = \sum I_i(\theta, b_i)$$
+
+La TIF permette di prevedere l’accuratezza con cui è
+possibile misurare ogni livello di tratto latente
+
+Simile al concetto di attendibilità in CTT
+
+### 
+
+\vspace*{-15mm}
+
+```{r}
+plot(theta, sum_info, cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "Informazione", 
+     type = "l", lwd =2, 
+     col = "black", ylim = c(0,1))
+
+for ( i in 1:length(b)) {
+  lines(theta, check[, i], 
+      lty = 1, lwd=3, col = my_colors[i])
+}
+```
+\centering 
+
+```{r results='asis'}
+print(xtable(si), comment = FALSE, include.rownames=FALSE)
+```
+
+
+### Standard Error of Measrument (SEM)
+
+Descrive la precisione della misurazione: 
+
+$$SEM(\theta) = \sqrt{\dfrac{1}{I(\theta)}}$$
+Maggiore è l'informazione, minore è il SEM
+
+Minore è l'informazione, maggiore è il SEM
+
+A differenza della CTT, non si assume che l'errore di misura sia uguale per tutti i soggetti
+
+### 
+
+\space*{-15mm}
+
+```{r}
+
+
+
+
+
+par(mar = c(5, 4, 4, 4) + 0.3)  # Leave space for z axis
+plot(theta, sqrt(1/sum_info), cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = "SEM", 
+     type = "l", lwd =2, 
+     col = "firebrick")
+par(new = TRUE)
+plot(theta, sum_info, type = "l", axes = FALSE,
+     bty = "n", xlab = "", ylab = "", ylim = c(0,1))
+
+axis(side=4, at = pretty(range(sum_info)), cex = 1.5)
+mtext("Informazione", side=4, line=3, cex = 2)
+
+```
+
+\centering 
+
+```{r results='asis'}
+print(xtable(si), comment = FALSE, include.rownames=FALSE)
+```
+
+## 2PL
+
