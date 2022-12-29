@@ -1,0 +1,280 @@
+---
+title: "Item Response Theory for beginners"
+subtitle: "Assuzioni e stima dei parametri"
+institute: "Bressanone"
+author: "Dr. Ottavia M. Epifania"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+output: 
+  beamer_presentation: 
+    theme: metropolis
+    highlight: haddock
+    toc: yes
+    slide_level: 3
+header-includes:
+    - \usepackage{graphicx} 
+    - \usepackage{setspace}
+    - \usepackage{tabularx}
+    - \usepackage[english]{babel}
+    - \usepackage{tikzsymbols}
+    - \usepackage{subcaption}
+    - \usepackage{tikz}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{spot}
+    - \usepackage{tabularx}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{booktabs}
+    - \setbeamertemplate{navigation symbols}{}
+    - \newcommand\Factor{1.2}
+    - \setbeamerfont{subtitle}{size=\large, series=\bfseries}
+    - \useinnertheme{circles}
+    - \useoutertheme{tree}
+    - \definecolor{latenti}{RGB}{54, 114, 89}
+    - \definecolor{manifeste}{RGB}{179, 7, 27}
+    - \definecolor{background}{RGB}{251, 251, 251}
+    - \definecolor{highlight}{RGB}{18, 10, 143}
+    - \setbeamercolor{frametitle}{bg=background}
+    - \setbeamertemplate{frametitle}[default][center]
+    - \AtBeginSubsection{\frame{\subsectionpage}}
+    - \setbeamercolor{section name}{fg=white}
+    - \setbeamersize{text margin left=5mm,text margin right=5mm} 
+    - \def\tikzoverlay{\tikz[remember picture, overlay]\node[every overlay node]}
+    - \definecolor{person}{RGB}{33, 113, 181}
+    - \definecolor{question}{RGB}{181, 102, 33}
+    - \newcommand*{\sbj}[1]{\textcolor{person}{#1}}
+    - \newcommand*{\colit}[1]{\textcolor{question}{#1}}
+    - \newcommand*{\high}[1]{\textcolor{highlight}{#1}}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center", 
+                      out.width = "90%")
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+
+i_info <- function(b, a=1,c=0, theta = seq(-5,5,length.out=1000)){
+ 
+P <- NULL 
+Q <- NULL
+Ii <- NULL
+for(i in 1:1000){
+  P[i] <- 1/(1+ exp (-a*(theta[i] - b)))
+  Q[i]= 1-P[i]
+  Ii[i] =(a*Q[i]*(P[i]-c)^2)/(P[i]*((1-c)^2)) # (3PL)
+   }
+return(Ii)
+}
+# Function to get all item information
+item_info <- function(b,a=1, c= 0){
+item <- NULL
+  for(i in 1:length(b)){
+  item[[i]] <- i_info(b[i],a[i])
+  }
+return(item)
+}
+
+set.seed(999)
+
+theta = seq(-4,4,length.out=1000)
+library(xtable)
+
+```
+
+# Assunzioni 
+
+## Unidimensionalità 
+
+### 
+
+
+L’assunzione di \high{\textbf{unidimensionalità}} indica che un solo tratto latente è
+responsabile delle risposte agli item
+
+Tale assunzione viene spesso valutata mediante modelli di \high{analisi fattoriale confermativa}
+
+I modelli IRT multidimensionali consentono di gestire la presenza di più tratti latenti ma sono modelli più complessi e meno diffusi 
+
+\begin{block}{In caso di violazione}
+
+Il modello IRT scelto può essere applicato, ma: 
+
+- si possono stime dei parametri distorte/non intepretabili
+
+- anche se si ottenessero delle stime interpretabili, queste non hanno senso perché il modello non ha senso
+
+\end{block}
+
+
+### Come si valuta
+
+Solitamente, si utilizza l'analisi fattoriale confermativa \high{(CFA)}. 
+
+Se la soluzione ad un fattore presenta una buona fit, si suppone l'unidimensionalità
+
+\begin{block}{Indici di fit CFA}
+
+Comparative Fit Index (CFI) $> .90$
+
+
+Standardized Root Mean Square Residual (SRMSR) $<.08$
+
+Root Mean Sqaure Error of Approximation (RMSEA) $<. 08$
+
+\end{block}
+
+## Indipedenza locale
+
+### 
+
+L’assunzione di \textbf{indipendenza locale} indica che non esiste alcuna relazione tra le risposte di un soggetto ad item diversi dopo aver controllato per il
+tratto latente
+
+Le risposte di un soggetto a un insieme di item sono indipendenti quando la probabilità associata alle risposte fornite dal soggetto agli item è uguale al prodotto delle probabilità relative alle singole risposte
+
+\begin{block}{In caso di violazione}
+
+
+Si rischia di sovrastimare l’informatività (attendibilità) del test
+\end{block}
+
+
+### Come si valuta 
+
+Si correlano i \high{\textbf{residui}} (i.e.,  differenza tra la risposta data da un soggetto ad un item e il valore atteso per quella risposta) 
+
+La correlazione tra i residui si interpreta attraverso la statistica $Q3$ (Yen, 1984)
+
+In genere, $Q3\geq .20$ per una coppia di item è indicativo di dipendenza locale (sono disponibili anche altri cut-off)
+
+### Cosa fare
+
+Eliminare uno dei due item della coppia (solitamentem quello con minore discriminatività o che ha una fit peggiore)
+
+Se si utilizza una procedura adattica (e.g., Computerized Adaptive Testing) $\rightarrow$ vincolare la somministrazione di uno solo dei due item
+
+Se possibile $\rightarrow$ combinare i due item in unico item \includegraphics[width=.10\linewidth]{"img/frank.jpg"}
+
+
+## Monotonicità 
+
+### 
+
+\high{\textbf{Monotonicità}}: La probabilità di rispondere correttamente aumenta all'aumentare del livello di tratto latente
+
+\begin{block}{Come si valuta}
+
+Si valuta per ogni item
+
+Coefficiente $H$ di Mokken (Originariamente di Loevinger). 
+
+$H \geq .3$: Item accettabile 
+
+$H \geq .5$: Item eccellente 
+
+$H < .3$: Item non accettabile 
+
+
+\end{block}
+
+\begin{block}{In caso di violazione}
+
+
+Effetti negativi sull'attendibilità e validità della scala
+\end{block}
+
+# Fit del modello 
+
+### 
+
+Dopo aver verificato le assuzioni, si può procedere alla verifica della fit del modello mediante due statistiche principali: 
+
+- $M^2$ (Meyedeu-olivares & Joe, 2005): si basa sulla classificazione dei soggetti in base al loro pattern di risposta. Si basa sulla distribuzione $\chi^2$ per cui tende ad essere significativa per campioni ampi (anche se il modello ha una buona fit)
+
+- Root Mean Square Error of Approximation (RMSEA): Misura di quanto il modello si avvicina alla realtà: 
+  - $\leq .05$ Perfetto
+  - $\leq .08$: Accettabile
+  - $> .80$: No fit
+
+# Stima dei parametri 
+
+## Massima verosimiglianza 
+
+###
+
+\high{Massima verosimiglianza} (\high{Maximum Likelihood}, \high{ML}) $\rightarrow$ trova i valori dei parametri che massimizzano la probabilità di ottenere i dati osservati (i.e., i valori che massimizzano la funzione di verosimiglianza dei dati osservati)
+
+Due tipologie: 
+
+1. \high{Massima verosimiglianza congiunta} (Joint Maximum Likelihood, JML): Permette di stimare per massima verosimiglianza \textbf{congiuntamente} i parametri degli item e delle persone
+
+2. \high{Massima verosimiglianza marginale} (Marginal Maximum Likelihood, MML): Permette di stimare per massima verosimiglianza i parametri degli item, i parametri delle persone sono stimati successivamente con procedure bayesiane
+
+###
+
+\begin{exampleblock}{Vantaggi ML}
+
+All'aumentare dell'ampiezza campionaria $\rightarrow$ le stime per ML covergono al valore vero (\high{unbiased})
+
+\end{exampleblock}
+
+\begin{alertblock}{Svantaggi ML}
+
+Le stime di soggetti/item con punteggi estremi sono $+$ o $-$ $\infty$
+
+Per ovviare a questo problema: 
+
+$\rightarrow$ Sottrarre $.30$ se il punteggio è massimo
+
+$\rightarrow$ Aggiungere $.30$ se il punteggio è minimo
+
+\end{alertblock}
+
+\begin{center}
+Puteggi estremi:
+\end{center}
+
+::: columns
+
+:::: column
+
+Soggetti che hanno dato solo risposte giuste o solo risposte errate
+
+::::
+
+:::: column
+
+Item che hanno ricevuto solo risposte giuste o solo risposte errate
+::::
+
+:::
+
+## Approccio Bayesiano
+
+### 
+
+Moltiplicando la funzione di verosimiglianza per una distribuzione a priori si ottiene la \textbf{distribuzione a posteriori}
+
+Le stime dei parametri si ottengono dalla distribuzione a posteriori $\rightarrow$ \high{stime bayesiane}
+
+Due tipologie: 
+
+- \high{\textbf{Maximum a Posteriori}} (MAP): La stima del parametro è la moda della distribuzione a posteriori di quel parametro
+
+- \high{\textbf{Expected a Posteriori}} (MAP): La stima del parametro è la media della distribuzione a posteriori di quel parametro
+
+
+### 
+
+\begin{exampleblock}{Vantaggi approcci bayesiani}
+
+Permettono la stima \textbf{finita} dei parametri dei soggetti e degli item anche in caso di punteggi estremi
+
+\end{exampleblock}
+
+
