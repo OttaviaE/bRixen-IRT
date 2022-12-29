@@ -1,0 +1,273 @@
+---
+title: "Item Response Theory for beginners"
+subtitle: "Item time!"
+institute: "Bressanone"
+author: "Dr. Ottavia M. Epifania"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+output: 
+  beamer_presentation: 
+    theme: metropolis
+    highlight: haddock
+    toc: yes
+    slide_level: 3
+header-includes:
+    - \usepackage{graphicx} 
+    - \usepackage{setspace}
+    - \usepackage{tabularx}
+    - \usepackage[english]{babel}
+    - \usepackage{tikzsymbols}
+    - \usepackage{subcaption}
+    - \usepackage{tikz}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{spot}
+    - \usepackage{tabularx}
+    - \usepackage[absolute,overlay]{textpos}
+    - \usepackage{booktabs}
+    - \setbeamertemplate{navigation symbols}{}
+    - \newcommand\Factor{1.2}
+    - \setbeamerfont{subtitle}{size=\large, series=\bfseries}
+    - \useinnertheme{circles}
+    - \useoutertheme{tree}
+    - \definecolor{latenti}{RGB}{54, 114, 89}
+    - \definecolor{manifeste}{RGB}{179, 7, 27}
+    - \definecolor{background}{RGB}{251, 251, 251}
+    - \definecolor{highlight}{RGB}{18, 10, 143}
+    - \setbeamercolor{frametitle}{bg=background}
+    - \setbeamertemplate{frametitle}[default][center]
+    - \AtBeginSubsection{\frame{\subsectionpage}}
+    - \setbeamercolor{section name}{fg=white}
+    - \setbeamersize{text margin left=5mm,text margin right=5mm} 
+    - \def\tikzoverlay{\tikz[remember picture, overlay]\node[every overlay node]}
+    - \definecolor{person}{RGB}{33, 113, 181}
+    - \definecolor{question}{RGB}{181, 102, 33}
+    - \newcommand*{\sbj}[1]{\textcolor{person}{#1}}
+    - \newcommand*{\colit}[1]{\textcolor{question}{#1}}
+    - \newcommand*{\high}[1]{\textcolor{highlight}{#1}}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center", 
+                      out.width = "90%")
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+
+i_info <- function(b, a=1,c=0, theta = seq(-5,5,length.out=1000)){
+ 
+P <- NULL 
+Q <- NULL
+Ii <- NULL
+for(i in 1:1000){
+  P[i] <- 1/(1+ exp (-a*(theta[i] - b)))
+  Q[i]= 1-P[i]
+  Ii[i] =(a*Q[i]*(P[i]-c)^2)/(P[i]*((1-c)^2)) # (3PL)
+   }
+return(Ii)
+}
+# Function to get all item information
+item_info <- function(b,a=1, c= 0){
+item <- NULL
+  for(i in 1:length(b)){
+  item[[i]] <- i_info(b[i],a[i])
+  }
+return(item)
+}
+
+set.seed(999)
+
+theta = seq(-4,4,length.out=1000)
+library(xtable)
+
+```
+
+# Fit degli item 
+
+### 
+
+Si può valutare la fit di ogni item nel modello 
+
+Statistiche più usate: 
+
+- $S - X^2$ (Orland \& Thissen, 2000): Statistica basata sul $\chi^2$. Se è significativo, l'item non è adeguato
+
+- \emph{Root Mean Squared Deviation} (RMSD): Distanza tra quanto atteso dal modello e i dati. Si vuole che questa distanza sia minima. Valori al di sotto di $.15$ sono accettabili, al di sotto di $.10$ sono ottimali e indicano ottima fit dell'item
+
+# Differential Item Functioning
+
+### 
+
+Lo stesso item presentato a due gruppi appaiati per livello di tratto latente... non funziona nello stesso modo 
+
+I soggetto vengono appaiati in funzione del loro livello di tratto latente. \high{Ci sono delle differenze nella perfomance su un item}?
+
+Teoricamente: Soggetti di gruppi diversi ma con lo stesso livello di tratto latente (i.e., \high{appaiati}) dovrebbero mostrare performance simili sull'item
+
+
+Se così non è $\rightarrow$ \high{\scshape{Differential Item Functioning}} (DIF)
+
+
+### Reference vs. focal group
+
+Solitamente ci si basa su due gruppi: 
+
+- \high{reference group} (Gruppo di riferimento): è la base del confronto. Spesso è il gruppo maggioritario (e.g., italiani) o in caso di traduzioni del test il gruppo a cui viene somministrata la versione originale
+
+- \high{focal group} (Gruppo focale): Gruppo focus dell'analisi. Spesso è il gruppo minoritario (e.g., immigrati di prima generazione) o il gruppo a cui viene somministrata la versione tradotta del test
+
+## DIF uniforme
+
+###
+
+\small
+L'item funziona in modo diverso nel focal group rispetto al reference group (o viceversa)
+
+Nello specifico, avvantaggia sistematicamente uno dei due gruppi
+
+Il vantaggio nei confronti del gruppo è costante (\high{uniforme}) per tutti i livelli del tratto latente
+
+
+
+```{r, out.width="70%"}
+difficulty <- c(-1, 1)
+par(mar = c(5,7,4,2) + 0.1) 
+ theta <- theta <- seq(-7, 7, .001)
+plot(theta, IRT(theta, b=difficulty[1]),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = expression(paste("P(", x[vi], " = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+
+#item B
+lines(theta, IRT(theta, b = difficulty[2]), 
+      lty = 4, lwd=3, col = "magenta")
+```
+
+
+## DIF Non uniforme
+
+### 
+
+\small 
+
+L'item funziona in modo diverso nel gruppo focale rispetto al gruppo di riferimento (o viceversa), ma il vantaggio che dà a uno dei due non è costante per tutti i livelli del tratto
+
+L'item avvantaggia un gruppo per i livelli più bassi del tratto e avvantaggia il gruppo opposto per i livelli più alti del tratto.
+
+```{r, out.width="70%"}
+difficulty <- c(1, 1)
+par(mar = c(5,7,4,2) + 0.1) 
+ theta <- theta <- seq(-7, 7, .001)
+plot(theta, IRT(theta, b=difficulty[1], a = 1),
+     cex.lab= 2, 
+     cex.axis =1.5,
+       xlab = expression(theta), ylab = expression(paste("P(", x[vi], " = 1)")),
+       xlim = c(-5, 5), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue")
+
+#item B
+lines(theta, IRT(theta, b = difficulty[2], a = 1.5), 
+      lty = 4, lwd=3, col = "magenta")
+```
+
+
+## Valutare il DIF
+
+
+### 
+
+Esistono metodi basati sui modelli IRT e metodi basati sul punteggio osservato per valutare il DIF
+
+I metodi basati sui modelli IRT utilizzano la stima del tratto latenmte ottenuta tramite il modello per appaiare i soggetti 
+
+La DIF uniforme viene valutata sui parametri di diffcoltà, mentre la DIF non uniforme viene valutata sui parametri di discriminatività
+
+::: columns
+
+:::: column
+
+\begin{center}
+
+DIF uniforme
+
+
+\end{center}
+
+- 1PL 
+
+- 2PL 
+
+- 3PL
+::::
+
+:::: column
+\begin{center}
+
+DIF non uniforme
+
+
+\end{center}
+
+- 2PL 
+
+- 3PL
+::::
+
+
+::: 
+
+## Likelihood Ratio Test
+
+Thissen, Steinberg, & Wainer (1988)
+
+Vengono stimati due modelli IRT sui dati: 
+
+1. Nel modello "no-DIF", i parametri vengono vincolati ad essere uguali nel reference e focal group
+
+2. Nel modello "DIF", si lasciano liberi i parametri di cambiare nei due gruppi 
+
+I due modelli vengono confrontati. Se la differenza tra l'adattamento dei due modelli è statisticamente significativa, c'è DIF
+
+Di fatto, funziona come una regressione lineare, in cui il gruppo di appartenenza viene inserito come predittore 
+
+## $chi^2$ di Lord 
+
+Lord (1980)
+
+Si stimano i parametri nel gruppo di riferimento e nel gruppo focale e si calcola la differenza. 
+
+Se la differenza è statisticamente significativa, c'è DIF tra gli item
+
+Oltre alla significatività, si può ottenere anche un'informazione circa la dimensione dell'effetto della differenza (Delta di Lord): 
+
+- $< 1.00$: DIF trascurabile 
+
+- $1.00 < d < 1.5$: DIF moderata
+
+- $> 1.5$: DIF grande
+
+## L'area di Raju 
+
+Raju (1988)
+
+Si calcola l'area tra le curve caratteristiche dell'item nel gruppo di riferimento e nel gruppo focale. 
+
+Se l'area è uguale a 0, non c'è DIF
+
+Più ci si allontana da 0, maggiore è il DIF 
+
+
+
+
+
+
+
+
+
