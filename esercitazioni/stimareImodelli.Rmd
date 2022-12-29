@@ -25,6 +25,7 @@ library(mokken)
 library(lavaan)
 library(difR)
 library(sirt)
+library(ggplot2)
 set.seed(999)
 N = 1000
 b <- runif(30, -3,3)
