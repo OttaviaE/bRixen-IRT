@@ -20,6 +20,19 @@ knitr::opts_chunk$set(echo = T,
                       message = F, 
                       fig.align = "center", 
                       out.width = "90%")
+library(TAM)
+library(mokken)
+library(lavaan)
+library(difR)
+library(sirt)
+set.seed(999)
+N = 1000
+b <- runif(30, -3,3)
+a = c(runif(30, 0.4, 2))
+true_theta = seq(-4, 4, length.out = N)
+data <- sirt::sim.raschtype( true_theta, b=b, 
+                             fixed.a = a)
+
 ```
 
 
@@ -41,7 +54,7 @@ pre[class] {
 ---
 class: section, center, middle
 
-# In cosa consiste questo corso?
+# Getting started
 
 ---
 
@@ -85,10 +98,212 @@ knitr::include_graphics("img/project3.png")
 
 .pull-left[
 .center[Installazione]
+```{r, eval = F, echo = T}
+install.packages("lavaan")
+
+install.packages("TAM")
+
+install.packages("mokken")
+
+install.packages("difR")
+
+install.packages("ggplot2")
+
+
+```
+
+
 ]
 
 
 .pull-right[
 .center[Caricamento]
+
+```{r, eval = F, echo = T}
+library("lavaan")
+
+library("TAM")
+
+library("mokken")
+
+library("difR")
+
+
+library("ggplot2")
+
+```
+
+
 ]
+---
+class: section, center, middle
+
+# Importare i dati 
+
+---
+
+## Caricare i dati in R 
+
+poi la faccio devo vedere quali dati fare
+
+---
+
+class: section, center, middle
+
+# Stima dei modelli 
+
+---
+
+## Unidimensionalità 
+
+```{r}
+
+item_lab = paste(colnames(data), collapse = " + ")
+form = paste("latent =~", item_lab)
+
+form
+
+```
+
+```{r}
+model = cfa(form, data = data,  ordered = colnames(data))
+summary(model, fit.measures = T)
+```
+
+
+---
+
+
+
+## 1PL - Stima
+
+```{r}
+m1pl = tam.mml(data, verbose = F)
+
+summary(m1pl)
+
+
+```
+
+
+---
+
+## 1PL - FIT 
+
+```{r}
+f.m1pl = tam.modelfit(m1pl, progress = F)
+
+f.m1pl$statlist
+
+f.m1pl$Q3_summary
+
+f.m1pl$modelfit.test
+```
+
+
+---
+
+## 1PL - Item fit
+
+
+```{r}
+item.fit.1pl = IRT.itemfit(m1pl)
+
+item.fit.1pl$chisquare_stat
+
+item.fit.1pl$RMSD
+
+item.fit.1pl$RMSD_summary
+
+```
+
+---
+
+## 1PL - ICC
+
+
+Serve un po' di lavoro manuale 
+
+```{r}
+# questa funzione calcola la probabilità di risposta corretta dato un certo theta e deterinati valori dell'item
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+
+# questa funzione estrae tutti gli item e i loro paraemtri 
+# e calcola la proababilità di risposta corretta per ogni item per ogni livello di theta
+# restituiesce una lista con dentro il dataset usato 
+# e un grafico in ggplot
+irt.icc = function(model) {
+  item_par = model$item_irt
+est_theta = IRT.factor.scores(model, 
+                              type = "EAP")$EAP
+
+item_prob = list()
+
+for (i in 1:nrow(item_par)) {
+item_prob[[i]] = data.frame(theta = est_theta)
+item_prob[[i]]$it_p = IRT(item_prob[[i]]$theta, 
+                          b = item_par[i, "beta"], 
+                          a = item_par[i, "alpha"])
+
+item_prob[[i]]$item = item_par[i, "item"]
+
+}
+
+p = do.call("rbind", item_prob)
+
+gp = ggplot(p, 
+       aes(x = theta, y = it_p, group = item, col = item)) + geom_line()
+
+object = list(prob.data = p, 
+              icc.graph = gp)
+
+return(object)
+}
+
+
+
+irt.icc(m1pl)$icc.graph
+
+```
+
+
+---
+
+## 2PL 
+
+```{r}
+m2pl = tam.mml.2pl(data, irtmodel = "2PL", verbose = F)
+
+summary(m2pl)
+```
+
+
+---
+
+## 3PL 
+
+```{r}
+
+m3pl = tam.mml.3pl(data, verbose = F)
+
+summary(m3pl)
+
+```
+
+
+
+
+---
+
+## Confronto tra modelli 
+
+```{r}
+IRT.compareModels(m1pl, m2pl)
+```
+
+
 ---
