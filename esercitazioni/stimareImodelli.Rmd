@@ -30,6 +30,7 @@ set.seed(999)
 N = 1000
 b <- runif(30, -3,3)
 a = c(runif(30, 0.4, 2))
+#g = runif(30, .10, .50)
 true_theta = seq(-4, 4, length.out = N)
 data <- sirt::sim.raschtype( true_theta, b=b, 
                              fixed.a = a)
@@ -136,6 +137,65 @@ library("ggplot2")
 
 
 ]
+
+---
+
+## Codici utili 
+
+
+
+```{r}
+# questa funzione calcola la probabilità di risposta corretta dato un certo theta e deterinati valori dell'item
+IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
+  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
+  y[is.na(y)] = 1
+  return(y)
+}
+
+# questa funzione estrae tutti gli item e i loro paraemtri 
+# e calcola la proababilità di risposta corretta per ogni item per ogni livello di theta
+# restituiesce una lista con dentro il dataset usato 
+# e un grafico in ggplot
+irt.icc = function(model) {
+  item_par = model$item
+  est_theta = IRT.factor.scores(model, 
+                              type = "EAP")$EAP
+  item_prob = list()
+  if (any(grep("guess", colnames(item_par))) == F) {
+    for (i in 1:nrow(item_par)) {
+      item_prob[[i]] = data.frame(theta = est_theta)
+      item_prob[[i]]$it_p = IRT(item_prob[[i]]$theta, 
+                          b = item_par[i, "xsi.item"], 
+                          a = item_par[i, "B.Cat1.Dim1"])
+      item_prob[[i]]$item = item_par[i, "item"]
+
+}
+  } else {
+     for (i in 1:nrow(item_par)) {
+      item_prob[[i]] = data.frame(theta = est_theta)
+      item_prob[[i]]$it_p = IRT(item_prob[[i]]$theta, 
+                          b = item_par[i, "AXsi_.Cat1"], 
+                          a = item_par[i, "B.Cat1.Dim1"], 
+                          c = item_par[i, "guess"])
+      item_prob[[i]]$item = item_par[i, "item"]
+
+}
+  }
+  p = do.call("rbind", item_prob)
+  gp = ggplot(p, 
+       aes(x = theta, y = it_p, group = item, col =
+             item)) + geom_line()
+  object = list(prob.data = p, 
+              icc.graph = gp)
+
+return(object)
+}
+
+```
+
+
+---
+
 ---
 class: section, center, middle
 
@@ -155,24 +215,7 @@ class: section, center, middle
 
 ---
 
-## Unidimensionalità 
 
-```{r}
-
-item_lab = paste(colnames(data), collapse = " + ")
-form = paste("latent =~", item_lab)
-
-form
-
-```
-
-```{r}
-model = cfa(form, data = data,  ordered = colnames(data))
-summary(model, fit.measures = T)
-```
-
-
----
 
 
 
@@ -189,6 +232,8 @@ summary(m1pl)
 
 ---
 
+
+
 ## 1PL - FIT 
 
 ```{r}
@@ -196,7 +241,7 @@ f.m1pl = tam.modelfit(m1pl, progress = F)
 
 f.m1pl$statlist
 
-f.m1pl$Q3_summary
+
 
 f.m1pl$modelfit.test
 ```
@@ -220,60 +265,19 @@ item.fit.1pl$RMSD_summary
 
 ---
 
+
+
+
+
 ## 1PL - ICC
 
-
-Serve un po' di lavoro manuale 
-
 ```{r}
-# questa funzione calcola la probabilità di risposta corretta dato un certo theta e deterinati valori dell'item
-IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
-  y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
-  y[is.na(y)] = 1
-  return(y)
-}
-
-# questa funzione estrae tutti gli item e i loro paraemtri 
-# e calcola la proababilità di risposta corretta per ogni item per ogni livello di theta
-# restituiesce una lista con dentro il dataset usato 
-# e un grafico in ggplot
-irt.icc = function(model) {
-  item_par = model$item_irt
-est_theta = IRT.factor.scores(model, 
-                              type = "EAP")$EAP
-
-item_prob = list()
-
-for (i in 1:nrow(item_par)) {
-item_prob[[i]] = data.frame(theta = est_theta)
-item_prob[[i]]$it_p = IRT(item_prob[[i]]$theta, 
-                          b = item_par[i, "beta"], 
-                          a = item_par[i, "alpha"])
-
-item_prob[[i]]$item = item_par[i, "item"]
-
-}
-
-p = do.call("rbind", item_prob)
-
-gp = ggplot(p, 
-       aes(x = theta, y = it_p, group = item, col = item)) + geom_line()
-
-object = list(prob.data = p, 
-              icc.graph = gp)
-
-return(object)
-}
-
-
-
-irt.icc(m1pl)$icc.graph
-
+irt.icc(m1pl)$icc.graph + theme_classic()
 ```
 
 
----
 
+---
 ## 2PL 
 
 ```{r}
@@ -282,16 +286,48 @@ m2pl = tam.mml.2pl(data, irtmodel = "2PL", verbose = F)
 summary(m2pl)
 ```
 
+---
+
+## 2PL - Fit 
+
+```{r}
+f.m2pl = tam.modelfit(m2pl)
+
+f.m2pl$statlist
+
+
+
+f.m2pl$modelfit.test
+
+```
+
 
 ---
 
-## 3PL 
+## 2PL - Item fit
+
+
+```{r}
+item.fit.2pl = IRT.itemfit(m2pl)
+
+item.fit.2pl$chisquare_stat
+
+item.fit.1pl$RMSD
+
+item.fit.1pl$RMSD_summary
+
+```
+
+---
+
+
+
+## 2PL - ICC
 
 ```{r}
 
-m3pl = tam.mml.3pl(data, verbose = F)
+irt.icc(m2pl)$icc.graph + theme_classic() 
 
-summary(m3pl)
 
 ```
 
@@ -300,10 +336,173 @@ summary(m3pl)
 
 ---
 
+## 3PL 
+
+```{r}
+
+m3pl = tam.mml.3pl(data, est.guess = colnames(data),
+                     verbose = F)
+
+summary(m3pl)
+
+```
+
+
+--- 
+
+## 3PL - Fit 
+
+```{r}
+f.m3pl = tam.modelfit(m3pl)
+
+f.m3pl$statlist
+
+
+
+f.m3pl$modelfit.test
+
+```
+
+
+---
+
+## 3PL - Item fit
+
+
+```{r}
+item.fit.3pl = IRT.itemfit(m3pl)
+
+item.fit.3pl$chisquare_stat
+
+item.fit.3pl$RMSD
+
+item.fit.3pl$RMSD_summary
+
+```
+
+
+---
+
+## 3PL - ICC
+
+```{r}
+
+irt.icc(m3pl)$icc.graph + theme_bw()
+```
+
+---
+
+# Scelta del modello
+
+
+---
+
 ## Confronto tra modelli 
 
 ```{r}
-IRT.compareModels(m1pl, m2pl)
+IRT.compareModels(m1pl, m2pl, m3pl)
+```
+
+
+---
+
+## Scelta del modello 
+
+Il 2PL è il modello migliore 
+
+
+---
+
+# Verifica delle assunzioni
+
+---
+
+## Unidimensionalità 
+
+```{r}
+
+item_lab = paste(colnames(data), collapse = " + ")
+form = paste("latent =~", item_lab)
+
+form
+
+```
+
+```{r}
+model = cfa(form, data = data,  ordered = colnames(data))
+summary(model, fit.measures = T)
+```
+
+
+---
+
+## Monotonicità 
+
+```{r}
+mono_check = check.monotonicity(data)
+summary(mono_check)
+
+
+```
+
+
+
+---
+## Indipendenza Locale
+
+```{r}
+f.m2pl$Q3_summary
+```
+
+
+---
+
+
+#  Item Information Function
+ 
+
+---
+
+## IIF per il 2PL 
+
+```{r}
+est_theta = IRT.factor.scores(m2pl, 
+                              type = "EAP")$EAP
+ii.2pl = IRT.informationCurves(m2pl, theta = est_theta)
+
+p = data.frame(theta = est_theta, 
+               info = ii.2pl$test_info_curve, 
+               se = ii.2pl$se_curve)
+
+ggplot(p, 
+       aes(x = theta, y = info)) + geom_line()
+ggplot(p, 
+       aes(x = theta, y = se)) + geom_line()
+
+
+
+iif_info = list()
+for(i in 1:nrow(ii.2pl$info_curves_item)) {
+    iif_info[[i]] = data.frame(theta = est_theta)
+    iif_info[[i]]$ii_item = ii.2pl$info_curves_item[i, ]
+    iif_info[[i]]$item = dimnames(ii.2pl$info_curves_item)[[1]][i]
+}
+
+dat_info = do.call("rbind", iif_info)
+
+ggplot(dat_info, 
+       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
+
+p_small = p[, c(1:2)]
+
+colnames(p_small)[2] = "ii_item"
+p_small$item = "test"
+
+all_info = rbind(dat_info, p_small)
+
+ggplot(all_info, 
+       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
+
 ```
 
 
