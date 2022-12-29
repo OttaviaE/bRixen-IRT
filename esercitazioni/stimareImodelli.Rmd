@@ -1,0 +1,94 @@
+---
+title: "Item Response Theory for beginners"
+subtitle: "Stimare i modelli in R"
+institute: "Bressanone"
+author: "Dr. Ottavia M. Epifania"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center", 
+                      out.width = "90%")
+```
+
+
+```{css, echo=F, eval = T}
+pre {
+  max-height: 700px;
+  overflow-y: auto;
+}
+pre[class] {
+  max-height: 500px;
+}
+.scroll-100 {
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+```
+
+---
+class: section, center, middle
+
+# In cosa consiste questo corso?
+
+---
+
+
+One slide.
+
+---
+
+## Create a new project I 
+
+
+New file $\rightarrow$ New project
+
+```{r, echo = F}
+knitr::include_graphics("img/project1.png")
+```
+---
+
+
+## Create a new project II 
+
+.pull-left[ 
+```{r echo = F}
+knitr::include_graphics("img/project2.png")
+```
+
+]
+
+.pull-right[
+```{r echo = F}
+knitr::include_graphics("img/project3.png")
+```
+
+]
+
+
+---
+
+
+## Pacchetti
+
+.pull-left[
+.center[Installazione]
+]
+
+
+.pull-right[
+.center[Caricamento]
+]
+---
