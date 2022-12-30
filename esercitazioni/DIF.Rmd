@@ -1,0 +1,273 @@
+---
+title: "Item Response Theory for beginners"
+subtitle: "Differential Item Functioning in R"
+institute: "Bressanone"
+author: "Dr. Ottavia M. Epifania"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      countIncrementalSlides: false
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, 
+                      warning = F, 
+                      message = F, 
+                      fig.align = "center", 
+                      out.width = "90%", 
+                      class.output="scroll-100")
+hook_output <- knitr::knit_hooks$get("output")
+
+knitr::knit_hooks$set(output = function(x, options) {
+  if (!is.null(n <- options$out.lines)) {
+    x <- xfun::split_lines(x)
+    if (length(x) > n) {
+      # truncate the output
+      x <- c(head(x, n), "....\n")
+    }
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
+library(TAM)
+library(mokken)
+library(lavaan)
+library(difR)
+library(sirt)
+library(ggplot2)
+set.seed(999)
+
+# codice di Dr Enrico Toffaini per la simulazione di dati con dif
+n <- 250
+nitem <- 10
+percDif <- 50
+
+logit2prob <- function(logit){
+  odds <- exp(logit)
+  prob <- odds / (1 + odds)
+  return(prob)
+}
+
+ndif <- round(nitem*percDif/100) # item con dif
+d <- data.frame(id=rep(1:(n*2),each=nitem),
+                gender=rep(c("m","f"),each=n*nitem),
+                ability=rep(rnorm(n*2,0,1),each=nitem),
+                item=paste("item",rep(1:nitem,times=n*2),sep=""),
+                level=rep(rnorm(nitem,0,1),times=n*2),
+                dif=NA)
+d$dif <- rep(c(rep(0,nitem-ndif),rnorm(ndif,0.5,0.5)),times=n*2)
+d$logit <- d$ability - d$level + d$dif * ifelse(d$gender=="m",0.5,-0.5)
+d$prob <- logit2prob(d$logit)
+d$resp <- rbinom(nrow(d),1,d$prob)
+
+d2 <- reshape(d[,!colnames(d)%in%c("logit","prob","level","dif")],direction="wide",varying=levels(as.factor(d$item)),
+              v.names="resp",timevar="item",idvar="id")
+temp = d2[, !colnames(d2) %in% c("id", "gender", "ability")]
+
+temp = temp[unique(d$item)]
+d2 = cbind( d2[, colnames(d2) %in% c("id", "gender", "ability")], 
+            temp)
+data = d2
+```
+
+
+```{css, echo=F, eval = T}
+pre {
+  max-height: 700px;
+  overflow-y: auto;
+}
+pre[class] {
+  max-height: 500px;
+}
+.scroll-100 {
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+```
+
+<style>
+.myClass {font-size: 14px;}
+</style>
+
+
+---
+class: section, center, middle
+
+# Importare i dati
+
+---
+
+
+## Devo capire quali dati 
+
+
+---
+
+class: section, center, middle
+
+# Look at the data! 
+
+---
+
+```{r echo = F}
+p = data.frame(table(d$item, d$resp))
+p$prop = p$Freq/500
+p$Var1 = factor(p$Var1, 
+                levels = unique(d$item))
+ggplot(p, 
+       aes(x = Var1, y=prop,  
+ 
+           fill = Var2)) + geom_bar(stat = "identity") + 
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50))
+
+```
+
+
+---
+
+## Closer 
+
+
+```{r}
+p = data.frame(table(d$item, d$resp, d$gender))
+p$prop = p$Freq/500
+p$Var1 = factor(p$Var1, 
+                levels = unique(d$item))
+ggplot(p[p$Var2 %in% 1,], 
+       aes(x = Var1, y=prop, fill = Var3)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  theme(axis.text = element_text(angle = 90)) + 
+  geom_hline(aes(yintercept=.50)) 
+```
+
+
+---
+
+class: section, center, middle
+
+# Stimare e scegliere il modello 
+
+---
+
+```{r}
+
+m1pl = tam.mml(data[, grep("item", colnames(data))], verbose = F)
+
+m2pl = tam.mml.2pl(data[, grep("item", colnames(data))], irtmodel = "2PL", verbose = F)
+
+m3pl = tam.mml.3pl(data[, grep("item", colnames(data))], est.guess = grep("item", colnames(data)),
+                     verbose = F)
+
+IRT.compareModels(m1pl, m2pl, m3pl)
+
+```
+
+
+1PL!
+---
+
+## Fit del modello 
+
+```{r}
+f.m1pl = tam.modelfit(m1pl, progress = F)
+
+f.m1pl$statlist
+
+
+
+f.m1pl$modelfit.test
+```
+
+
+---
+
+## 1PL - Item fit
+
+
+```{r}
+item.fit.1pl = IRT.itemfit(m1pl)
+
+item.fit.1pl$chisquare_stat
+
+item.fit.1pl$RMSD
+
+item.fit.1pl$RMSD_summary
+
+```
+
+---
+
+class: section, center, middle
+
+# DIF time!
+
+---
+
+Per investigare la DIF, utilizziamo il pacchetto `difR`
+
+`difR` permette di investigare la DIF anche con approcci IRT che però non sono il focus di questo corso 
+
+Il vantaggio di usare un approccio IRT è che la DIF viene investigata considerando il tratto latente $\rightarrow$ non dipende dal campione
+
+- Likelihood Ratio Test 
+
+- Lord
+
+- Raju 
+
+---
+
+## Likelihood Ratio Test 
+
+Non è propriamente il LRT
+
+```{r}
+est_theta = IRT.factor.scores(m1pl)$EAP
+lrt_dif = difGenLogistic(d2[, !colnames(d2) %in% c("id", "gender", "ability")],
+                           group = as.factor(d2$gender),
+                           focal.names = "f",
+                           type = "udif",
+                           alpha = .001,
+                           p.adjust.method = "BH",
+                           match = est_theta,
+                           criterion = "LRT")
+lrt_dif
+```
+
+
+---
+
+## DIF Lord
+
+```{r}
+lordDif = difLord(d2[, !colnames(d2) %in% c("id", "ability")], 
+                  group = "gender", 
+                  focal.name = "m", 
+                  model = "1PL", 
+                  p.adjust.method = "BH")
+lordDif
+```
+
+---
+
+
+## DIF Raju 
+
+```{r}
+rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")], 
+                  group = "gender", 
+                  focal.name = "m", 
+                  model = "1PL", 
+                  p.adjust.method = "BH")
+rajDif
+
+```
+
+
+---

@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Item Response Theory for beginners
 ]
 .subtitle[
-## Stimare, secgeliere i modelli e verificare le assunzioni in R
+## Stimare, scegliere i modelli e verificare le assunzioni in R
 ]
 .author[
 ### Dr. Ottavia M. Epifania
@@ -145,7 +145,13 @@ IRT &lt;- function(theta, a = 1, b = 0, c = 0,e = 1) {
   y[is.na(y)] = 1
   return(y)
 }
+```
 
+---
+## Codici utili II
+
+
+```r
 # questa funzione estrae tutti gli item e i loro parametri 
 # e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
 # restituisce una lista con dentro il dataset usato 
@@ -189,10 +195,10 @@ return(object)
 
 ---
 
-## Codici utili II
+## Codici utili III
 
 
-```{.r .myClass}
+```r
 irt.iif = function(model) {
   est_theta = IRT.factor.scores(model, 
                               type = "EAP")$EAP
@@ -234,6 +240,60 @@ poi la faccio devo vedere quali dati fare
 
 ---
 
+## Look at the data - Item I
+
+
+```r
+vis_data = data
+vis_data$id = paste0("s", 1:nrow(data))
+
+vis_data = vis_data[, c(ncol(vis_data), 1:ncol(data))]
+
+vis_data = reshape(vis_data, idvar = "id", direction = "long", varying = list(2:ncol(vis_data)), v.names = "resp", 
+        times = names(vis_data)[-1], timevar = "item")
+
+prop_data = data.frame(table(vis_data$item, vis_data$resp))
+
+colnames(prop_data)[1:2] = c("item", "response")
+
+prop_data$proportion = prop_data$Freq/nrow(data)
+
+ggplot(prop_data, 
+       aes(x = item, y=proportion,  
+ 
+           fill = response)) + geom_bar(stat = "identity") + 
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw()
+```
+
+---
+
+
+
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## Look at the data - Respondents
+
+
+```r
+sbj_data = data
+sbj_data$id = paste0("s", 1:nrow(data))
+sbj_data = sbj_data[, c(ncol(sbj_data), 1:ncol(data))]
+
+sbj_data$sum = rowSums(sbj_data[,-1])
+
+boxplot(sbj_data$sum)
+```
+
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
 class: section, center, middle
 
 # Stima dei modelli 
@@ -258,9 +318,9 @@ summary(m1pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 14:01:51 
-## Time difference of 0.1062341 secs
-## Computation time: 0.1062341 
+## Date of Analysis: 2022-12-30 16:07:49 
+## Time difference of 0.1027279 secs
+## Computation time: 0.1027279 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -269,109 +329,59 @@ summary(m1pl)
 ## tam.mml(resp = data, verbose = F)
 ## 
 ## ------------------------------------------------------------
-## Number of iterations = 20 
+## Number of iterations = 34 
 ## Numeric integration with 21 integration points
 ## 
-## Deviance = 25203.21 
-## Log likelihood = -12601.6 
+## Deviance = 5413.25 
+## Log likelihood = -2706.63 
 ## Number of persons = 1000 
 ## Number of persons used = 1000 
-## Number of items = 30 
-## Number of estimated parameters = 31 
-##     Item threshold parameters = 30 
+## Number of items = 5 
+## Number of estimated parameters = 6 
+##     Item threshold parameters = 5 
 ##     Item slope parameters = 0 
 ##     Regression parameters = 0 
 ##     Variance/covariance parameters = 1 
 ## 
-## AIC = 25265  | penalty=62    | AIC=-2*LL + 2*p 
-## AIC3 = 25296  | penalty=93    | AIC3=-2*LL + 3*p 
-## BIC = 25417  | penalty=214.14    | BIC=-2*LL + log(n)*p 
-## aBIC = 25319  | penalty=115.56    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
-## CAIC = 25448  | penalty=245.14    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
-## AICc = 25267  | penalty=64.05    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
-## GHP = 0.42109     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
+## AIC = 5425  | penalty=12    | AIC=-2*LL + 2*p 
+## AIC3 = 5431  | penalty=18    | AIC3=-2*LL + 3*p 
+## BIC = 5455  | penalty=41.45    | BIC=-2*LL + log(n)*p 
+## aBIC = 5436  | penalty=22.37    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
+## CAIC = 5461  | penalty=47.45    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
+## AICc = 5425  | penalty=12.08    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
+## GHP = 0.54253     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
 ## 
 ## ------------------------------------------------------------
 ## EAP Reliability
-## [1] 0.938
+## [1] 0.713
 ## ------------------------------------------------------------
 ## Covariances and Variances
 ##       [,1]
-## [1,] 4.837
+## [1,] 3.937
 ## ------------------------------------------------------------
 ## Correlations and Standard Deviations (in the diagonal)
 ##       [,1]
-## [1,] 2.199
+## [1,] 1.984
 ## ------------------------------------------------------------
 ## Regression Coefficients
 ##      [,1]
 ## [1,]    0
 ## ------------------------------------------------------------
 ## Item Parameters -A*Xsi
-##    item    N     M xsi.item AXsi_.Cat1 B.Cat1.Dim1
-## 1   I01 1000 0.561   -0.486     -0.486           1
-## 2   I02 1000 0.433    0.478      0.478           1
-## 3   I03 1000 0.782   -2.277     -2.277           1
-## 4   I04 1000 0.245    2.015      2.015           1
-## 5   I05 1000 0.306    1.484      1.484           1
-## 6   I06 1000 0.777   -2.231     -2.231           1
-## 7   I07 1000 0.432    0.485      0.485           1
-## 8   I08 1000 0.812   -2.569     -2.569           1
-## 9   I09 1000 0.554   -0.433     -0.433           1
-## 10  I10 1000 0.423    0.554      0.554           1
-## 11  I11 1000 0.615   -0.895     -0.895           1
-## 12  I12 1000 0.456    0.303      0.303           1
-## 13  I13 1000 0.844   -2.911     -2.911           1
-## 14  I14 1000 0.182    2.631      2.631           1
-## 15  I15 1000 0.774   -2.203     -2.203           1
-## 16  I16 1000 0.295    1.576      1.576           1
-## 17  I17 1000 0.758   -2.058     -2.058           1
-## 18  I18 1000 0.284    1.670      1.670           1
-## 19  I19 1000 0.737   -1.874     -1.874           1
-## 20  I20 1000 0.728   -1.798     -1.798           1
-## 21  I21 1000 0.208    2.365      2.365           1
-## 22  I22 1000 0.402    0.716      0.716           1
-## 23  I23 1000 0.455    0.310      0.310           1
-## 24  I24 1000 0.611   -0.864     -0.864           1
-## 25  I25 1000 0.292    1.602      1.602           1
-## 26  I26 1000 0.253    1.942      1.942           1
-## 27  I27 1000 0.455    0.310      0.310           1
-## 28  I28 1000 0.416    0.608      0.608           1
-## 29  I29 1000 0.260    1.880      1.880           1
-## 30  I30 1000 0.542   -0.343     -0.343           1
+##   item    N     M xsi.item AXsi_.Cat1 B.Cat1.Dim1
+## 1  I01 1000 0.572   -0.498     -0.498           1
+## 2  I02 1000 0.442    0.370      0.370           1
+## 3  I03 1000 0.729   -1.623     -1.623           1
+## 4  I04 1000 0.262    1.685      1.685           1
+## 5  I05 1000 0.295    1.421      1.421           1
 ## 
 ## Item Parameters in IRT parameterization
-##    item alpha   beta
-## 1   I01     1 -0.486
-## 2   I02     1  0.478
-## 3   I03     1 -2.277
-## 4   I04     1  2.015
-## 5   I05     1  1.484
-## 6   I06     1 -2.231
-## 7   I07     1  0.485
-## 8   I08     1 -2.569
-## 9   I09     1 -0.433
-## 10  I10     1  0.554
-## 11  I11     1 -0.895
-## 12  I12     1  0.303
-## 13  I13     1 -2.911
-## 14  I14     1  2.631
-## 15  I15     1 -2.203
-## 16  I16     1  1.576
-## 17  I17     1 -2.058
-## 18  I18     1  1.670
-## 19  I19     1 -1.874
-## 20  I20     1 -1.798
-## 21  I21     1  2.365
-## 22  I22     1  0.716
-## 23  I23     1  0.310
-## 24  I24     1 -0.864
-## 25  I25     1  1.602
-## 26  I26     1  1.942
-## 27  I27     1  0.310
-## 28  I28     1  0.608
-## 29  I29     1  1.880
-## 30  I30     1 -0.343
+##   item alpha   beta
+## 1  I01     1 -0.498
+## 2  I02     1  0.370
+## 3  I03     1 -1.623
+## 4  I04     1  1.685
+## 5  I05     1  1.421
 ```
 
 
@@ -389,8 +399,8 @@ f.m1pl$statlist
 ```
 
 ```{.scroll-100}
-##   X100.MADCOV       SRMR     SRMSR     MADaQ3 pmaxX2
-## 1    1.811654 0.08493693 0.1046168 0.04072332      0
+##   X100.MADCOV       SRMR      SRMSR     MADaQ3      pmaxX2
+## 1    1.415162 0.06452616 0.08729947 0.06260904 3.64464e-11
 ```
 
 ```r
@@ -398,8 +408,8 @@ f.m1pl$modelfit.test
 ```
 
 ```{.scroll-100}
-##      maxX2 Npairs p.holm
-## 1 108.0643    435      0
+##     maxX2 Npairs      p.holm
+## 1 48.3069     10 3.64464e-11
 ```
 
 
@@ -416,37 +426,12 @@ item.fit.1pl$chisquare_stat
 ```
 
 ```{.scroll-100}
-##    item     Group1
-## 1   I01  77.252267
-## 2   I02  33.508314
-## 3   I03  11.109288
-## 4   I04   7.396331
-## 5   I05  17.332579
-## 6   I06  32.224634
-## 7   I07  52.921498
-## 8   I08  22.319528
-## 9   I09 218.920404
-## 10  I10  15.935413
-## 11  I11  51.458329
-## 12  I12  49.371596
-## 13  I13  22.321825
-## 14  I14   5.483464
-## 15  I15   8.630843
-## 16  I16   6.766333
-## 17  I17  30.870955
-## 18  I18  13.335964
-## 19  I19  59.391092
-## 20  I20 115.097900
-## 21  I21  29.418762
-## 22  I22  33.060854
-## 23  I23  89.529184
-## 24  I24  69.675408
-## 25  I25  15.840449
-## 26  I26  27.346625
-## 27  I27 182.373408
-## 28  I28  51.196604
-## 29  I29   8.176760
-## 30  I30  52.418243
+##   item     Group1
+## 1  I01 11.2578889
+## 2  I02 14.6178740
+## 3  I03  6.8620373
+## 4  I04  0.5385041
+## 5  I05 10.7291513
 ```
 
 ```r
@@ -454,37 +439,12 @@ item.fit.1pl$RMSD
 ```
 
 ```{.scroll-100}
-##    item     Group1
-## 1   I01 0.08424255
-## 2   I02 0.05104697
-## 3   I03 0.03468976
-## 4   I04 0.02784733
-## 5   I05 0.04709823
-## 6   I06 0.06535459
-## 7   I07 0.08399154
-## 8   I08 0.05023223
-## 9   I09 0.12577138
-## 10  I10 0.04274041
-## 11  I11 0.06175835
-## 12  I12 0.07933141
-## 13  I13 0.04970507
-## 14  I14 0.02076430
-## 15  I15 0.02639670
-## 16  I16 0.02921774
-## 17  I17 0.06310939
-## 18  I18 0.02561378
-## 19  I19 0.06336675
-## 20  I20 0.08602657
-## 21  I21 0.06194753
-## 22  I22 0.06430674
-## 23  I23 0.07387088
-## 24  I24 0.10302118
-## 25  I25 0.03334831
-## 26  I26 0.04777962
-## 27  I27 0.11047531
-## 28  I28 0.08204966
-## 29  I29 0.02986392
-## 30  I30 0.08184028
+##   item      Group1
+## 1  I01 0.033633418
+## 2  I02 0.045644930
+## 3  I03 0.020356685
+## 4  I04 0.008875834
+## 5  I05 0.035963344
 ```
 
 ```r
@@ -492,8 +452,8 @@ item.fit.1pl$RMSD_summary
 ```
 
 ```{.scroll-100}
-##     Parm          M         SD       Min       Max
-## 1 Group1 0.06022695 0.02700875 0.0207643 0.1257714
+##     Parm          M         SD         Min        Max
+## 1 Group1 0.02889484 0.01437571 0.008875834 0.04564493
 ```
 
 ---
@@ -509,7 +469,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m1pl)$icc.graph + theme_classic()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -528,9 +488,9 @@ summary(m2pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 14:01:56 
-## Time difference of 1.396715 secs
-## Computation time: 1.396715 
+## Date of Analysis: 2022-12-30 16:07:50 
+## Time difference of 0.203202 secs
+## Computation time: 0.203202 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -539,31 +499,31 @@ summary(m2pl)
 ## tam.mml.2pl(resp = data, irtmodel = "2PL", verbose = F)
 ## 
 ## ------------------------------------------------------------
-## Number of iterations = 95 
+## Number of iterations = 66 
 ## Numeric integration with 21 integration points
 ## 
-## Deviance = 23814.33 
-## Log likelihood = -11907.16 
+## Deviance = 5308.52 
+## Log likelihood = -2654.26 
 ## Number of persons = 1000 
 ## Number of persons used = 1000 
-## Number of items = 30 
-## Number of estimated parameters = 60 
-##     Item threshold parameters = 30 
-##     Item slope parameters = 30 
+## Number of items = 5 
+## Number of estimated parameters = 10 
+##     Item threshold parameters = 5 
+##     Item slope parameters = 5 
 ##     Regression parameters = 0 
 ##     Variance/covariance parameters = 0 
 ## 
-## AIC = 23934  | penalty=120    | AIC=-2*LL + 2*p 
-## AIC3 = 23994  | penalty=180    | AIC3=-2*LL + 3*p 
-## BIC = 24229  | penalty=414.47    | BIC=-2*LL + log(n)*p 
-## aBIC = 24038  | penalty=223.66    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
-## CAIC = 24289  | penalty=474.47    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
-## AICc = 23942  | penalty=127.8    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
-## GHP = 0.39891     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
+## AIC = 5329  | penalty=20    | AIC=-2*LL + 2*p 
+## AIC3 = 5339  | penalty=30    | AIC3=-2*LL + 3*p 
+## BIC = 5378  | penalty=69.08    | BIC=-2*LL + log(n)*p 
+## aBIC = 5346  | penalty=37.28    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
+## CAIC = 5388  | penalty=79.08    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
+## AICc = 5329  | penalty=20.22    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
+## GHP = 0.53285     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
 ## 
 ## ------------------------------------------------------------
 ## EAP Reliability
-## [1] 0.948
+## [1] 0.729
 ## ------------------------------------------------------------
 ## Covariances and Variances
 ##      [,1]
@@ -578,70 +538,20 @@ summary(m2pl)
 ## [1,]    0
 ## ------------------------------------------------------------
 ## Item Parameters -A*Xsi
-##    item    N     M xsi.item AXsi_.Cat1 B.Cat1.Dim1
-## 1   I01 1000 0.561   -0.263     -0.263       1.247
-## 2   I02 1000 0.433    0.504      0.504       1.566
-## 3   I03 1000 0.782   -2.553     -2.553       2.641
-## 4   I04 1000 0.245    2.601      2.601       2.701
-## 5   I05 1000 0.306    2.092      2.092       2.878
-## 6   I06 1000 0.777   -3.532     -3.532       3.961
-## 7   I07 1000 0.432    1.161      1.161       4.109
-## 8   I08 1000 0.812   -3.720     -3.720       3.573
-## 9   I09 1000 0.554   -0.211     -0.211       0.928
-## 10  I10 1000 0.423    0.854      0.854       2.644
-## 11  I11 1000 0.615   -0.592     -0.592       1.395
-## 12  I12 1000 0.456    0.819      0.819       4.023
-## 13  I13 1000 0.844   -4.447     -4.447       3.807
-## 14  I14 1000 0.182    3.218      3.218       2.613
-## 15  I15 1000 0.774   -2.071     -2.071       2.085
-## 16  I16 1000 0.295    1.661      1.661       2.021
-## 17  I17 1000 0.758   -2.631     -2.631       3.122
-## 18  I18 1000 0.284    1.609      1.609       1.791
-## 19  I19 1000 0.737   -1.309     -1.309       1.251
-## 20  I20 1000 0.728   -1.176     -1.176       1.064
-## 21  I21 1000 0.208    4.242      4.242       4.014
-## 22  I22 1000 0.402    1.323      1.323       3.428
-## 23  I23 1000 0.455    0.322      0.322       1.285
-## 24  I24 1000 0.611   -1.422     -1.422       4.720
-## 25  I25 1000 0.292    1.492      1.492       1.690
-## 26  I26 1000 0.253    2.877      2.877       3.157
-## 27  I27 1000 0.455    0.281      0.281       1.006
-## 28  I28 1000 0.416    1.366      1.366       4.065
-## 29  I29 1000 0.260    2.463      2.463       2.726
-## 30  I30 1000 0.542   -0.319     -0.319       4.231
+##   item    N     M xsi.item AXsi_.Cat1 B.Cat1.Dim1
+## 1  I01 1000 0.572   -0.382     -0.382       1.299
+## 2  I02 1000 0.442    0.695      0.695       4.178
+## 3  I03 1000 0.729   -1.365     -1.365       1.460
+## 4  I04 1000 0.262    1.620      1.620       1.855
+## 5  I05 1000 0.295    2.206      2.206       3.616
 ## 
 ## Item Parameters in IRT parameterization
-##    item alpha   beta
-## 1   I01 1.247 -0.211
-## 2   I02 1.566  0.322
-## 3   I03 2.641 -0.967
-## 4   I04 2.701  0.963
-## 5   I05 2.878  0.727
-## 6   I06 3.961 -0.892
-## 7   I07 4.109  0.283
-## 8   I08 3.573 -1.041
-## 9   I09 0.928 -0.227
-## 10  I10 2.644  0.323
-## 11  I11 1.395 -0.425
-## 12  I12 4.023  0.203
-## 13  I13 3.807 -1.168
-## 14  I14 2.613  1.232
-## 15  I15 2.085 -0.993
-## 16  I16 2.021  0.822
-## 17  I17 3.122 -0.843
-## 18  I18 1.791  0.899
-## 19  I19 1.251 -1.047
-## 20  I20 1.064 -1.106
-## 21  I21 4.014  1.057
-## 22  I22 3.428  0.386
-## 23  I23 1.285  0.251
-## 24  I24 4.720 -0.301
-## 25  I25 1.690  0.882
-## 26  I26 3.157  0.911
-## 27  I27 1.006  0.280
-## 28  I28 4.065  0.336
-## 29  I29 2.726  0.903
-## 30  I30 4.231 -0.075
+##   item alpha   beta
+## 1  I01 1.299 -0.294
+## 2  I02 4.178  0.166
+## 3  I03 1.460 -0.935
+## 4  I04 1.855  0.874
+## 5  I05 3.616  0.610
 ```
 
 ---
@@ -664,8 +574,8 @@ f.m2pl$statlist
 ```
 
 ```{.scroll-100}
-##   X100.MADCOV       SRMR      SRMSR    MADaQ3 pmaxX2
-## 1   0.3154719 0.01496019 0.01903373 0.0319888      1
+##   X100.MADCOV        SRMR      SRMSR     MADaQ3 pmaxX2
+## 1   0.2043301 0.009127058 0.01265885 0.07103058      1
 ```
 
 ```r
@@ -673,8 +583,8 @@ f.m2pl$modelfit.test
 ```
 
 ```{.scroll-100}
-##      maxX2 Npairs p.holm
-## 1 5.296837    435      1
+##       maxX2 Npairs p.holm
+## 1 0.8595675     10      1
 ```
 
 
@@ -691,37 +601,12 @@ item.fit.2pl$chisquare_stat
 ```
 
 ```{.scroll-100}
-##    item     Group1
-## 1   I01  1.7051127
-## 2   I02  2.1804764
-## 3   I03  2.5858086
-## 4   I04  1.5945602
-## 5   I05  2.2244315
-## 6   I06  1.4394994
-## 7   I07  0.5900551
-## 8   I08  1.7798638
-## 9   I09  6.6145077
-## 10  I10 12.1918081
-## 11  I11  2.4173191
-## 12  I12  2.0731057
-## 13  I13  1.5692035
-## 14  I14  1.8241584
-## 15  I15  6.5608803
-## 16  I16  3.4492439
-## 17  I17  6.8013567
-## 18  I18  3.5214166
-## 19  I19  1.1946620
-## 20  I20  3.4254406
-## 21  I21  1.1708249
-## 22  I22  1.1712935
-## 23  I23  3.1782093
-## 24  I24  3.6971893
-## 25  I25  2.3629812
-## 26  I26 61.1240109
-## 27  I27  4.2917188
-## 28  I28  1.7290683
-## 29  I29  3.4287326
-## 30  I30  1.4579497
+##   item    Group1
+## 1  I01 0.4296817
+## 2  I02 0.2003800
+## 3  I03 1.4600113
+## 4  I04 1.3387959
+## 5  I05 0.3435749
 ```
 
 ```r
@@ -729,37 +614,12 @@ item.fit.1pl$RMSD
 ```
 
 ```{.scroll-100}
-##    item     Group1
-## 1   I01 0.08424255
-## 2   I02 0.05104697
-## 3   I03 0.03468976
-## 4   I04 0.02784733
-## 5   I05 0.04709823
-## 6   I06 0.06535459
-## 7   I07 0.08399154
-## 8   I08 0.05023223
-## 9   I09 0.12577138
-## 10  I10 0.04274041
-## 11  I11 0.06175835
-## 12  I12 0.07933141
-## 13  I13 0.04970507
-## 14  I14 0.02076430
-## 15  I15 0.02639670
-## 16  I16 0.02921774
-## 17  I17 0.06310939
-## 18  I18 0.02561378
-## 19  I19 0.06336675
-## 20  I20 0.08602657
-## 21  I21 0.06194753
-## 22  I22 0.06430674
-## 23  I23 0.07387088
-## 24  I24 0.10302118
-## 25  I25 0.03334831
-## 26  I26 0.04777962
-## 27  I27 0.11047531
-## 28  I28 0.08204966
-## 29  I29 0.02986392
-## 30  I30 0.08184028
+##   item      Group1
+## 1  I01 0.033633418
+## 2  I02 0.045644930
+## 3  I03 0.020356685
+## 4  I04 0.008875834
+## 5  I05 0.035963344
 ```
 
 ```r
@@ -767,8 +627,8 @@ item.fit.1pl$RMSD_summary
 ```
 
 ```{.scroll-100}
-##     Parm          M         SD       Min       Max
-## 1 Group1 0.06022695 0.02700875 0.0207643 0.1257714
+##     Parm          M         SD         Min        Max
+## 1 Group1 0.02889484 0.01437571 0.008875834 0.04564493
 ```
 
 ---
@@ -782,7 +642,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m2pl)$icc.graph + theme_classic() 
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -804,9 +664,9 @@ summary(m3pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 14:03:02 
-## Time difference of 1.035039 mins
-## Computation time: 1.035039 
+## Date of Analysis: 2022-12-30 16:07:56 
+## Time difference of 4.928281 secs
+## Computation time: 4.928281 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -815,85 +675,58 @@ summary(m3pl)
 ## tam.mml.3pl(resp = data, est.guess = colnames(data), verbose = F)
 ## 
 ## ------------------------------------------------------------
-## Number of iterations = 292 
+## Number of iterations = 578 
 ## 
 ## Skill space: Normal Distribution 
 ## Numeric integration with 21 integration points
 ## 
-## Deviance = 23780.56  | Log Likelihood = -11890.28 
+## Deviance = 5309.34  | Log Likelihood = -2654.67 
 ## Number of persons = 1000 
 ## Number of persons used = 1000 
-## Number of items = 30 
-## Number of estimated parameters = 91 
-##     Item threshold parameters = 30 
-##     Item slope parameters = 30 
+## Number of items = 5 
+## Number of estimated parameters = 16 
+##     Item threshold parameters = 5 
+##     Item slope parameters = 5 
 ##       Non-active item slopes = 0 
-##     Item guessing parameters = 30 
+##     Item guessing parameters = 5 
 ##     Regression parameters = 0 
 ##     Variance/covariance parameters = 1 
 ##     Delta parameters     = 0 
 ## 
-## AIC = 23963  | penalty=182    | AIC=-2*LL + 2*p 
-## AIC3 = 24054  | penalty=273    | AIC3=-2*LL + 3*p 
-## BIC = 24409  | penalty=628.61    | BIC=-2*LL + log(n)*p 
-## aBIC = 24120  | penalty=339.22    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
-## CAIC = 24500  | penalty=719.61    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
-## AICc = 23981  | penalty=200.44    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
-## GHP = 0.39938     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
+## AIC = 5341  | penalty=32    | AIC=-2*LL + 2*p 
+## AIC3 = 5357  | penalty=48    | AIC3=-2*LL + 3*p 
+## BIC = 5420  | penalty=110.52    | BIC=-2*LL + log(n)*p 
+## aBIC = 5369  | penalty=59.64    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
+## CAIC = 5436  | penalty=126.52    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
+## AICc = 5342  | penalty=32.55    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
+## GHP = 0.53413     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
 ## 
 ## ------------------------------------------------------------
 ## EAP Reliability
-## [1] 0.938
+## [1] 0.728
 ## ------------------------------------------------------------
 ## Covariances and Variances
 ##       [,1]
-## [1,] 2.621
+## [1,] 1.475
 ## ------------------------------------------------------------
 ## Correlations and Standard Deviations (in the diagonal)
 ##       [,1]
-## [1,] 1.619
+## [1,] 1.215
 ## ------------------------------------------------------------
 ## Regression Coefficients
 ##      [,1]
 ## [1,]    0
 ## ------------------------------------------------------------
 ## Item Parameters -A*Xsi
-##    item    N     M est.guess guess AXsi_.Cat1 B.Cat1.Dim1
-## 1   I01 1000 0.561         1 0.000     -0.395       0.825
-## 2   I02 1000 0.433         2 0.000      0.341       1.043
-## 3   I03 1000 0.782         3 0.038     -3.049       2.008
-## 4   I04 1000 0.245         4 0.001      2.278       1.775
-## 5   I05 1000 0.306         5 0.000      1.802       1.945
-## 6   I06 1000 0.777         6 0.019     -3.624       2.542
-## 7   I07 1000 0.432         7 0.000      0.760       2.878
-## 8   I08 1000 0.812         8 0.010     -4.169       2.678
-## 9   I09 1000 0.554         9 0.000     -0.311       0.618
-## 10  I10 1000 0.423        10 0.000      0.636       1.962
-## 11  I11 1000 0.615        11 0.000     -0.750       0.949
-## 12  I12 1000 0.456        12 0.000      0.407       2.743
-## 13  I13 1000 0.844        13 0.001     -4.540       2.564
-## 14  I14 1000 0.182        14 0.000      2.804       1.641
-## 15  I15 1000 0.774        15 0.062     -3.246       2.502
-## 16  I16 1000 0.295        16 0.000      1.453       1.343
-## 17  I17 1000 0.758        17 0.025     -4.078       3.590
-## 18  I18 1000 0.284        18 0.000      1.422       1.181
-## 19  I19 1000 0.737        19 0.000     -1.447       0.826
-## 20  I20 1000 0.728        20 0.000     -1.298       0.714
-## 21  I21 1000 0.208        21 0.000      3.155       2.219
-## 22  I22 1000 0.402        22 0.000      0.984       2.357
-## 23  I23 1000 0.455        23 0.000      0.188       0.849
-## 24  I24 1000 0.611        24 0.000     -1.933       3.249
-## 25  I25 1000 0.292        25 0.000      1.325       1.131
-## 26  I26 1000 0.253        26 0.000      2.466       2.057
-## 27  I27 1000 0.455        27 0.000      0.176       0.673
-## 28  I28 1000 0.416        28 0.067      0.975       2.841
-## 29  I29 1000 0.260        29 0.000      2.127       1.778
-## 30  I30 1000 0.542        30 0.000     -0.790       2.927
+##   item    N     M est.guess guess AXsi_.Cat1 B.Cat1.Dim1
+## 1  I01 1000 0.572         1 0.072     -0.357       1.090
+## 2  I02 1000 0.442         2 0.030      0.729       3.526
+## 3  I03 1000 0.729         3 0.068     -1.349       1.196
+## 4  I04 1000 0.262         4 0.053      1.731       1.623
+## 5  I05 1000 0.295         5 0.062      2.178       2.945
 ## 
 ## Gammaslope Parameters
-##  [1] 0.825 1.043 2.008 1.775 1.945 2.542 2.878 2.678 0.618 1.962 0.949 2.743
-## [13] 2.564 1.641 2.502 1.343 3.590 1.181 0.826 0.714 2.219 2.357 0.849 3.249
-## [25] 1.131 2.057 0.673 2.841 1.778 2.927
+## [1] 1.090 3.526 1.196 1.623 2.945
 ```
 
 
@@ -917,8 +750,8 @@ f.m3pl$statlist
 ```
 
 ```{.scroll-100}
-##   X100.MADCOV      SRMR     SRMSR    MADaQ3 pmaxX2
-## 1    6.631912 0.2861955 0.3000624 0.1061928      0
+##   X100.MADCOV      SRMR     SRMSR     MADaQ3 pmaxX2
+## 1    3.513074 0.1362303 0.1383601 0.05930855      0
 ```
 
 ```r
@@ -927,7 +760,7 @@ f.m3pl$modelfit.test
 
 ```{.scroll-100}
 ##      maxX2 Npairs p.holm
-## 1 797332.9    435      0
+## 1 121.0066     10      0
 ```
 
 
@@ -944,37 +777,12 @@ item.fit.3pl$chisquare_stat
 ```
 
 ```{.scroll-100}
-##    item     Group1
-## 1   I01   357.5171
-## 2   I02   380.1783
-## 3   I03        Inf
-## 4   I04   247.8723
-## 5   I05   426.0580
-## 6   I06        Inf
-## 7   I07  1765.7606
-## 8   I08        Inf
-## 9   I09   211.4219
-## 10  I10   874.9286
-## 11  I11   520.1103
-## 12  I12  1833.7742
-## 13  I13        Inf
-## 14  I14   143.6380
-## 15  I15        Inf
-## 16  I16   269.6024
-## 17  I17        Inf
-## 18  I18   223.7522
-## 19  I19   442.3523
-## 20  I20   327.1229
-## 21  I21   203.9289
-## 22  I22  1109.4013
-## 23  I23   281.2717
-## 24  I24 23660.0047
-## 25  I25   222.8356
-## 26  I26   291.4324
-## 27  I27   192.6416
-## 28  I28        Inf
-## 29  I29   278.8353
-## 30  I30  5791.8276
+##   item   Group1
+## 1  I01 22.18046
+## 2  I02      Inf
+## 3  I03 27.80196
+## 4  I04 88.67648
+## 5  I05      Inf
 ```
 
 ```r
@@ -982,37 +790,12 @@ item.fit.3pl$RMSD
 ```
 
 ```{.scroll-100}
-##    item    Group1
-## 1   I01 0.2701276
-## 2   I02 0.2969911
-## 3   I03 0.3590686
-## 4   I04 0.2308112
-## 5   I05 0.3122324
-## 6   I06 0.3938281
-## 7   I07 0.4966985
-## 8   I08 0.3430578
-## 9   I09 0.2156927
-## 10  I10 0.4112563
-## 11  I11 0.2956139
-## 12  I12 0.4986178
-## 13  I13 0.3052686
-## 14  I14 0.1580745
-## 15  I15 0.3465412
-## 16  I16 0.2487715
-## 17  I17 0.4003411
-## 18  I18 0.2253220
-## 19  I19 0.2349878
-## 20  I20 0.2110378
-## 21  I21 0.2016710
-## 22  I22 0.4445424
-## 23  I23 0.2582129
-## 24  I24 0.5466243
-## 25  I25 0.2259168
-## 26  I26 0.2535459
-## 27  I27 0.2160452
-## 28  I28 0.5743425
-## 29  I29 0.2482917
-## 30  I30 0.5472320
+##   item     Group1
+## 1  I01 0.06431136
+## 2  I02 0.14470552
+## 3  I03 0.07391311
+## 4  I04 0.12967412
+## 5  I05 0.23233843
 ```
 
 ```r
@@ -1020,8 +803,8 @@ item.fit.3pl$RMSD_summary
 ```
 
 ```{.scroll-100}
-##     Parm         M        SD       Min       Max
-## 1 Group1 0.3256922 0.1170706 0.1580745 0.5743425
+##     Parm         M         SD        Min       Max
+## 1 Group1 0.1289885 0.06735193 0.06431136 0.2323384
 ```
 
 
@@ -1034,7 +817,7 @@ item.fit.3pl$RMSD_summary
 irt.icc(m3pl)$icc.graph + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-24-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1053,19 +836,19 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 ```{.scroll-100}
 ## $IC
 ##   Model   loglike Deviance Npars Nobs      AIC      BIC     AIC3     AICc
-## 1  m1pl -12601.60 25203.21    31 1000 25265.21 25417.35 25296.21 25267.25
-## 2  m2pl -11907.16 23814.33    60 1000 23934.33 24228.79 23994.33 23942.12
-## 3  m3pl -11890.28 23780.56    91 1000 23962.56 24409.16 24053.56 23981.00
+## 1  m1pl -2706.625 5413.250     6 1000 5425.250 5454.697 5431.250 5425.335
+## 2  m2pl -2654.262 5308.525    10 1000 5328.525 5377.602 5338.525 5328.747
+## 3  m3pl -2654.668 5309.336    16 1000 5341.336 5419.860 5357.336 5341.890
 ##       CAIC       GHP
-## 1 25448.35 0.4210868
-## 2 24288.79 0.3989055
-## 3 24500.16 0.3993760
+## 1 5460.697 0.5425250
+## 2 5387.602 0.5328525
+## 3 5435.860 0.5341336
 ## 
 ## $LRtest
-##   Model1 Model2       Chi2 df         p
-## 1   m1pl   m2pl 1388.87677 29 0.0000000
-## 2   m1pl   m3pl 1422.64741 60 0.0000000
-## 3   m2pl   m3pl   33.77064 31 0.3350216
+##   Model1 Model2        Chi2 df p
+## 1   m1pl   m2pl 104.7253819  4 0
+## 2   m1pl   m3pl 103.9139966 10 0
+## 3   m2pl   m3pl  -0.8113853  6 1
 ## 
 ## attr(,"class")
 ## [1] "IRT.compareModels"
@@ -1096,7 +879,7 @@ form
 ```
 
 ```{.scroll-100}
-## [1] "latent =~ I01 + I02 + I03 + I04 + I05 + I06 + I07 + I08 + I09 + I10 + I11 + I12 + I13 + I14 + I15 + I16 + I17 + I18 + I19 + I20 + I21 + I22 + I23 + I24 + I25 + I26 + I27 + I28 + I29 + I30"
+## [1] "latent =~ I01 + I02 + I03 + I04 + I05"
 ```
 
 
@@ -1106,44 +889,44 @@ summary(model, fit.measures = T)
 ```
 
 ```{.scroll-100}
-## lavaan 0.6-12 ended normally after 52 iterations
+## lavaan 0.6-12 ended normally after 15 iterations
 ## 
 ##   Estimator                                       DWLS
 ##   Optimization method                           NLMINB
-##   Number of model parameters                        60
+##   Number of model parameters                        10
 ## 
 ##   Number of observations                          1000
 ## 
 ## Model Test User Model:
 ##                                               Standard      Robust
-##   Test Statistic                               269.212     423.114
-##   Degrees of freedom                               405         405
-##   P-value (Chi-square)                           1.000       0.258
-##   Scaling correction factor                                  1.175
-##   Shift parameter                                          194.059
+##   Test Statistic                                 1.643       3.095
+##   Degrees of freedom                                 5           5
+##   P-value (Chi-square)                           0.896       0.685
+##   Scaling correction factor                                  0.551
+##   Shift parameter                                            0.115
 ##     simple second-order correction                                
 ## 
 ## Model Test Baseline Model:
 ## 
-##   Test statistic                            197281.370   78783.083
-##   Degrees of freedom                               435         435
+##   Test statistic                              2945.814    2439.475
+##   Degrees of freedom                                10          10
 ##   P-value                                        0.000       0.000
-##   Scaling correction factor                                  2.512
+##   Scaling correction factor                                  1.208
 ## 
 ## User Model versus Baseline Model:
 ## 
 ##   Comparative Fit Index (CFI)                    1.000       1.000
-##   Tucker-Lewis Index (TLI)                       1.001       1.000
+##   Tucker-Lewis Index (TLI)                       1.002       1.002
 ##                                                                   
 ##   Robust Comparative Fit Index (CFI)                            NA
 ##   Robust Tucker-Lewis Index (TLI)                               NA
 ## 
 ## Root Mean Square Error of Approximation:
 ## 
-##   RMSEA                                          0.000       0.007
+##   RMSEA                                          0.000       0.000
 ##   90 Percent confidence interval - lower         0.000       0.000
-##   90 Percent confidence interval - upper         0.000       0.013
-##   P-value RMSEA &lt;= 0.05                          1.000       1.000
+##   90 Percent confidence interval - upper         0.019       0.034
+##   P-value RMSEA &lt;= 0.05                          0.999       0.995
 ##                                                                   
 ##   Robust RMSEA                                                  NA
 ##   90 Percent confidence interval - lower                     0.000
@@ -1151,7 +934,7 @@ summary(model, fit.measures = T)
 ## 
 ## Standardized Root Mean Square Residual:
 ## 
-##   SRMR                                           0.032       0.032
+##   SRMR                                           0.014       0.014
 ## 
 ## Parameter Estimates:
 ## 
@@ -1163,35 +946,10 @@ summary(model, fit.measures = T)
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
 ##   latent =~                                           
 ##     I01               1.000                           
-##     I02               1.135    0.061   18.546    0.000
-##     I03               1.328    0.065   20.445    0.000
-##     I04               1.341    0.066   20.289    0.000
-##     I05               1.387    0.065   21.398    0.000
-##     I06               1.439    0.066   21.703    0.000
-##     I07               1.494    0.067   22.140    0.000
-##     I08               1.406    0.065   21.486    0.000
-##     I09               0.827    0.064   12.943    0.000
-##     I10               1.378    0.065   21.364    0.000
-##     I11               1.064    0.062   17.113    0.000
-##     I12               1.482    0.067   22.068    0.000
-##     I13               1.393    0.066   21.143    0.000
-##     I14               1.299    0.064   20.159    0.000
-##     I15               1.259    0.064   19.771    0.000
-##     I16               1.247    0.062   20.134    0.000
-##     I17               1.415    0.065   21.723    0.000
-##     I18               1.174    0.063   18.764    0.000
-##     I19               0.969    0.064   15.239    0.000
-##     I20               0.892    0.063   14.076    0.000
-##     I21               1.420    0.067   21.236    0.000
-##     I22               1.448    0.067   21.764    0.000
-##     I23               1.016    0.061   16.638    0.000
-##     I24               1.501    0.068   21.976    0.000
-##     I25               1.142    0.064   17.746    0.000
-##     I26               1.391    0.066   21.041    0.000
-##     I27               0.878    0.063   14.029    0.000
-##     I28               1.489    0.067   22.179    0.000
-##     I29               1.345    0.066   20.445    0.000
-##     I30               1.498    0.067   22.210    0.000
+##     I02               1.516    0.096   15.845    0.000
+##     I03               1.035    0.088   11.716    0.000
+##     I04               1.180    0.083   14.202    0.000
+##     I05               1.436    0.088   16.291    0.000
 ## 
 ## Intercepts:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
@@ -1200,99 +958,24 @@ summary(model, fit.measures = T)
 ##    .I03               0.000                           
 ##    .I04               0.000                           
 ##    .I05               0.000                           
-##    .I06               0.000                           
-##    .I07               0.000                           
-##    .I08               0.000                           
-##    .I09               0.000                           
-##    .I10               0.000                           
-##    .I11               0.000                           
-##    .I12               0.000                           
-##    .I13               0.000                           
-##    .I14               0.000                           
-##    .I15               0.000                           
-##    .I16               0.000                           
-##    .I17               0.000                           
-##    .I18               0.000                           
-##    .I19               0.000                           
-##    .I20               0.000                           
-##    .I21               0.000                           
-##    .I22               0.000                           
-##    .I23               0.000                           
-##    .I24               0.000                           
-##    .I25               0.000                           
-##    .I26               0.000                           
-##    .I27               0.000                           
-##    .I28               0.000                           
-##    .I29               0.000                           
-##    .I30               0.000                           
 ##     latent            0.000                           
 ## 
 ## Thresholds:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##     I01|t1           -0.154    0.040   -3.855    0.000
-##     I02|t1            0.169    0.040    4.233    0.000
-##     I03|t1           -0.779    0.044  -17.564    0.000
-##     I04|t1            0.690    0.043   15.948    0.000
-##     I05|t1            0.507    0.042   12.203    0.000
-##     I06|t1           -0.762    0.044  -17.267    0.000
-##     I07|t1            0.171    0.040    4.297    0.000
-##     I08|t1           -0.885    0.046  -19.308    0.000
-##     I09|t1           -0.136    0.040   -3.413    0.001
-##     I10|t1            0.194    0.040    4.865    0.000
-##     I11|t1           -0.292    0.040   -7.259    0.000
-##     I12|t1            0.111    0.040    2.781    0.005
-##     I13|t1           -1.011    0.048  -21.075    0.000
-##     I14|t1            0.908    0.046   19.648    0.000
-##     I15|t1           -0.752    0.044  -17.089    0.000
-##     I16|t1            0.539    0.042   12.885    0.000
-##     I17|t1           -0.700    0.043  -16.129    0.000
-##     I18|t1            0.571    0.042   13.565    0.000
-##     I19|t1           -0.634    0.043  -14.854    0.000
-##     I20|t1           -0.607    0.042  -14.303    0.000
-##     I21|t1            0.813    0.045   18.152    0.000
-##     I22|t1            0.248    0.040    6.189    0.000
-##     I23|t1            0.113    0.040    2.844    0.004
-##     I24|t1           -0.282    0.040   -7.008    0.000
-##     I25|t1            0.548    0.042   13.071    0.000
-##     I26|t1            0.665    0.043   15.463    0.000
-##     I27|t1            0.113    0.040    2.844    0.004
-##     I28|t1            0.212    0.040    5.306    0.000
-##     I29|t1            0.643    0.043   15.037    0.000
-##     I30|t1           -0.105    0.040   -2.655    0.008
+##     I01|t1           -0.181    0.040   -4.549    0.000
+##     I02|t1            0.146    0.040    3.665    0.000
+##     I03|t1           -0.610    0.042  -14.364    0.000
+##     I04|t1            0.637    0.043   14.915    0.000
+##     I05|t1            0.539    0.042   12.885    0.000
 ## 
 ## Variances:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .I01               0.593                           
-##    .I02               0.476                           
-##    .I03               0.283                           
-##    .I04               0.268                           
-##    .I05               0.218                           
-##    .I06               0.158                           
-##    .I07               0.092                           
-##    .I08               0.196                           
-##    .I09               0.722                           
-##    .I10               0.227                           
-##    .I11               0.539                           
-##    .I12               0.107                           
-##    .I13               0.210                           
-##    .I14               0.313                           
-##    .I15               0.356                           
-##    .I16               0.368                           
-##    .I17               0.186                           
-##    .I18               0.439                           
-##    .I19               0.618                           
-##    .I20               0.676                           
-##    .I21               0.179                           
-##    .I22               0.147                           
-##    .I23               0.580                           
-##    .I24               0.083                           
-##    .I25               0.469                           
-##    .I26               0.213                           
-##    .I27               0.687                           
-##    .I28               0.099                           
-##    .I29               0.265                           
-##    .I30               0.087                           
-##     latent            0.407    0.037   11.108    0.000
+##    .I01               0.618                           
+##    .I02               0.123                           
+##    .I03               0.591                           
+##    .I04               0.468                           
+##    .I05               0.212                           
+##     latent            0.382    0.044    8.740    0.000
 ## 
 ## Scales y*:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
@@ -1300,32 +983,7 @@ summary(model, fit.measures = T)
 ##     I02               1.000                           
 ##     I03               1.000                           
 ##     I04               1.000                           
-##     I05               1.000                           
-##     I06               1.000                           
-##     I07               1.000                           
-##     I08               1.000                           
-##     I09               1.000                           
-##     I10               1.000                           
-##     I11               1.000                           
-##     I12               1.000                           
-##     I13               1.000                           
-##     I14               1.000                           
-##     I15               1.000                           
-##     I16               1.000                           
-##     I17               1.000                           
-##     I18               1.000                           
-##     I19               1.000                           
-##     I20               1.000                           
-##     I21               1.000                           
-##     I22               1.000                           
-##     I23               1.000                           
-##     I24               1.000                           
-##     I25               1.000                           
-##     I26               1.000                           
-##     I27               1.000                           
-##     I28               1.000                           
-##     I29               1.000                           
-##     I30               1.000
+##     I05               1.000
 ```
 
 
@@ -1341,36 +999,11 @@ summary(mono_check)
 
 ```{.scroll-100}
 ##     ItemH #ac #vi #vi/#ac maxvi  sum sum/#ac zmax #zsig crit
-## I01  0.47  36   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I02  0.51  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I03  0.67  22   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I04  0.65  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I05  0.67  15   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I06  0.71  15   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I07  0.70  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I08  0.71  10   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I09  0.38  28   1    0.04  0.05 0.05  0.0019 0.69     0   13
-## I10  0.64  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I11  0.51  36   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I12  0.70  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I13  0.74  10   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I14  0.69  10   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I15  0.62  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I16  0.59  15   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I17  0.70  10   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I18  0.56  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I19  0.49  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I20  0.44  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I21  0.73   6   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I22  0.68  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I23  0.46  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I24  0.74  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I25  0.54  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I26  0.68  22   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I27  0.40  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I28  0.70  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I29  0.65  21   0    0.00  0.00 0.00  0.0000 0.00     0    0
-## I30  0.72  15   0    0.00  0.00 0.00  0.0000 0.00     0    0
+## I01  0.47  10   0     0.0  0.00 0.00  0.0000 0.00     0    0
+## I02  0.65  10   0     0.0  0.00 0.00  0.0000 0.00     0    0
+## I03  0.55  10   1     0.1  0.05 0.05  0.0049 1.56     0   18
+## I04  0.55  10   0     0.0  0.00 0.00  0.0000 0.00     0    0
+## I05  0.63   6   0     0.0  0.00 0.00  0.0000 0.00     0    0
 ```
 
 
@@ -1384,9 +1017,9 @@ f.m2pl$Q3_summary
 ```
 
 ```{.scroll-100}
-##   type             M         SD        min        max      SGDDM     wSGDDM
-## 1   Q3 -2.657317e-02 0.04116627 -0.2240080 0.07421296 0.03526959 0.03526959
-## 2  aQ3 -8.273395e-19 0.04116627 -0.1974349 0.10078613 0.03198880 0.03198880
+##   type             M         SD        min         max      SGDDM     wSGDDM
+## 1   Q3 -1.686040e-01 0.09870174 -0.4230942 -0.06357212 0.16860403 0.16860403
+## 2  aQ3 -3.552714e-18 0.09870174 -0.2544902  0.10503191 0.07103058 0.07103058
 ```
 
 
@@ -1408,7 +1041,7 @@ ggplot(info2pl$item_info,
        aes(x = theta, y = ii_item, group = item, color = item)) + geom_line(lwd = 1) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-26-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-30-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1422,7 +1055,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-27-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1435,7 +1068,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-28-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 

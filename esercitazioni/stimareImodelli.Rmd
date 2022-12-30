@@ -42,8 +42,8 @@ library(sirt)
 library(ggplot2)
 set.seed(999)
 N = 1000
-b <- runif(30, -3,3)
-a = c(runif(30, 0.4, 2))
+b <- runif(5, -3,3)
+a = c(runif(5, 0.4, 2))
 true_theta = seq(-4, 4, length.out = N)
 data <- sirt::sim.raschtype( true_theta, b=b, 
                              fixed.a = a)
@@ -170,6 +170,14 @@ IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
   return(y)
 }
 
+
+
+```
+
+---
+## Codici utili II
+
+```{r}
 # questa funzione estrae tutti gli item e i loro parametri 
 # e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
 # restituisce una lista con dentro il dataset usato 
@@ -208,15 +216,14 @@ irt.icc = function(model) {
 
 return(object)
 }
-
 ```
 
 
 ---
 
-## Codici utili II
+## Codici utili III
 
-```{r class.source="myClass", class.output="scroll-100"}
+```{r}
 irt.iif = function(model) {
   est_theta = IRT.factor.scores(model, 
                               type = "EAP")$EAP
@@ -256,6 +263,79 @@ class: section, center, middle
 ## Caricare i dati in R 
 
 poi la faccio devo vedere quali dati fare
+
+---
+
+## Look at the data - Item I
+
+```{r eval = F}
+vis_data = data
+vis_data$id = paste0("s", 1:nrow(data))
+
+vis_data = vis_data[, c(ncol(vis_data), 1:ncol(data))]
+
+vis_data = reshape(vis_data, idvar = "id", direction = "long", varying = list(2:ncol(vis_data)), v.names = "resp", 
+        times = names(vis_data)[-1], timevar = "item")
+
+prop_data = data.frame(table(vis_data$item, vis_data$resp))
+
+colnames(prop_data)[1:2] = c("item", "response")
+
+prop_data$proportion = prop_data$Freq/nrow(data)
+
+ggplot(prop_data, 
+       aes(x = item, y=proportion,  
+ 
+           fill = response)) + geom_bar(stat = "identity") + 
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw()
+
+
+```
+
+---
+
+
+
+```{r echo = F}
+vis_data = data
+vis_data$id = paste0("s", 1:nrow(data))
+
+vis_data = vis_data[, c(ncol(vis_data), 1:ncol(data))]
+
+vis_data = reshape(vis_data, idvar = "id", direction = "long", varying = list(2:ncol(vis_data)), v.names = "resp", 
+        times = names(vis_data)[-1], timevar = "item")
+
+prop_data = data.frame(table(vis_data$item, vis_data$resp))
+
+colnames(prop_data)[1:2] = c("item", "response")
+
+prop_data$proportion = prop_data$Freq/nrow(data)
+
+ggplot(prop_data, 
+       aes(x = item, y=proportion,  
+ 
+           fill = response)) + geom_bar(stat = "identity") + 
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw()
+```
+
+
+
+---
+
+## Look at the data - Respondents
+
+```{r out.width="70%"}
+sbj_data = data
+sbj_data$id = paste0("s", 1:nrow(data))
+sbj_data = sbj_data[, c(ncol(sbj_data), 1:ncol(data))]
+
+sbj_data$sum = rowSums(sbj_data[,-1])
+
+boxplot(sbj_data$sum)
+
+```
+
+
 
 ---
 
