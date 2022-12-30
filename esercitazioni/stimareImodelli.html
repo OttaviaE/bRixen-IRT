@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Item Response Theory for beginners
 ]
 .subtitle[
-## Stimare i modelli in R
+## Stimare, secgeliere i modelli e verificare le assunzioni in R
 ]
 .author[
 ### Dr. Ottavia M. Epifania
@@ -47,6 +47,10 @@ pre[class] {
   overflow-y: auto;
   background-color: inherit;
 }
+&lt;/style&gt;
+
+&lt;style&gt;
+.myClass {font-size: 14px;}
 &lt;/style&gt;
 
 ---
@@ -135,16 +139,16 @@ library("ggplot2")
 
 
 ```r
-# questa funzione calcola la probabilità di risposta corretta dato un certo theta e deterinati valori dell'item
+# questa funzione calcola la probabilità di risposta corretta dato un certo theta e determinati valori dell'item
 IRT &lt;- function(theta, a = 1, b = 0, c = 0,e = 1) {
   y &lt;- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
   y[is.na(y)] = 1
   return(y)
 }
 
-# questa funzione estrae tutti gli item e i loro paraemtri 
-# e calcola la proababilità di risposta corretta per ogni item per ogni livello di theta
-# restituiesce una lista con dentro il dataset usato 
+# questa funzione estrae tutti gli item e i loro parametri 
+# e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
+# restituisce una lista con dentro il dataset usato 
 # e un grafico in ggplot
 irt.icc = function(model) {
   item_par = model$item
@@ -174,11 +178,43 @@ irt.icc = function(model) {
   p = do.call("rbind", item_prob)
   gp = ggplot(p, 
        aes(x = theta, y = it_p, group = item, col =
-             item)) + geom_line()
+             item)) + geom_line(lwd = 1)
   object = list(prob.data = p, 
               icc.graph = gp)
 
 return(object)
+}
+```
+
+
+---
+
+## Codici utili II
+
+
+```{.r .myClass}
+irt.iif = function(model) {
+  est_theta = IRT.factor.scores(model, 
+                              type = "EAP")$EAP
+ii = IRT.informationCurves(model, theta = est_theta)
+
+test_info = data.frame(theta = est_theta, 
+               info = ii$test_info_curve, 
+               se = ii$se_curve)
+
+iif_info = list()
+for(i in 1:nrow(ii$info_curves_item)) {
+    iif_info[[i]] = data.frame(theta = est_theta)
+    iif_info[[i]]$ii_item = ii$info_curves_item[i, ]
+    iif_info[[i]]$item = dimnames(ii$info_curves_item)[[1]][i]
+}
+
+dat_info = do.call("rbind", iif_info)
+
+info_tot = list(test_info = test_info, 
+                item_info = dat_info)
+
+return(info_tot)
 }
 ```
 
@@ -217,14 +253,14 @@ m1pl = tam.mml(data, verbose = F)
 summary(m1pl)
 ```
 
-```
+```{.scroll-100}
 ## ------------------------------------------------------------
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-29 18:09:31 
-## Time difference of 0.1237321 secs
-## Computation time: 0.1237321 
+## Date of Analysis: 2022-12-30 14:01:51 
+## Time difference of 0.1062341 secs
+## Computation time: 0.1062341 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -352,7 +388,7 @@ f.m1pl = tam.modelfit(m1pl, progress = F)
 f.m1pl$statlist
 ```
 
-```
+```{.scroll-100}
 ##   X100.MADCOV       SRMR     SRMSR     MADaQ3 pmaxX2
 ## 1    1.811654 0.08493693 0.1046168 0.04072332      0
 ```
@@ -361,7 +397,7 @@ f.m1pl$statlist
 f.m1pl$modelfit.test
 ```
 
-```
+```{.scroll-100}
 ##      maxX2 Npairs p.holm
 ## 1 108.0643    435      0
 ```
@@ -379,7 +415,7 @@ item.fit.1pl = IRT.itemfit(m1pl)
 item.fit.1pl$chisquare_stat
 ```
 
-```
+```{.scroll-100}
 ##    item     Group1
 ## 1   I01  77.252267
 ## 2   I02  33.508314
@@ -417,7 +453,7 @@ item.fit.1pl$chisquare_stat
 item.fit.1pl$RMSD
 ```
 
-```
+```{.scroll-100}
 ##    item     Group1
 ## 1   I01 0.08424255
 ## 2   I02 0.05104697
@@ -455,7 +491,7 @@ item.fit.1pl$RMSD
 item.fit.1pl$RMSD_summary
 ```
 
-```
+```{.scroll-100}
 ##     Parm          M         SD       Min       Max
 ## 1 Group1 0.06022695 0.02700875 0.0207643 0.1257714
 ```
@@ -473,7 +509,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m1pl)$icc.graph + theme_classic()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -487,14 +523,14 @@ m2pl = tam.mml.2pl(data, irtmodel = "2PL", verbose = F)
 summary(m2pl)
 ```
 
-```
+```{.scroll-100}
 ## ------------------------------------------------------------
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-29 18:09:33 
-## Time difference of 0.5410521 secs
-## Computation time: 0.5410521 
+## Date of Analysis: 2022-12-30 14:01:56 
+## Time difference of 1.396715 secs
+## Computation time: 1.396715 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -617,7 +653,7 @@ summary(m2pl)
 f.m2pl = tam.modelfit(m2pl)
 ```
 
-```
+```{.scroll-100}
 ## **** Calculate Residuals 
 ## **** Calculate Counts 
 ## **** Calculate Covariances
@@ -627,7 +663,7 @@ f.m2pl = tam.modelfit(m2pl)
 f.m2pl$statlist
 ```
 
-```
+```{.scroll-100}
 ##   X100.MADCOV       SRMR      SRMSR    MADaQ3 pmaxX2
 ## 1   0.3154719 0.01496019 0.01903373 0.0319888      1
 ```
@@ -636,7 +672,7 @@ f.m2pl$statlist
 f.m2pl$modelfit.test
 ```
 
-```
+```{.scroll-100}
 ##      maxX2 Npairs p.holm
 ## 1 5.296837    435      1
 ```
@@ -654,7 +690,7 @@ item.fit.2pl = IRT.itemfit(m2pl)
 item.fit.2pl$chisquare_stat
 ```
 
-```
+```{.scroll-100}
 ##    item     Group1
 ## 1   I01  1.7051127
 ## 2   I02  2.1804764
@@ -692,7 +728,7 @@ item.fit.2pl$chisquare_stat
 item.fit.1pl$RMSD
 ```
 
-```
+```{.scroll-100}
 ##    item     Group1
 ## 1   I01 0.08424255
 ## 2   I02 0.05104697
@@ -730,7 +766,7 @@ item.fit.1pl$RMSD
 item.fit.1pl$RMSD_summary
 ```
 
-```
+```{.scroll-100}
 ##     Parm          M         SD       Min       Max
 ## 1 Group1 0.06022695 0.02700875 0.0207643 0.1257714
 ```
@@ -746,7 +782,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m2pl)$icc.graph + theme_classic() 
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-15-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -763,14 +799,14 @@ m3pl = tam.mml.3pl(data, est.guess = colnames(data),
 summary(m3pl)
 ```
 
-```
+```{.scroll-100}
 ## ------------------------------------------------------------
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-29 18:09:58 
-## Time difference of 23.21842 secs
-## Computation time: 23.21842 
+## Date of Analysis: 2022-12-30 14:03:02 
+## Time difference of 1.035039 mins
+## Computation time: 1.035039 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -870,7 +906,7 @@ summary(m3pl)
 f.m3pl = tam.modelfit(m3pl)
 ```
 
-```
+```{.scroll-100}
 ## **** Calculate Residuals 
 ## **** Calculate Counts 
 ## **** Calculate Covariances
@@ -880,7 +916,7 @@ f.m3pl = tam.modelfit(m3pl)
 f.m3pl$statlist
 ```
 
-```
+```{.scroll-100}
 ##   X100.MADCOV      SRMR     SRMSR    MADaQ3 pmaxX2
 ## 1    6.631912 0.2861955 0.3000624 0.1061928      0
 ```
@@ -889,7 +925,7 @@ f.m3pl$statlist
 f.m3pl$modelfit.test
 ```
 
-```
+```{.scroll-100}
 ##      maxX2 Npairs p.holm
 ## 1 797332.9    435      0
 ```
@@ -907,7 +943,7 @@ item.fit.3pl = IRT.itemfit(m3pl)
 item.fit.3pl$chisquare_stat
 ```
 
-```
+```{.scroll-100}
 ##    item     Group1
 ## 1   I01   357.5171
 ## 2   I02   380.1783
@@ -945,7 +981,7 @@ item.fit.3pl$chisquare_stat
 item.fit.3pl$RMSD
 ```
 
-```
+```{.scroll-100}
 ##    item    Group1
 ## 1   I01 0.2701276
 ## 2   I02 0.2969911
@@ -983,7 +1019,7 @@ item.fit.3pl$RMSD
 item.fit.3pl$RMSD_summary
 ```
 
-```
+```{.scroll-100}
 ##     Parm         M        SD       Min       Max
 ## 1 Group1 0.3256922 0.1170706 0.1580745 0.5743425
 ```
@@ -998,7 +1034,7 @@ item.fit.3pl$RMSD_summary
 irt.icc(m3pl)$icc.graph + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-19-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1014,7 +1050,7 @@ irt.icc(m3pl)$icc.graph + theme_bw()
 IRT.compareModels(m1pl, m2pl, m3pl)
 ```
 
-```
+```{.scroll-100}
 ## $IC
 ##   Model   loglike Deviance Npars Nobs      AIC      BIC     AIC3     AICc
 ## 1  m1pl -12601.60 25203.21    31 1000 25265.21 25417.35 25296.21 25267.25
@@ -1059,7 +1095,7 @@ form = paste("latent =~", item_lab)
 form
 ```
 
-```
+```{.scroll-100}
 ## [1] "latent =~ I01 + I02 + I03 + I04 + I05 + I06 + I07 + I08 + I09 + I10 + I11 + I12 + I13 + I14 + I15 + I16 + I17 + I18 + I19 + I20 + I21 + I22 + I23 + I24 + I25 + I26 + I27 + I28 + I29 + I30"
 ```
 
@@ -1069,7 +1105,7 @@ model = cfa(form, data = data,  ordered = colnames(data))
 summary(model, fit.measures = T)
 ```
 
-```
+```{.scroll-100}
 ## lavaan 0.6-12 ended normally after 52 iterations
 ## 
 ##   Estimator                                       DWLS
@@ -1303,7 +1339,7 @@ mono_check = check.monotonicity(data)
 summary(mono_check)
 ```
 
-```
+```{.scroll-100}
 ##     ItemH #ac #vi #vi/#ac maxvi  sum sum/#ac zmax #zsig crit
 ## I01  0.47  36   0    0.00  0.00 0.00  0.0000 0.00     0    0
 ## I02  0.51  28   0    0.00  0.00 0.00  0.0000 0.00     0    0
@@ -1347,7 +1383,7 @@ summary(mono_check)
 f.m2pl$Q3_summary
 ```
 
-```
+```{.scroll-100}
 ##   type             M         SD        min        max      SGDDM     wSGDDM
 ## 1   Q3 -2.657317e-02 0.04116627 -0.2240080 0.07421296 0.03526959 0.03526959
 ## 2  aQ3 -8.273395e-19 0.04116627 -0.1974349 0.10078613 0.03198880 0.03198880
@@ -1366,56 +1402,42 @@ f.m2pl$Q3_summary
 
 
 ```r
-est_theta = IRT.factor.scores(m2pl, 
-                              type = "EAP")$EAP
-ii.2pl = IRT.informationCurves(m2pl, theta = est_theta)
+info2pl = irt.iif(m2pl)
 
-p = data.frame(theta = est_theta, 
-               info = ii.2pl$test_info_curve, 
-               se = ii.2pl$se_curve)
-
-ggplot(p, 
-       aes(x = theta, y = info)) + geom_line()
+ggplot(info2pl$item_info, 
+       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line(lwd = 1) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-26-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+## TIF per il 2PL
+
 
 ```r
-ggplot(p, 
-       aes(x = theta, y = se)) + geom_line()
+ggplot(info2pl$test_info, 
+       aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-2.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-27-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## SE per il 2 PL 
+
 
 ```r
-iif_info = list()
-for(i in 1:nrow(ii.2pl$info_curves_item)) {
-    iif_info[[i]] = data.frame(theta = est_theta)
-    iif_info[[i]]$ii_item = ii.2pl$info_curves_item[i, ]
-    iif_info[[i]]$item = dimnames(ii.2pl$info_curves_item)[[1]][i]
-}
-
-dat_info = do.call("rbind", iif_info)
-
-ggplot(dat_info, 
-       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
+ggplot(info2pl$test_info, 
+       aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-3.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-28-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
-```r
-p_small = p[, c(1:2)]
 
-colnames(p_small)[2] = "ii_item"
-p_small$item = "test"
-
-all_info = rbind(dat_info, p_small)
-
-ggplot(all_info, 
-       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
-```
-
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-4.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---

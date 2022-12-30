@@ -1,6 +1,6 @@
 ---
 title: "Item Response Theory for beginners"
-subtitle: "Stimare i modelli in R"
+subtitle: "Stimare, scegliere i modelli e verificare le assunzioni in R"
 institute: "Bressanone"
 author: "Dr. Ottavia M. Epifania"
 date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
@@ -19,7 +19,21 @@ knitr::opts_chunk$set(echo = T,
                       warning = F, 
                       message = F, 
                       fig.align = "center", 
-                      out.width = "90%")
+                      out.width = "90%", 
+                      class.output="scroll-100")
+hook_output <- knitr::knit_hooks$get("output")
+
+knitr::knit_hooks$set(output = function(x, options) {
+  if (!is.null(n <- options$out.lines)) {
+    x <- xfun::split_lines(x)
+    if (length(x) > n) {
+      # truncate the output
+      x <- c(head(x, n), "....\n")
+    }
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
 library(TAM)
 library(mokken)
 library(lavaan)
@@ -30,10 +44,10 @@ set.seed(999)
 N = 1000
 b <- runif(30, -3,3)
 a = c(runif(30, 0.4, 2))
-#g = runif(30, .10, .50)
 true_theta = seq(-4, 4, length.out = N)
 data <- sirt::sim.raschtype( true_theta, b=b, 
                              fixed.a = a)
+
 
 ```
 
@@ -52,6 +66,10 @@ pre[class] {
   background-color: inherit;
 }
 ```
+
+<style>
+.myClass {font-size: 14px;}
+</style>
 
 ---
 class: section, center, middle
@@ -145,16 +163,16 @@ library("ggplot2")
 
 
 ```{r}
-# questa funzione calcola la probabilità di risposta corretta dato un certo theta e deterinati valori dell'item
+# questa funzione calcola la probabilità di risposta corretta dato un certo theta e determinati valori dell'item
 IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
   y <- c + (e - c) * exp(a * (theta - b)) / (1 + exp(a * (theta - b)))
   y[is.na(y)] = 1
   return(y)
 }
 
-# questa funzione estrae tutti gli item e i loro paraemtri 
-# e calcola la proababilità di risposta corretta per ogni item per ogni livello di theta
-# restituiesce una lista con dentro il dataset usato 
+# questa funzione estrae tutti gli item e i loro parametri 
+# e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
+# restituisce una lista con dentro il dataset usato 
 # e un grafico in ggplot
 irt.icc = function(model) {
   item_par = model$item
@@ -184,11 +202,43 @@ irt.icc = function(model) {
   p = do.call("rbind", item_prob)
   gp = ggplot(p, 
        aes(x = theta, y = it_p, group = item, col =
-             item)) + geom_line()
+             item)) + geom_line(lwd = 1)
   object = list(prob.data = p, 
               icc.graph = gp)
 
 return(object)
+}
+
+```
+
+
+---
+
+## Codici utili II
+
+```{r class.source="myClass", class.output="scroll-100"}
+irt.iif = function(model) {
+  est_theta = IRT.factor.scores(model, 
+                              type = "EAP")$EAP
+ii = IRT.informationCurves(model, theta = est_theta)
+
+test_info = data.frame(theta = est_theta, 
+               info = ii$test_info_curve, 
+               se = ii$se_curve)
+
+iif_info = list()
+for(i in 1:nrow(ii$info_curves_item)) {
+    iif_info[[i]] = data.frame(theta = est_theta)
+    iif_info[[i]]$ii_item = ii$info_curves_item[i, ]
+    iif_info[[i]]$item = dimnames(ii$info_curves_item)[[1]][i]
+}
+
+dat_info = do.call("rbind", iif_info)
+
+info_tot = list(test_info = test_info, 
+                item_info = dat_info)
+
+return(info_tot)
 }
 
 ```
@@ -466,44 +516,44 @@ f.m2pl$Q3_summary
 ## IIF per il 2PL 
 
 ```{r}
-est_theta = IRT.factor.scores(m2pl, 
-                              type = "EAP")$EAP
-ii.2pl = IRT.informationCurves(m2pl, theta = est_theta)
-
-p = data.frame(theta = est_theta, 
-               info = ii.2pl$test_info_curve, 
-               se = ii.2pl$se_curve)
-
-ggplot(p, 
-       aes(x = theta, y = info)) + geom_line()
-ggplot(p, 
-       aes(x = theta, y = se)) + geom_line()
 
 
+info2pl = irt.iif(m2pl)
 
-iif_info = list()
-for(i in 1:nrow(ii.2pl$info_curves_item)) {
-    iif_info[[i]] = data.frame(theta = est_theta)
-    iif_info[[i]]$ii_item = ii.2pl$info_curves_item[i, ]
-    iif_info[[i]]$item = dimnames(ii.2pl$info_curves_item)[[1]][i]
-}
+ggplot(info2pl$item_info, 
+       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line(lwd = 1) + theme_bw()
 
-dat_info = do.call("rbind", iif_info)
-
-ggplot(dat_info, 
-       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
-
-p_small = p[, c(1:2)]
-
-colnames(p_small)[2] = "ii_item"
-p_small$item = "test"
-
-all_info = rbind(dat_info, p_small)
-
-ggplot(all_info, 
-       aes(x = theta, y = ii_item, group = item, color = item)) + geom_line() 
 
 ```
+
+
+---
+
+
+## TIF per il 2PL
+
+```{r}
+
+ggplot(info2pl$test_info, 
+       aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
+
+
+```
+
+
+---
+
+## SE per il 2 PL 
+
+```{r}
+
+ggplot(info2pl$test_info, 
+       aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
+
+
+```
+
+
 
 
 ---
