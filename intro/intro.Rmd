@@ -27,7 +27,7 @@ header-includes:
     - \newcommand\Factor{1.2}
     - \setbeamerfont{subtitle}{size=\large, series=\bfseries}
     - \useinnertheme{circles}
-    - \useoutertheme{tree}
+    - \useoutertheme{smoothbars}
     - \definecolor{latenti}{RGB}{54, 114, 89}
     - \definecolor{manifeste}{RGB}{179, 7, 27}
     - \definecolor{background}{RGB}{251, 251, 251}
@@ -88,6 +88,7 @@ theta = seq(-4,4,length.out=1000)
 library(xtable)
 library(sirt)
 library(TAM)
+
 ```
 
 
@@ -100,11 +101,11 @@ library(TAM)
 
 \vspace{5mm}
 
-- Sono variabili \color{latenti} non direttamente osservabili \normalcolor $\rightarrow$ **\color{latenti} variabili latenti**
+- Variabili \color{latenti} non direttamente osservabili \normalcolor $\rightarrow$ **\color{latenti} variabili latenti**
 
 - Inferite a partire da indicatori \color{manifeste} direttamente  osservabili \normalcolor $\rightarrow$ **\color{manifeste} variabili manifeste**
 
-- Importanza dell'operazionalizzazione del costrutto 
+- Importanza dell'\emph{operazionalizzazione del costrutto} 
 
 
 ### Esempio 1
@@ -146,6 +147,7 @@ I comportamenti di Alessandra (\color{manifeste}**variabili manifeste**\normalco
 
 Modelli matematici che permettono di collegare le \color{latenti}variabili latenti\normalcolor con le \color{manifeste}variabili manifeste \normalcolor 
 
+\small
 Assunzioni: 
 
 - Le \color{latenti}variabili latenti \normalcolor sono la causa delle \color{manifeste}variabili manifeste \normalcolor 
@@ -154,7 +156,7 @@ Assunzioni:
 
 \vspace{3mm}
 
-```{r echo = F, out.width="70%"}
+```{r echo = F, out.width="60%"}
 knitr::include_graphics("img/latenti.png")
 ```
 
@@ -167,7 +169,6 @@ knitr::include_graphics("img/mavl.png")
 
 Modelli IRT e modello di Rasch $\rightarrow$ **Modelli di analisi per tratti latenti** 
 
-# Item Respone Theory
 
 ## IRT vs. CTT
 
@@ -179,33 +180,34 @@ Sia i modelli dell'IRT sia la Classical Test Theory (CTT) hanno come obiettivo l
 
 :::: column
 \begin{center}
-IRT
+\textbf{\large\high{IRT}}
 \end{center}
 
-Focus $\rightarrow$ Gli item
+Focus $\rightarrow$ \high{Gli item}
 ::::
 
 :::: column
 \begin{center}
-CTT
+\textbf{\large\high{CTT}}
 \end{center}
 
-Focus $\rightarrow$ Il test
+Focus $\rightarrow$ \high{Il test}
 ::::
 
 :::
 
 
-## L'idea di base 
+## L'idea di base dell'IRT
 
 ### 
 
 La probabilità di una risposta osservata (\color{manifeste}variabile manifesta\normalcolor) dipende sia dalle caratteristiche della \sbj{persona} sia dalle caratteristiche dell'\colit{item}
 
-Le caratteristiche della \sbj{persona} sono descritte da un parametro relativo alla persona $\rightarrow$ \color{latenti} costrutto latente\normalcolor (e.g., intelligenza, autostima, estroversione, apertura all'esperienza ecc.)
+Le caratteristiche della \sbj{persona} sono descritte da un parametro relativo alla persona $\rightarrow$ \color{latenti} costrutto latente \normalcolor (e.g., intelligenza, autostima, estroversione, apertura all'esperienza ecc.)
 
 Le caratteristiche dell'\colit{item} possono essere descritte da uno o più parametri, quali la \textbf{difficoltà}, la \textbf{discriminatività}, lo \textbf{pseudo guessing} e il \textbf{careless error}
 
+L'item e la persona (le loro caratteristiche) sono sullo stesso tratto latente
 
 ### 
 
@@ -251,7 +253,7 @@ $3x - 2y + 4 = ?$
 
 ### Diversi modelli IRT 
 
-A seconda: 
+Diversi modelli IRT a seconda: 
 
 1. Tratto latente: 
 
@@ -266,20 +268,20 @@ A seconda:
 ### Modelli per item dicotomici
 
 
-Si distinguono in base al numerod parametri che descrivono le caratteristiche degli item: 
+Si distinguono in base al numero di parametri che descrivono le caratteristiche degli item: 
 
-- modello logistico a un parametro (one-parameter logistic model; 1PL)
+- Modello logistico a un parametro (one-parameter logistic model; 1PL)
 
-- modello logistico a due parametri (two-parameter logistic model; 2PL)
+- Modello logistico a due parametri (two-parameter logistic model; 2PL)
 
-- modello logistico a tre parametri (three-parameter logistic model; 3PL)
+- Modello logistico a tre parametri (three-parameter logistic model; 3PL)
 
-- modello logistico a quattro parametri (four-parameter logistic model;
+- Modello logistico a quattro parametri (four-parameter logistic model;
 4PL; usato raramente)
 
 ### Caratteristiche generali 
 
-- Parametro del soggetto e parametri degli item si trovano sullo stesso latente 
+- Parametro del soggetto e parametri degli item si trovano sullo stesso tratto latente 
 
 - Ad aumentare della distanza sul tratto latente tra i parametri degli item e il parametro del soggetto cambia la probabilità di rispondere correttamente
 
@@ -288,18 +290,18 @@ Si distinguono in base al numerod parametri che descrivono le caratteristiche de
 # 1PL
 
 
-## Response function
+## Item Response function
 
 ###
 
 La probabilità di rispondere correttamente (affermativamente) all'item $i$ da parte della persona $p$ è formalizzata come: 
 
-$$P(x_{v1} = 1| \theta_p, b_i) = \dfrac{exp(\theta_p - b_i)}{exp(\theta_p - b_i)}$$
+$$P(x_{pi} = 1| \theta_p, b_i) = \dfrac{exp(\theta_p - b_i)}{exp(\theta_p - b_i)}$$
 Dove: 
 
-$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_v$, maggiore il livello di tratto di $v$
+$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_p$, maggiore il livello di tratto di $p$
       
-$b_i$; difficoltà dell'item $i$ o location dell'item sul tratto latente $\rightarrow$ maggiore $b_i$,più è difficile rispondere correttamente a $i$
+$b_i$; difficoltà dell'item $i$ o location dell'item sul tratto latente $\rightarrow$ maggiore $b_i$, più è difficile rispondere correttamente a $i$ (\emph{endorse} $i$) 
 
 
 
@@ -311,11 +313,11 @@ $b_i$; difficoltà dell'item $i$ o location dell'item sul tratto latente $\right
 par(mar = c(5,7,4,2) + 0.1) 
 plot(theta, IRT(theta, b = 1, a = 1),
      cex.lab= 2.5, 
-     cex.axis =1.5,
+     cex.axis =1.5, cex.main = 3,
        xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente",
        xlim = c(-4, 4), ylim = c(0, 1), 
      type = "l", lwd = 3, 
-     col = "royalblue")
+     col = "royalblue", main = "Item Charcteristic Curve (ICC)")
 
 mtext("b = 1", side = 1, at = 1, cex = 2, padj = 1)
 
@@ -326,76 +328,6 @@ segments(1, -0.5,
          1, 0.5, 
          col = "red", lty = 3, lwd = 3)
 ```
-
-## Item Response Function
-
-###
-
-SI può ottenere una misura della precisione con cui ogni item misura determinate parti del tratto latente $\rightarrow$ \emph{Item Response Function}: 
-
-$$I_I = P_i(\theta, b_i)Q_i(\theta, b_i)$$
-
-dove $Q = 1- P_i(\theta_p, b_i)$ è la probabilità che di risposta errata all'item $i$
-
-###
-
-Valore massimo quando $\theta_v = b_i$ $\rightarrow$ in questo caso $P(x_{pi}=1) = P(x_{pi}=0) =0.50$ $\rightarrow$ $I_i = .25$
-
-```{r}
-b <- 1
-a <- rep(1, length(b))
-# Get all item information
-c <- item_info(b,a)
-Theta <- matrix(seq(-4,4, length.out=1000))
-check <- data.frame(Theta, 
-                    item_info = c[[1]])
-d <- do.call('cbind',c)
-sum_info1 <- rowSums(d)
-
-plot(check$Theta, check$item_info, ylim= c(0, 1), cex.lab= 2, 
-     cex.axis =1.5,
-       xlab = expression(theta), ylab = "Informazione", 
-     type = "l", lwd =2, 
-     col = "royalblue")
-segments(-7, 0.25, 
-         1, 0.25, 
-         col = "red", lty = 3, lwd = 3)
-segments(1, -0.25, 
-         1, 0.25, 
-         col = "red", lty = 3, lwd = 3)
-
-lines(theta, IRT(theta, b=1, 
-                a = 1), 
-      lty = 2, lwd=3, col = "grey")
-```
-
-### 
-
-Qualsiasi item è più informativo per i soggetti con abilità uguale alla location dell'item $\rightarrow$ al crescere della distanza tra soggetto e item, cala l'informatività (i.e., precisione del soggetto)
-
-Tanti soggetti con livelli diversi di abilità $\rightarrow$ item con livelli di difficoltà distribuiti lungo tutto il continuum latente 
-
-::: columns
-
-:::: column
-
-\begin{center}
-IRT
-\end{center}
-
-Meglio item con difficoltà diverse, sparpagliate lungo tutto il tratto latente
-::::
-
-:::: column
-\begin{center}
-CTT
-\end{center}
-
-Meglio item con difficoltà omogenee
-::::
-
-
-:::
 
 ### Item con diverse locations: ICC
 
@@ -410,8 +342,8 @@ my_colors <- RColorBrewer::brewer.pal(6, "Blues")[2:6]
 par(mar = c(5,7,4,2) + 0.1) 
 plot(theta, IRT(theta, b = b[1], a = a[1]),
      cex.lab= 2.5, 
-     cex.axis =1.5,
-       xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente",
+     cex.axis =1.5,cex.main = 3,
+       xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente", main = "ICC - Item con diverse locations",
        xlim = c(-4, 4), ylim = c(0, 1), 
      type = "l", lwd = 3, 
      col = my_colors[1])
@@ -456,11 +388,91 @@ text(x= b[i] +.5,
 print(xtable(si), comment = FALSE, include.rownames=T)
 ```
 
+
+
+## Item Information Function
+
+###
+
+SI può ottenere una misura della precisione con cui ogni item misura determinate parti del tratto latente $\rightarrow$ \emph{Item Information Function}: 
+
+$$I_I = P_i(\theta, b_i)Q_i(\theta, b_i)$$
+
+dove $Q = 1- P_i(\theta_p, b_i)$ è la probabilità che di risposta errata all'item $i$
+
+###
+
+Valore massimo quando $\theta_p = b_i$ $\rightarrow$ in questo caso $P(x_{pi}=1) = P(x_{pi}=0) =0.50$ $\rightarrow$ $I_i = .25$
+
+\vspace{-2mm}
+
+```{r prova}
+b <- 1
+a <- rep(1, length(b))
+# Get all item information
+c <- item_info(b,a)
+Theta <- matrix(seq(-4,4, length.out=1000))
+check <- data.frame(Theta, 
+                    item_info = c[[1]])
+d <- do.call('cbind',c)
+sum_info1 <- rowSums(d)
+
+plot(check$Theta, check$item_info, ylim= c(0, 1), cex.lab= 2, 
+     cex.axis =1.5, cex.main = 3,
+       xlab = expression(theta), ylab = "Informazione", 
+     type = "l", lwd =2, 
+     col = "royalblue", main = "Item Information Function - IIF")
+segments(-7, 0.25, 
+         1, 0.25, 
+         col = "red", lty = 3, lwd = 3)
+segments(1, -0.25, 
+         1, 0.25, 
+         col = "red", lty = 3, lwd = 3)
+
+lines(theta, IRT(theta, b=1, 
+                a = 1), 
+      lty = 2, lwd=3, col = "grey")
+```
+
+### 
+
+Qualsiasi item è più informativo per i soggetti con abilità uguale alla location dell'item $\rightarrow$ al crescere della distanza tra soggetto e item, cala l'informatività 
+
+Tanti soggetti con livelli diversi di abilità $\rightarrow$ item con livelli di difficoltà distribuiti lungo tutto il continuum latente 
+
+::: columns
+
+:::: column
+
+\begin{center}
+\large{\textbf{\high{IRT}}} 
+\end{center}
+
+Meglio item con difficoltà diverse, sparpagliate lungo tutto il tratto latente
+::::
+
+:::: column
+\begin{center}
+\large{\textbf{\high{CTT}}} 
+\end{center}
+
+Meglio item con difficoltà omogenee
+::::
+
+
+:::
+
+
 ### Item con diverse locations: IIF
 
 \vspace*{-15mm}
 
 ```{r}
+
+b = seq(-2.5, 2.5, length = 5)
+a = rep(1, length(b))
+
+my_colors <- RColorBrewer::brewer.pal(6, "Blues")[2:6]
 a <- rep(1, length(b))
 # Get all item information
 c <- item_info(b,a)
@@ -480,10 +492,10 @@ sum_info <- rowSums(d)
 check$theta = NULL
 
 plot(Theta, check[, 1], ylim= c(0, 1), cex.lab= 2, 
-     cex.axis =1.5,
+     cex.axis =1.5, cex.main =3,
        xlab = expression(theta), ylab = "Informazione", 
      type = "l", lwd =2, 
-     col = my_colors[1])
+     col = my_colors[1], main = "IIF- Item con diverse locations")
 segments(-7, 0.25, 
          b[1], 0.25, 
          col = "red", lty = 3, lwd = 3)
@@ -516,7 +528,9 @@ for ( i in 2:length(b)) {
       lty = 1, lwd=2, col = "grey")
 }
 
-
+si = data.frame(item1 = b[1], item2 = b[2], item3 = b[3], 
+                item4 = b[4], item5 = b[5])
+rownames(si) = "b"
 ```
 
 \centering 
@@ -529,7 +543,7 @@ print(xtable(si), comment = FALSE, include.rownames=T)
 
 ###
 
-Restituisce una misura della precisione con cui il test misura complessivamente il tratto latente: 
+Restituisce una misura dell'accuratezza con cui il test misura complessivamente il tratto latente: 
 
 $$I(\theta) = \sum I_i(\theta, b_i) = $$
 
@@ -589,10 +603,11 @@ plot(theta, sqrt(1/sum_info), cex.lab= 2,
        xlab = expression(theta), ylab = "SEM", 
      type = "l", lwd =2, 
      col = "firebrick")
+text("SEM", x =-3, y = 3.0, col = "firebrick", cex = 2)
 par(new = TRUE)
 plot(theta, sum_info, type = "l", axes = FALSE,
      bty = "n", xlab = "", ylab = "", ylim = c(0,1))
-
+text("TIF", x = 0, y = .7, cex = 2)
 axis(side=4, at = pretty(range(sum_info)), cex = 1.5)
 mtext("Informazione", side=4, line=3, cex = 2)
 
@@ -614,14 +629,14 @@ print(xtable(si), comment = FALSE, include.rownames=T)
 
 Viene inserito il parametro di discriminatività dell'item ($a_i$): 
 
-$$P(x_{v1} = 1| \theta_p, b_i. a_i) = \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
+$$P(x_{pi} = 1| \theta_p, b_i. a_i) = \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
 Dove: 
 
-$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_v$, maggiore il livello di tratto di $v$
+$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_p$, maggiore il livello di tratto di $p$
       
 $b_i$; difficoltà dell'item $i$
 
-$a_i$: capacità discriminativa o discriminatività dell'item $\rightarrow$  capacità dell’item i di discriminare
+$a_i$: capacità discriminativa o discriminatività dell'item $\rightarrow$  capacità dell’item $i$ di discriminare
 tra soggetti con livelli diversi di tratto (piccole differenze nel livello di tratto portano a grandi differenze nella probabilità di rispondere correttamente all’item)
 
 
@@ -656,6 +671,7 @@ text(x= 3.2,
 
 ```
 
+\vspace{-3mm}
 \begin{columns}[T]
 
 \begin{column}{.50\linewidth}
@@ -1029,12 +1045,12 @@ print(xtable(si), comment = FALSE, include.rownames=T)
 
 Viene aggiunto un parametro ("pseudo-guessing", $c$, che sposta verso l'alto l'asintoto sinistro): 
 
-$$P(x_{v1} = 1| \theta_p, b_i. a_i) = c_i + (1 - c_i) \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
+$$P(x_{pi} = 1| \theta_p, b_i. a_i) = c_i + (1 - c_i) \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
 
 
 Dove: 
 
-$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_v$, maggiore il livello di tratto di $v$
+$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_p$, maggiore il livello di tratto di $v$
       
 $b_i$; difficoltà dell'item $i$
 
@@ -1296,10 +1312,10 @@ Veramente poco usato
 
 Prende in considerazione l'errore di distrazione (\textbf{careless error}) compiuto da persone con un livello molto alto di tratto: 
 
-$$P(x_{v1} = 1| \theta_p, b_i. a_i) = c_i + (d_i - c_i) \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
+$$P(x_{pi} = 1| \theta_p, b_i. a_i) = c_i + (d_i - c_i) \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
 Dove: 
 
-$\theta_v$: livello di tratto latente della persona
+$\theta_p$: livello di tratto latente della persona
 
 $b_i$,$a_i$, $c_i$; difficoltà, discriminatività e pseduo-guessing dell'item $i$
 
@@ -1431,3 +1447,5 @@ AIC e BIC sono indici di entropia $\rightarrow$ va scelto il modello che present
 L'AIC penalizza i modelli più complessi indipendentemente dall'ampiezza campionaria 
 
 Il BIC penalizza i modelli più complessi tenendo conto dell'ampiezza campionaria $\rightarrow$ particolarmente conservativo su campioni piccoli
+
+
