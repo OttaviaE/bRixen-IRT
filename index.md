@@ -1,7 +1,7 @@
 Benvenut* a questo corso introduttivo sui modelli dell'Item Response Theory!
 
 Questo corso propone un'overview generale sui modelli dell'Item Response Theroy (IRT) con un focus specifico sui modelli per risposte dicotomiche. 
-Il corso avrà luogo presso l'Università Libera di Bolzano (sede di Bressanone-Brixen) dal 16 al 19 gennaio. 
+Il corso avrà luogo presso l'Università Libera di Bolzano (sede di Bressanone-Brixen) dal 16 al 18 gennaio. 
 
 Il corso prevede una forte componente pratica con R e si struttura come segue: 
 
