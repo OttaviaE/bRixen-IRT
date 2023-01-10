@@ -102,9 +102,10 @@ I modelli IRT multidimensionali consentono di gestire la presenza di più tratti
 
 \begin{block}{In caso di violazione}
 
+\vspace{3mm}
 Il modello IRT scelto può essere applicato, ma: 
 
-- si possono stime dei parametri distorte/non intepretabili
+- si possono ottenere stime dei parametri distorte/non intepretabili
 
 - anche se si ottenessero delle stime interpretabili, queste non hanno senso perché il modello non ha senso
 
@@ -119,6 +120,7 @@ Se la soluzione ad un fattore presenta una buona fit, si suppone l'unidimensiona
 
 \begin{block}{Indici di fit CFA}
 
+\vspace{3mm}
 Comparative Fit Index (CFI) $> .90$
 
 
@@ -132,7 +134,7 @@ Root Mean Sqaure Error of Approximation (RMSEA) $<. 08$
 
 ### 
 
-L’assunzione di \textbf{indipendenza locale} indica che non esiste alcuna relazione tra le risposte di un soggetto ad item diversi dopo aver controllato per il
+L’assunzione di \high{\textbf{indipendenza locale}} indica che non esiste alcuna relazione tra le risposte di un soggetto ad item diversi dopo aver controllato per il
 tratto latente
 
 Le risposte di un soggetto a un insieme di item sono indipendenti quando la probabilità associata alle risposte fornite dal soggetto agli item è uguale al prodotto delle probabilità relative alle singole risposte
@@ -140,6 +142,7 @@ Le risposte di un soggetto a un insieme di item sono indipendenti quando la prob
 \begin{block}{In caso di violazione}
 
 
+\vspace{3mm}
 Si rischia di sovrastimare l’informatività (attendibilità) del test
 \end{block}
 
@@ -156,7 +159,7 @@ In genere, $Q3\geq .20$ per una coppia di item è indicativo di dipendenza local
 
 Eliminare uno dei due item della coppia (solitamentem quello con minore discriminatività o che ha una fit peggiore)
 
-Se si utilizza una procedura adattica (e.g., Computerized Adaptive Testing) $\rightarrow$ vincolare la somministrazione di uno solo dei due item
+Se si utilizza una procedura adattiva (e.g., Computerized Adaptive Testing) $\rightarrow$ vincolare la somministrazione di uno solo dei due item
 
 Se possibile $\rightarrow$ combinare i due item in unico item \includegraphics[width=.10\linewidth]{"img/frank.jpg"}
 
@@ -169,6 +172,7 @@ Se possibile $\rightarrow$ combinare i due item in unico item \includegraphics[w
 
 \begin{block}{Come si valuta}
 
+\vspace{3mm}
 Si valuta per ogni item
 
 Coefficiente $H$ di Mokken (Originariamente di Loevinger). 
@@ -184,7 +188,7 @@ $H < .3$: Item non accettabile
 
 \begin{block}{In caso di violazione}
 
-
+\vspace{3mm}
 Effetti negativi sull'attendibilità e validità della scala
 \end{block}
 
@@ -192,7 +196,7 @@ Effetti negativi sull'attendibilità e validità della scala
 
 ### 
 
-Dopo aver verificato le assuzioni, si può procedere alla verifica della fit del modello mediante due statistiche principali: 
+Dopo aver verificato le assunzioni, si può procedere alla verifica della fit del modello mediante due statistiche principali: 
 
 - $M^2$ (Meyedeu-olivares & Joe, 2005): si basa sulla classificazione dei soggetti in base al loro pattern di risposta. Si basa sulla distribuzione $\chi^2$ per cui tende ad essere significativa per campioni ampi (anche se il modello ha una buona fit)
 
@@ -219,12 +223,14 @@ Due tipologie:
 
 \begin{exampleblock}{Vantaggi ML}
 
+
 All'aumentare dell'ampiezza campionaria $\rightarrow$ le stime per ML covergono al valore vero (\high{unbiased})
 
 \end{exampleblock}
 
 \begin{alertblock}{Svantaggi ML}
 
+\vspace{3mm}
 Le stime di soggetti/item con punteggi estremi sono $+$ o $-$ $\infty$
 
 Per ovviare a questo problema: 
@@ -266,7 +272,7 @@ Due tipologie:
 
 - \high{\textbf{Maximum a Posteriori}} (MAP): La stima del parametro è la moda della distribuzione a posteriori di quel parametro
 
-- \high{\textbf{Expected a Posteriori}} (MAP): La stima del parametro è la media della distribuzione a posteriori di quel parametro
+- \high{\textbf{Expected a Posteriori}} (EAP): La stima del parametro è la media della distribuzione a posteriori di quel parametro
 
 
 ### 

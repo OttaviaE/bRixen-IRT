@@ -576,7 +576,7 @@ print(xtable(si), comment = FALSE, include.rownames=T)
 ```
 
 
-### Standard Error of Measrument (SEM)
+### Standard Error of Measurement (SEM)
 
 Descrive la precisione della misurazione: 
 
@@ -718,6 +718,7 @@ rasterImage(bart, -1.5, -0.10, -0.5, 0.15)
 
 ```
 
+\vspace{-3mm}
 \begin{columns}[T]
 
 \begin{column}{.50\linewidth}
@@ -781,6 +782,7 @@ rasterImage(bart, -1.5, -0.10, -0.5, 0.15)
 
 ```
 	
+	\vspace{-3mm}
 \begin{columns}[T]
 
 \begin{column}{.50\linewidth}
@@ -806,11 +808,13 @@ $5 + 14 = ?$
 
 ### Discriminatività negativa
 
+\vspace*{-10mm}
+
 ```{r}
 plot(theta, IRT(theta, a = -0.5, b = 0), 
-     type = "l", 
+     type = "l", cex.main = 3, 
      ylab = "P(x = 1)", ylim = c(0,1 ), cex.lab= 2, 
-     cex.axis =1.5, xlab = expression(theta), lwd = 3)
+     cex.axis =1.5, xlab = expression(theta), lwd = 3, main = "Discriminatività negativa")
 text(x= 3.2, 
      y = 0.95, expression(paste(a[1], "= -0.50")), 
      col = "black", cex = 2)
@@ -824,12 +828,15 @@ segments(0, -0.5,
 
 ```
 
+\footnotesize
+
 Al crescere del tratto latente...la probabilità di rispondere correttamente diminuisce!
 
 Questi item vengono scartati 
 
 
 ### 
+\vspace*{-5mm}
 
 ```{r}
 a = c(0.5, 0.9, 1.5, 1.5)
@@ -887,12 +894,19 @@ text(x= b[4] +.7,
      y = 0.8,  colnames(si)[4], col = my_col[4], cex = 2)
 ```
 
+\centering 
+\small
+\vspace{-3mm}
+
+```{r results='asis'}
+print(xtable(si), comment = FALSE, include.rownames=T)
+```
 
 ## Item Information Function
 
 ###
 
-$$I_i(\theta, b_i, a_i) = P_i(\theta, b_i, a_i)Q_i(\theta, b_i, a_i)$$
+$$I_i(\theta, b_i, a_i) = a_i^2P_i(\theta, b_i, a_i)Q_i(\theta, b_i, a_i)$$
 
 Dove $Q_i = 1 - P_i(\theta, b_i, a_i)$ è la probabilità di osservare una risposta errata 
 
@@ -977,7 +991,7 @@ print(xtable(si), comment = F)
 
 La TIF è la somma delle informatività dei singoli item
 
-$$I(\theta) = \sum I_i(\theta, b_i, a_i) = $$
+$$I(\theta) = \sum I_i(\theta, b_i, a_i)  $$
 
 ### 
 
@@ -997,13 +1011,14 @@ for ( i in 1:length(b)) {
 ```
 
 \centering 
+\vspace{-3mm}
 \small
 ```{r results='asis'}
 print(xtable(si), comment = FALSE, include.rownames=T)
 ```
 
 
-### Standard Error of Measrument (SEM)
+### Standard Error of Measurement (SEM)
 
 Reciproco della TIF: 
 
@@ -1011,7 +1026,7 @@ $$SEM(\theta) = \sqrt{\dfrac{1}{I(\theta)}} = \sqrt{\dfrac{1}{a^2 P_i(\theta, b_
 
 ### 
 
-<!-- \vspace*{-15mm} -->
+\vspace*{-5mm}
 
 ```{r}
 
@@ -1021,10 +1036,11 @@ plot(theta, sqrt(1/sum_info), cex.lab= 2,
        xlab = expression(theta), ylab = "SEM", 
      type = "l", lwd =2, 
      col = "firebrick")
+text("SEM", cex = 2, x = -2.5, y = 3, col = "firebrick")
 par(new = TRUE)
 plot(theta, sum_info, type = "l", axes = FALSE,
      bty = "n", xlab = "", ylab = "", ylim = c(0,1))
-
+text("TIF", x = 0, y = .7, cex = 2)
 axis(side=4, at = pretty(range(sum_info)), cex = 1.5)
 mtext("Informazione", side=4, line=3, cex = 2)
 
@@ -1043,14 +1059,14 @@ print(xtable(si), comment = FALSE, include.rownames=T)
 
 ### 
 
-Viene aggiunto un parametro ("pseudo-guessing", $c$, che sposta verso l'alto l'asintoto sinistro): 
+Viene aggiunto un parametro ("pseudo-guessing", $c$) che sposta verso l'alto l'asintoto sinistro: 
 
 $$P(x_{pi} = 1| \theta_p, b_i. a_i) = c_i + (1 - c_i) \dfrac{exp(a_i(\theta_p - b_i))}{1+exp(a_i(\theta_p - b_i))}$$
 
 
 Dove: 
 
-$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_p$, maggiore il livello di tratto di $v$
+$\theta_p$: abilità della persona (i.e., livello di tratto posseduto dalla persona) $\rightarrow$ maggiore $\theta_p$, maggiore il livello di tratto di $p$
       
 $b_i$; difficoltà dell'item $i$
 
@@ -1123,7 +1139,7 @@ text(x= -0.4,
 ```
 
 La probabilità di una risposta corretta è $>0.50$ quando il livello di
-tratto è ugaule alla difficoltà dell’item (in particolare, essa è $c + (1 - c)/2$)
+tratto è uguale alla difficoltà dell’item (in particolare, essa è $c + (1 - c)/2$)
 
 ### 
 
@@ -1150,6 +1166,7 @@ Più è alto il guessing, minore sarà l'informatività dell'item
  $Q_i = 1 - P_i(\theta, b_i, a_i, c_i)$ è la probabilità di osservare una risposta errata 
 
 ### 
+\vspace*{-5mm}
 
 ```{r}
 i_info <- function(b = 0, a=1,g=0, guessing = F, theta=seq(-4,4,length.out=1000)){
@@ -1231,6 +1248,8 @@ for ( i in 1:length(b)) {
 ```
 
 \centering
+\small
+\vspace{-5mm}
 
 ```{r results='asis'}
 print(xtable(si), comment = F)
@@ -1243,11 +1262,11 @@ print(xtable(si), comment = F)
 
 La TIF è la somma delle informatività dei singoli item
 
-$$I(\theta) = \sum I_i(\theta, b_i, a_i, c_i) = $$
+$$I(\theta) = \sum I_i(\theta, b_i, a_i, c_i) $$
 
 ### 
 
-\vspace*{-15mm}
+\vspace*{-10mm}
 
 ```{r}
 plot(theta, sum_info, cex.lab= 2, 
@@ -1261,14 +1280,16 @@ for ( i in 1:length(b)) {
       lty = 1, lwd=3, col = my_colors[i])
 }
 ```
-\centering 
+\centering
+\small
+\vspace{-3mm}
 
 ```{r results='asis'}
 print(xtable(si), comment = FALSE)
 ```
 
 
-### Standard Error of Measrument (SEM)
+### Standard Error of Measurement (SEM)
 
 Reciproco della TIF: 
 
@@ -1276,7 +1297,7 @@ $$SEM(\theta) = \sqrt{\dfrac{1}{I(\theta)}} = \sqrt{\dfrac{1}{a^2 P_i(\theta, b_
 
 ### 
 
-\vspace*{-15mm}
+\vspace*{-10mm}
 
 ```{r}
 
@@ -1286,17 +1307,19 @@ plot(theta, sqrt(1/sum_info), cex.lab= 2,
        xlab = expression(theta), ylab = "SEM", 
      type = "l", lwd =2, 
      col = "firebrick")
+text("SEM", col = "firebrick", cex =2, x = -2.5, y = 80)
 par(new = TRUE)
 plot(theta, sum_info, type = "l", axes = FALSE,
      bty = "n", xlab = "", ylab = "", ylim = c(0,1))
-
+text("TIF", x = 1, y = .5, cex = 2)
 axis(side=4, at = pretty(range(sum_info)), cex = 1.5)
 mtext("Informazione", side=4, line=3, cex = 2)
 
 ```
 
 \centering 
-
+\small
+\vspace{-3mm}
 ```{r results='asis'}
 print(xtable(si), comment = FALSE, include.rownames=T)
 ```
@@ -1325,6 +1348,17 @@ tratto latente si avvicina a $+ \infty$
 Minore è il valore di $d_i$, minore è la probabilità che un soggetto con un alto livello di tratto risponda correttamente (o affermativamente) all’item $i
 
 ###
+
+\begin{columns}[T]
+\begin{column}{.50\linewidth}
+Item 1: $b = 0$, $a = 1.4$, $c=0.20$, $d = .9$
+\end{column}
+\begin{column}{.50\linewidth}
+Item 2: $b = 0$, $a = 1.4$, $c=0.30$, $d = .7$
+\end{column}
+\end{columns}
+
+
 
 ```{r}
 b = rep(0, 2)
@@ -1367,7 +1401,7 @@ text(x= -0.4,
 
 ### e il modello di Rasch? 
 
-Formalmente, il modelli di Rasch è equivalente all'1PL, ma cambia la filosofia che c'è dietro.
+Formalmente, il modello di Rasch è equivalente all'1PL, ma cambia la filosofia che c'è dietro.
 
 ::: columns
 
@@ -1432,7 +1466,7 @@ La scelta migliore è considerarli sempre tutti insieme (quando si hanno modelli
 
 ### $-$\emph{2loglikelihood}
 
-Per intepretare la $-$\emph{2loglikelihood}, va calcolata la differenza tra la $-$\emph{2loglikelihood} di due modelli nested e la differenza tra i gradi di libertà dei due modelli nested
+Per intepretare la $-$\emph{2loglikelihood}, va calcolata la differenza tra la \emph{likelihood} di due modelli nested moltiplicata per $-2$ ($-2$\emph{LogLikelihood}) e la differenza tra i gradi di libertà dei due modelli nested
 
 Si calcola la probabilità associata alla differenza tra la $-$\emph{2loglikelihood} dei due modelli secondo una distribuzione $\chi^2$ con gradi di libertà uguali alla differenza tra i gradi di libertà dei due modelli: 
 
@@ -1446,6 +1480,11 @@ AIC e BIC sono indici di entropia $\rightarrow$ va scelto il modello che present
 
 L'AIC penalizza i modelli più complessi indipendentemente dall'ampiezza campionaria 
 
+$$AIC = -2logLik + 2p$$
+
+
 Il BIC penalizza i modelli più complessi tenendo conto dell'ampiezza campionaria $\rightarrow$ particolarmente conservativo su campioni piccoli
+
+$$BIC = -2logLik + p \cdot log(N)$$
 
 
