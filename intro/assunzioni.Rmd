@@ -198,9 +198,9 @@ Effetti negativi sull'attendibilità e validità della scala
 
 Dopo aver verificato le assunzioni, si può procedere alla verifica della fit del modello mediante due statistiche principali: 
 
-- $M^2$ (Meyedeu-olivares & Joe, 2005): si basa sulla classificazione dei soggetti in base al loro pattern di risposta. Si basa sulla distribuzione $\chi^2$ per cui tende ad essere significativa per campioni ampi (anche se il modello ha una buona fit)
+- \high{\textbf{$M^2$}} (Meyedeu-olivares & Joe, 2005): si basa sulla classificazione dei soggetti in base al loro pattern di risposta. Si basa sulla distribuzione $\chi^2$ per cui tende ad essere significativo per campioni ampi (anche se il modello ha una buona fit)
 
-- Root Mean Square Error of Approximation (RMSEA): Misura di quanto il modello si avvicina alla realtà: 
+- \high{\textbf{Root Mean Square Error of Approximation}} (\high{\textbf{RMSEA}}): Misura di quanto il modello si avvicina alla realtà: 
   - $\leq .05$ Perfetto
   - $\leq .08$: Accettabile
   - $> .80$: No fit
@@ -215,15 +215,15 @@ Dopo aver verificato le assunzioni, si può procedere alla verifica della fit de
 
 Due tipologie: 
 
-1. \high{Massima verosimiglianza congiunta} (Joint Maximum Likelihood, JML): Permette di stimare per massima verosimiglianza \textbf{congiuntamente} i parametri degli item e delle persone
+1. \high{\textbf{Massima verosimiglianza congiunta}} (Joint Maximum Likelihood, JML): Permette di stimare per massima verosimiglianza \textbf{congiuntamente} i parametri degli item e delle persone
 
-2. \high{Massima verosimiglianza marginale} (Marginal Maximum Likelihood, MML): Permette di stimare per massima verosimiglianza i parametri degli item, i parametri delle persone sono stimati successivamente con procedure bayesiane
+2. \high{\textbf{Massima verosimiglianza marginale}} (Marginal Maximum Likelihood, MML): Permette di stimare per massima verosimiglianza i parametri degli item, i parametri delle persone sono stimati successivamente con procedure bayesiane
 
 ###
 
 \begin{exampleblock}{Vantaggi ML}
 
-
+\vspace{3mm}
 All'aumentare dell'ampiezza campionaria $\rightarrow$ le stime per ML covergono al valore vero (\high{unbiased})
 
 \end{exampleblock}
@@ -279,6 +279,7 @@ Due tipologie:
 
 \begin{exampleblock}{Vantaggi approcci bayesiani}
 
+\vspace{3mm}
 Permettono la stima \textbf{finita} dei parametri dei soggetti e degli item anche in caso di punteggi estremi
 
 \end{exampleblock}

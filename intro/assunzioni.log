@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  10 JAN 2023 14:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  10 JAN 2023 16:46
 entering extended mode
 **./assunzioni.tex
 (assunzioni.tex
@@ -1566,17 +1566,17 @@ Package pdftex.def Info: img/frank.jpg  used on input line 232.
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 294.
+(Font)              <10> on input line 296.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 294.
+(Font)              <7> on input line 296.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 294.
+(Font)              <5> on input line 296.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 294.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 296.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 294.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 296.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 294.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 296.
 [14
 
 ] [15
@@ -1585,7 +1585,11 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
 
 ] [17
 
-] [18
+]
+Overfull \vbox (4.93204pt too high) detected at line 363
+ []
+
+[18
 
 ] [19
 
@@ -1605,11 +1609,11 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
 
 (assunzioni.aux) ) 
 Here is how much of TeX's memory you used:
- 33078 strings out of 480236
- 676043 string characters out of 2880084
+ 33080 strings out of 480236
+ 676067 string characters out of 2880084
  1042467 words of memory out of 3000000
  48797 multiletter control sequences out of 15000+200000
- 611043 words of font info for 101 fonts, out of 3000000 for 9000
+ 611144 words of font info for 102 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  111i,14n,112p,1813b,770s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/enc/dvip
@@ -1623,7 +1627,7 @@ ic/lm/lmss8.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1/publ
 ic/lm/lmssbx10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/lm/lmsso10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/lm/lmsy10.pfb>
-Output written on assunzioni.pdf (21 pages, 178983 bytes).
+Output written on assunzioni.pdf (21 pages, 179290 bytes).
 PDF statistics:
  337 PDF objects out of 1000 (max. 8388607)
  62 named destinations out of 1000 (max. 500000)
