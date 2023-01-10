@@ -103,12 +103,12 @@ Statistiche più usate:
 
 Lo stesso item presentato a due gruppi appaiati per livello di tratto latente... non funziona nello stesso modo 
 
-I soggetto vengono appaiati in funzione del loro livello di tratto latente. \high{Ci sono delle differenze nella perfomance su un item}?
+I soggetti vengono appaiati in funzione del loro livello di tratto latente. \high{Ci sono delle differenze nella perfomance su un item}?
 
 Teoricamente: Soggetti di gruppi diversi ma con lo stesso livello di tratto latente (i.e., \high{appaiati}) dovrebbero mostrare performance simili sull'item
 
 
-Se così non è $\rightarrow$ \high{\scshape{Differential Item Functioning}} (DIF)
+Se così non è $\rightarrow$ \high{\scshape{Differential Item Functioning}} (\high{DIF})
 
 
 ### Reference vs. focal group
