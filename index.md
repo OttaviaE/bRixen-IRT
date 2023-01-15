@@ -13,4 +13,4 @@ Il corso prevede una forte componente pratica con R e si struttura come segue:
 
 ## Dati
 
-In questa cartella sono disponibili i dati da usare per le esrecitazioni
+In [questa cartella](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing) sono disponibili i dati da usare per le esercitazioni
