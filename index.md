@@ -11,3 +11,6 @@ Il corso prevede una forte componente pratica con R e si struttura come segue:
 - Esercitazione pratica: Stimare i modelli, scegliere il più appropriato e verificarne la fit [HTML](esercitazioni/stimareImodelli.html)
 - Esercitazione pratica: Investigare la DIF [HTML](esercitazioni/DIF.html)
 
+## Dati
+
+In [questa cartella](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing) sono disponibili i dati da usare per le esercitazioni
