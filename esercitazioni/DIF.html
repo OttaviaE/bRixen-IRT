@@ -45,12 +45,29 @@ pre[class] {
 .scroll-100 {
   max-height: 500px;
   overflow-y: auto;
-  background-color: inherit;
 }
-&lt;/style&gt;
 
-&lt;style&gt;
-.myClass {font-size: 14px;}
+.inverse {
+  background-color: #272822;
+  color: #d6d6d6;
+  text-shadow: 0 0 20px #333;
+}
+
+
+.scrollable {
+  height: 500px;
+  overflow-y: auto;
+}
+
+
+.scrollable-auto {
+  height: 80%;
+  overflow-y: auto;
+}
+
+.remark-slide-number {
+  display: none;
+}
 &lt;/style&gt;
 
 
@@ -62,7 +79,23 @@ class: section, center, middle
 ---
 
 
-## Devo capire quali dati 
+## Caricare i dati in R 
+
+
+.scrollable[
+Scaricare il file  `difClass.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Salvarlo all'interno della sottocartella `Dati` del progetto `R` che avete creato per il corso
+
+Usate questo codice: 
+
+
+```r
+data = read.csv("Dati/difClass.csv", header = T, sep = ",")
+```
+
+
+]
 
 
 ---
@@ -73,28 +106,39 @@ class: section, center, middle
 
 ---
 
-&lt;img src="DIF_files/figure-html/unnamed-chunk-2-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+## Risposte agli item
+
+.scrollable[
+
+&lt;img src="DIF_files/figure-html/unnamed-chunk-3-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+---
 
 
 ---
 
 ## Closer 
 
-
+.scrollable[
 
 ```r
-p = data.frame(table(d$item, d$resp, d$gender))
-p$prop = p$Freq/500
+p = data.frame(table(long_data$item, long_data$resp, long_data$gender))
+p$prop = p$Freq/nrow(data)
 p$Var1 = factor(p$Var1, 
-                levels = unique(d$item))
+                levels = unique(long_data$item))
+colnames(p)[3] = "gender"
 ggplot(p[p$Var2 %in% 1,], 
-       aes(x = Var1, y=prop, fill = Var3)) + 
+       aes(x = Var1, y=prop, fill = gender)) + 
   geom_bar(stat = "identity", position = "dodge") + 
   theme(axis.text = element_text(angle = 90)) + 
   geom_hline(aes(yintercept=.50)) 
 ```
 
-&lt;img src="DIF_files/figure-html/unnamed-chunk-3-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="DIF_files/figure-html/unnamed-chunk-4-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+
 
 
 ---
@@ -120,27 +164,117 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 ```{.scroll-100}
 ## $IC
 ##   Model   loglike Deviance Npars Nobs      AIC      BIC     AIC3     AICc
-## 1  m1pl -3177.117 6354.233    11  500 6376.233 6422.594 6387.233 6376.774
-## 2  m2pl -3175.186 6350.373    20  500 6390.373 6474.665 6410.373 6392.126
-## 3  m3pl -3175.140 6350.280    31  500 6412.280 6542.933 6443.280 6416.519
+## 1  m1pl -5599.390 11198.78    11 1000 11220.78 11274.77 11231.78 11221.05
+## 2  m2pl -5597.621 11195.24    20 1000 11235.24 11333.40 11255.24 11236.10
+## 3  m3pl -5597.716 11195.43    31 1000 11257.43 11409.57 11288.43 11259.48
 ##       CAIC       GHP
-## 1 6433.594 0.6376233
-## 2 6494.665 0.6390373
-## 3 6573.933 0.6412280
+## 1 11285.77 0.5610390
+## 2 11353.40 0.5617621
+## 3 11440.57 0.5628716
 ## 
 ## $LRtest
 ##   Model1 Model2       Chi2 df         p
-## 1   m1pl   m2pl 3.86035960  9 0.9203604
-## 2   m1pl   m3pl 3.95300945 20 0.9999578
-## 3   m2pl   m3pl 0.09264985 11 1.0000000
+## 1   m1pl   m2pl  3.5389531  9 0.9390614
+## 2   m1pl   m3pl  3.3484797 20 0.9999895
+## 3   m2pl   m3pl -0.1904735 11 1.0000000
 ## 
 ## attr(,"class")
 ## [1] "IRT.compareModels"
 ```
 
-
-1PL!
 ---
+
+## 1PL 
+
+
+```r
+summary(m1pl)
+```
+
+```{.scroll-100}
+## ------------------------------------------------------------
+## TAM 4.0-16 (2022-05-13 13:23:23) 
+## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
+## 
+## Date of Analysis: 2023-01-15 12:38:35 
+## Time difference of 0.04405689 secs
+## Computation time: 0.04405689 
+## 
+## Multidimensional Item Response Model in TAM 
+## 
+## IRT Model: 1PL
+## Call:
+## tam.mml(resp = data[, grep("item", colnames(data))], verbose = F)
+## 
+## ------------------------------------------------------------
+## Number of iterations = 18 
+## Numeric integration with 21 integration points
+## 
+## Deviance = 11198.78 
+## Log likelihood = -5599.39 
+## Number of persons = 1000 
+## Number of persons used = 1000 
+## Number of items = 10 
+## Number of estimated parameters = 11 
+##     Item threshold parameters = 10 
+##     Item slope parameters = 0 
+##     Regression parameters = 0 
+##     Variance/covariance parameters = 1 
+## 
+## AIC = 11221  | penalty=22    | AIC=-2*LL + 2*p 
+## AIC3 = 11232  | penalty=33    | AIC3=-2*LL + 3*p 
+## BIC = 11275  | penalty=75.99    | BIC=-2*LL + log(n)*p 
+## aBIC = 11240  | penalty=41    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
+## CAIC = 11286  | penalty=86.99    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
+## AICc = 11221  | penalty=22.27    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
+## GHP = 0.56104     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
+## 
+## ------------------------------------------------------------
+## EAP Reliability
+## [1] 0.624
+## ------------------------------------------------------------
+## Covariances and Variances
+##       [,1]
+## [1,] 0.988
+## ------------------------------------------------------------
+## Correlations and Standard Deviations (in the diagonal)
+##       [,1]
+## [1,] 0.994
+## ------------------------------------------------------------
+## Regression Coefficients
+##      [,1]
+## [1,]    0
+## ------------------------------------------------------------
+## Item Parameters -A*Xsi
+##      item    N     M xsi.item AXsi_.Cat1 B.Cat1.Dim1
+## 1   item1 1000 0.490    0.050      0.050           1
+## 2   item2 1000 0.720   -1.131     -1.131           1
+## 3   item3 1000 0.310    0.963      0.963           1
+## 4   item4 1000 0.329    0.859      0.859           1
+## 5   item5 1000 0.823   -1.821     -1.821           1
+## 6   item6 1000 0.291    1.070      1.070           1
+## 7   item7 1000 0.222    1.495      1.495           1
+## 8   item8 1000 0.512   -0.056     -0.056           1
+## 9   item9 1000 0.695   -0.988     -0.988           1
+## 10 item10 1000 0.156    1.992      1.992           1
+## 
+## Item Parameters in IRT parameterization
+##      item alpha   beta
+## 1   item1     1  0.050
+## 2   item2     1 -1.131
+## 3   item3     1  0.963
+## 4   item4     1  0.859
+## 5   item5     1 -1.821
+## 6   item6     1  1.070
+## 7   item7     1  1.495
+## 8   item8     1 -0.056
+## 9   item9     1 -0.988
+## 10 item10     1  1.992
+```
+
+
+---
+
 
 ## Fit del modello 
 
@@ -153,7 +287,7 @@ f.m1pl$statlist
 
 ```{.scroll-100}
 ##   X100.MADCOV       SRMR      SRMSR     MADaQ3 pmaxX2
-## 1   0.7218683 0.03083912 0.03772106 0.03502247      1
+## 1   0.4318818 0.02178404 0.02800907 0.02874571      1
 ```
 
 ```r
@@ -162,7 +296,7 @@ f.m1pl$modelfit.test
 
 ```{.scroll-100}
 ##      maxX2 Npairs p.holm
-## 1 4.582957     45      1
+## 1 5.173086     45      1
 ```
 
 
@@ -170,7 +304,7 @@ f.m1pl$modelfit.test
 
 ## 1PL - Item fit
 
-
+.scrollable[
 
 ```r
 item.fit.1pl = IRT.itemfit(m1pl)
@@ -179,17 +313,17 @@ item.fit.1pl$chisquare_stat
 ```
 
 ```{.scroll-100}
-##      item     Group1
-## 1   item1 0.30940564
-## 2   item2 0.72403383
-## 3   item3 1.40768406
-## 4   item4 0.06044327
-## 5   item5 0.90215524
-## 6   item6 0.94613044
-## 7   item7 0.34022689
-## 8   item8 0.14159672
-## 9   item9 0.18135068
-## 10 item10 0.77294583
+##      item    Group1
+## 1   item1 1.2342630
+## 2   item2 0.5938130
+## 3   item3 0.6668817
+## 4   item4 0.3117211
+## 5   item5 1.1353671
+## 6   item6 0.3983689
+## 7   item7 2.2867280
+## 8   item8 0.4899905
+## 9   item9 1.2476006
+## 10 item10 0.3184401
 ```
 
 ```r
@@ -198,16 +332,16 @@ item.fit.1pl$RMSD
 
 ```{.scroll-100}
 ##      item      Group1
-## 1   item1 0.010702301
-## 2   item2 0.016096237
-## 3   item3 0.021584918
-## 4   item4 0.004637591
-## 5   item5 0.014105393
-## 6   item6 0.015577272
-## 7   item7 0.006695166
-## 8   item8 0.005372935
-## 9   item9 0.007506678
-## 10 item10 0.016621478
+## 1   item1 0.013892105
+## 2   item2 0.007935321
+## 3   item3 0.010894367
+## 4   item4 0.005948698
+## 5   item5 0.010882772
+## 6   item6 0.008170491
+## 7   item7 0.019833211
+## 8   item8 0.009002479
+## 9   item9 0.013681206
+## 10 item10 0.006888076
 ```
 
 ```r
@@ -215,9 +349,12 @@ item.fit.1pl$RMSD_summary
 ```
 
 ```{.scroll-100}
-##     Parm       M          SD         Min        Max
-## 1 Group1 0.01189 0.005727659 0.004637591 0.02158492
+##     Parm          M          SD         Min        Max
+## 1 Group1 0.01071287 0.004171214 0.005948698 0.01983321
 ```
+
+]
+
 
 ---
 
@@ -227,9 +364,11 @@ class: section, center, middle
 
 ---
 
+## Pacchetto `difR`
+
 Per investigare la DIF, utilizziamo il pacchetto `difR`
 
-`difR` permette di investigare la DIF anche con approcci IRT che però non sono il focus di questo corso 
+`difR` permette di investigare la DIF anche con approcci non IRT che però non sono il focus di questo corso 
 
 Il vantaggio di usare un approccio IRT è che la DIF viene investigata considerando il tratto latente `\(\rightarrow\)` non dipende dal campione
 
@@ -243,13 +382,14 @@ Il vantaggio di usare un approccio IRT è che la DIF viene investigata considera
 
 ## Likelihood Ratio Test 
 
+.scrollable[
 Non è propriamente il LRT
 
 
 ```r
 est_theta = IRT.factor.scores(m1pl)$EAP
-lrt_dif = difGenLogistic(d2[, !colnames(d2) %in% c("id", "gender", "ability")],
-                           group = as.factor(d2$gender),
+lrt_dif = difGenLogistic(data[, !colnames(data) %in% c("id", "gender")],
+                           group = as.factor(data$gender),
                            focal.names = "f",
                            type = "udif",
                            alpha = .001,
@@ -274,16 +414,16 @@ lrt_dif
 ## Logistic regression DIF statistic: 
 ##  
 ##        Stat.   P-value Adj. P     
-## item1   3.3325  0.0679  0.1132    
-## item2   1.8040  0.1792  0.1991    
-## item3   2.9366  0.0866  0.1237    
-## item4   9.1911  0.0024  0.0093 ** 
-## item5  18.5357  0.0000  0.0002 ***
-## item6   8.9475  0.0028  0.0093 ** 
-## item7   5.4126  0.0200  0.0500 *  
-## item8   0.8921  0.3449  0.3449    
-## item9   2.3821  0.1227  0.1534    
-## item10  4.0601  0.0439  0.0878 .  
+## item1   9.5769  0.0020  0.0033 ** 
+## item2   7.8345  0.0051  0.0064 ** 
+## item3   2.8907  0.0891  0.0891 .  
+## item4   6.6418  0.0100  0.0111 *  
+## item5  28.1792  0.0000  0.0000 ***
+## item6  36.3876  0.0000  0.0000 ***
+## item7  18.8507  0.0000  0.0000 ***
+## item8   9.8524  0.0017  0.0033 ** 
+## item9  27.3310  0.0000  0.0000 ***
+## item10  8.9442  0.0028  0.0040 ** 
 ## 
 ## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1  
 ## 
@@ -292,6 +432,9 @@ lrt_dif
 ## Items detected as uniform DIF items:
 ##       
 ##  item5
+##  item6
+##  item7
+##  item9
 ## 
 ##  
 ## Effect size (Nagelkerke's R^2): 
@@ -302,16 +445,16 @@ lrt_dif
 ##  'C': large effect 
 ##  
 ##        R^2    ZT JG
-## item1  0.0067 A  A 
-## item2  0.0039 A  A 
-## item3  0.0060 A  A 
-## item4  0.0183 A  A 
-## item5  0.0364 A  B 
-## item6  0.0172 A  A 
-## item7  0.0142 A  A 
-## item8  0.0018 A  A 
-## item9  0.0049 A  A 
-## item10 0.0078 A  A 
+## item1  0.0092 A  A 
+## item2  0.0086 A  A 
+## item3  0.0030 A  A 
+## item4  0.0069 A  A 
+## item5  0.0368 A  B 
+## item6  0.0394 A  B 
+## item7  0.0231 A  A 
+## item8  0.0098 A  A 
+## item9  0.0293 A  A 
+## item10 0.0130 A  A 
 ## 
 ## Effect size codes: 
 ##  Zumbo &amp; Thomas (ZT): 0 'A' 0.13 'B' 0.26 'C' 1 
@@ -320,86 +463,15 @@ lrt_dif
 ##  Output was not captured!
 ```
 
+]
 
----
-
-## DIF Lord
-
-
-```r
-lordDif = difLord(d2[, !colnames(d2) %in% c("id", "ability")], 
-                  group = "gender", 
-                  focal.name = "m", 
-                  model = "1PL", 
-                  p.adjust.method = "BH")
-lordDif
-```
-
-```{.scroll-100}
-## 
-## Detection of Differential Item Functioning using Lord's method 
-## with 1PL model and without item purification
-## 
-## Engine 'ltm' for item parameter estimation 
-##  
-## Common discrimination parameter: fixed to 1
-## 
-## No set of anchor items was provided 
-##  
-## Multiple comparisons made with Benjamini-Hochberg adjustement of p-values 
-##  
-## Lord's chi-square statistic: 
-##  
-##        Stat.   P-value Adj. P    
-## item1   2.8921  0.0890  0.1484   
-## item2   1.6256  0.2023  0.2307   
-## item3   2.6283  0.1050  0.1500   
-## item4   7.2519  0.0071  0.0354 * 
-## item5  12.7233  0.0004  0.0036 **
-## item6   6.2859  0.0122  0.0406 * 
-## item7   4.3793  0.0364  0.0909 . 
-## item8   0.8383  0.3599  0.3599   
-## item9   1.5880  0.2076  0.2307   
-## item10  2.9526  0.0857  0.1484   
-## 
-## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1  
-##  
-## Items detected as DIF items: 
-##       
-##  item4
-##  item5
-##  item6
-## 
-## Effect size (ETS Delta scale): 
-##  
-## Effect size code: 
-##  'A': negligible effect 
-##  'B': moderate effect 
-##  'C': large effect 
-##  
-##        mF-mR   deltaLord  
-## item1   0.3701 -0.8697   A
-## item2   0.2825 -0.6639   A
-## item3   0.3506 -0.8239   A
-## item4   0.5833 -1.3708   B
-## item5  -0.7842  1.8429   C
-## item6  -0.5505  1.2937   B
-## item7  -0.5455  1.2819   B
-## item8   0.1982 -0.4658   A
-## item9  -0.2763  0.6493   A
-## item10  0.3720 -0.8742   A
-## 
-## Effect size codes: 0 'A' 1.0 'B' 1.5 'C' 
-##  (for absolute values of 'deltaLord') 
-##  
-## Output was not captured!
-```
 
 ---
 
 
 ## DIF Raju 
 
+.scrollable[
 
 ```r
 rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")], 
@@ -427,27 +499,33 @@ rajDif
 ##  
 ## Raju's statistic: 
 ##  
-##        Stat.   P-value Adj. P    
-## item1   1.7006  0.0890  0.1484   
-## item2   1.2750  0.2023  0.2307   
-## item3   1.6212  0.1050  0.1500   
-## item4   2.6929  0.0071  0.0354 * 
-## item5  -3.5670  0.0004  0.0036 **
-## item6  -2.5072  0.0122  0.0406 * 
-## item7  -2.0927  0.0364  0.0909 . 
-## item8   0.9156  0.3599  0.3599   
-## item9  -1.2601  0.2076  0.2307   
-## item10  1.7183  0.0857  0.1484   
+##        Stat.   P-value Adj. P     
+## item1   2.7358  0.0062  0.0104 *  
+## item2   2.5503  0.0108  0.0154 *  
+## item3   1.5133  0.1302  0.1302    
+## item4   2.2916  0.0219  0.0244 *  
+## item5  -4.4742  0.0000  0.0000 ***
+## item6  -5.0150  0.0000  0.0000 ***
+## item7  -3.6098  0.0003  0.0008 ***
+## item8  -2.4605  0.0139  0.0173 *  
+## item9   4.6929  0.0000  0.0000 ***
+## item10  2.9145  0.0036  0.0071 ** 
 ## 
 ## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1  
 ## 
 ## Detection thresholds: -1.96 and 1.96 (significance level: 0.05)
 ## 
 ## Items detected as DIF items: 
-##       
-##  item4
-##  item5
-##  item6
+##        
+##  item1 
+##  item2 
+##  item4 
+##  item5 
+##  item6 
+##  item7 
+##  item8 
+##  item9 
+##  item10
 ## 
 ## Effect size (ETS Delta scale): 
 ##  
@@ -457,22 +535,293 @@ rajDif
 ##  'C': large effect 
 ##  
 ##        mF-mR   deltaRaju  
-## item1   0.3701 -0.8697   A
-## item2   0.2825 -0.6639   A
-## item3   0.3506 -0.8239   A
-## item4   0.5833 -1.3708   B
-## item5  -0.7842  1.8429   C
-## item6  -0.5505  1.2937   B
-## item7  -0.5455  1.2819   B
-## item8   0.1982 -0.4658   A
-## item9  -0.2763  0.6493   A
-## item10  0.3720 -0.8742   A
+## item1   0.4190 -0.9846   A
+## item2   0.4244 -0.9973   A
+## item3   0.2458 -0.5776   A
+## item4   0.3677 -0.8641   A
+## item5  -0.9066  2.1305   C
+## item6  -0.8568  2.0135   C
+## item7  -0.6592  1.5491   C
+## item8  -0.3799  0.8928   A
+## item9   0.7692 -1.8076   C
+## item10  0.5764 -1.3545   B
 ## 
 ## Effect size codes: 0 'A' 1.0 'B' 1.5 'C' 
 ##  (for absolute values of 'deltaRaju') 
 ##  
 ## Output was not captured!
 ```
+
+]
+
+
+
+---
+
+## DIF Lord
+
+.scrollable[
+
+```r
+lordDif = difLord(data[, !colnames(data) %in% "id"], 
+                  group = "gender", 
+                  focal.name = "f", 
+                  model = "1PL", 
+                  p.adjust.method = "BH")
+lordDif
+```
+
+```{.scroll-100}
+## 
+## Detection of Differential Item Functioning using Lord's method 
+## with 1PL model and without item purification
+## 
+## Engine 'ltm' for item parameter estimation 
+##  
+## Common discrimination parameter: fixed to 1
+## 
+## No set of anchor items was provided 
+##  
+## Multiple comparisons made with Benjamini-Hochberg adjustement of p-values 
+##  
+## Lord's chi-square statistic: 
+##  
+##        Stat.   P-value Adj. P     
+## item1   7.4848  0.0062  0.0104 *  
+## item2   6.5039  0.0108  0.0154 *  
+## item3   2.2901  0.1302  0.1302    
+## item4   5.2515  0.0219  0.0244 *  
+## item5  20.0188  0.0000  0.0000 ***
+## item6  25.1505  0.0000  0.0000 ***
+## item7  13.0309  0.0003  0.0008 ***
+## item8   6.0539  0.0139  0.0173 *  
+## item9  22.0232  0.0000  0.0000 ***
+## item10  8.4941  0.0036  0.0071 ** 
+## 
+## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1  
+##  
+## Items detected as DIF items: 
+##        
+##  item1 
+##  item2 
+##  item4 
+##  item5 
+##  item6 
+##  item7 
+##  item8 
+##  item9 
+##  item10
+## 
+## Effect size (ETS Delta scale): 
+##  
+## Effect size code: 
+##  'A': negligible effect 
+##  'B': moderate effect 
+##  'C': large effect 
+##  
+##        mF-mR   deltaLord  
+## item1  -0.4190  0.9846   A
+## item2  -0.4244  0.9973   A
+## item3  -0.2458  0.5776   A
+## item4  -0.3677  0.8641   A
+## item5   0.9066 -2.1305   C
+## item6   0.8568 -2.0135   C
+## item7   0.6592 -1.5491   C
+## item8   0.3799 -0.8928   A
+## item9  -0.7692  1.8076   C
+## item10 -0.5764  1.3545   B
+## 
+## Effect size codes: 0 'A' 1.0 'B' 1.5 'C' 
+##  (for absolute values of 'deltaLord') 
+##  
+## Output was not captured!
+```
+
+]
+
+
+---
+
+## DIF Lord I 
+
+`mF-mR` è la differenza tra i parametri de gruppo Focal e del gruppo reference 
+
+`deltaLord` è una misura dell'effetto ottenuta moltiplicando la differenza tra i parametri di difficoltà nei due gruppi per `\(-2.35\)` (Penfield &amp; Camilli, 2007)
+
+Il `deltaLord` può essere interpretato secondo i valori riportati nell'output (Holland &amp; Thayer, 1985)
+
+I parametri nei due gruppi posso essere estrati con: 
+
+
+```r
+lordDif$itemParInit
+```
+
+
+---
+
+## Attenzione ai paramteri degli item
+
+.scrollable[
+Le prime `\(i = 1, \ldots, I\)` righe sono i parametri degli item **NEL GRUPPO DI RIFERIMENTO**
+
+
+```r
+item_par = lordDif$itemParInit
+
+item_par[1:10, ]
+```
+
+```{.scroll-100}
+##                 b     se(b)
+## Item1   0.1003314 0.1081049
+## Item2  -1.0813481 0.1167024
+## Item3   0.9287588 0.1141034
+## Item4   0.8852199 0.1135280
+## Item5  -2.5345451 0.1625745
+## Item6   0.5418750 0.1100347
+## Item7   1.0626916 0.1160698
+## Item8  -0.4051660 0.1092741
+## Item9  -0.7726385 0.1124324
+## Item10  2.1299052 0.1442241
+```
+
+Le ultime righe sono i parametri **NEL GRUPPO FOCALE**
+
+
+```r
+item_par[11:nrow(item_par), ]
+```
+
+```{.scroll-100}
+##                    b     se(b)
+## Item1   1.621335e-06 0.1084637
+## Item2  -1.187073e+00 0.1186087
+## Item3   1.001565e+00 0.1156194
+## Item4   8.361141e-01 0.1134093
+## Item5  -1.309367e+00 0.1209242
+## Item6   1.717348e+00 0.1307057
+## Item7   2.040499e+00 0.1409710
+## Item8   2.933326e-01 0.1090660
+## Item9  -1.223203e+00 0.1192650
+## Item10  1.872148e+00 0.1353199
+```
+
+]
+
+
+---
+
+## Attenzione ai parametri degli item
+
+
+```r
+itemFR = data.frame(cbind(item_par[11:nrow(item_par), ], 
+               item_par[1:10, ]))
+colnames(itemFR)[c(1,3)] = paste0(rep("b",2),
+                                  c("F", "R"))
+itemFR$dif =itemFR$bF - itemFR$bR 
+itemFR
+```
+
+```{.scroll-100}
+##                   bF     se.b.         bR   se.b..1         dif
+## Item1   1.621335e-06 0.1084637  0.1003314 0.1081049 -0.10032975
+## Item2  -1.187073e+00 0.1186087 -1.0813481 0.1167024 -0.10572484
+## Item3   1.001565e+00 0.1156194  0.9287588 0.1141034  0.07280599
+## Item4   8.361141e-01 0.1134093  0.8852199 0.1135280 -0.04910580
+## Item5  -1.309367e+00 0.1209242 -2.5345451 0.1625745  1.22517862
+## Item6   1.717348e+00 0.1307057  0.5418750 0.1100347  1.17547293
+## Item7   2.040499e+00 0.1409710  1.0626916 0.1160698  0.97780725
+## Item8   2.933326e-01 0.1090660 -0.4051660 0.1092741  0.69849860
+## Item9  -1.223203e+00 0.1192650 -0.7726385 0.1124324 -0.45056403
+## Item10  1.872148e+00 0.1353199  2.1299052 0.1442241 -0.25775737
+```
+
+I valori sono diversi da quelli di `dif` sono dversi da quelli riportati nell'ouput in `mF-mR`!!
+
+Questo perché i parametri del gruppo focale vengono riscalati con equal means anchoring di Cook e Eignor (1991)
+
+
+---
+
+## Cook e Eignor (1991)
+
+Secondo il metodo dell'equal means ancrhoring, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
+
+Il rescaling viene fatto sottraendo una costante al parametro di difficoltà del gruppo di riferimeno: 
+
+`$$c = \bar{b}_R - \bar{b}_F$$`
+Questa costante va tolta a tutti i parametri di difficoltà del **gruppo di riferimento**
+
+Dopo aver applicato il rescaling, si può calcolare la DIF 
+
+---
+
+## Rescaling
+
+
+```r
+itemFR$constant = mean(itemFR$bR) - mean(itemFR$bF)
+
+itemFR$new.bR = itemFR$bR - itemFR$constant
+
+itemFR$DIF.correct = itemFR$bF- itemFR$new.bR
+
+itemFR
+```
+
+```{.scroll-100}
+##                   bF     se.b.         bR   se.b..1         dif   constant
+## Item1   1.621335e-06 0.1084637  0.1003314 0.1081049 -0.10032975 -0.3186282
+## Item2  -1.187073e+00 0.1186087 -1.0813481 0.1167024 -0.10572484 -0.3186282
+## Item3   1.001565e+00 0.1156194  0.9287588 0.1141034  0.07280599 -0.3186282
+## Item4   8.361141e-01 0.1134093  0.8852199 0.1135280 -0.04910580 -0.3186282
+## Item5  -1.309367e+00 0.1209242 -2.5345451 0.1625745  1.22517862 -0.3186282
+## Item6   1.717348e+00 0.1307057  0.5418750 0.1100347  1.17547293 -0.3186282
+## Item7   2.040499e+00 0.1409710  1.0626916 0.1160698  0.97780725 -0.3186282
+## Item8   2.933326e-01 0.1090660 -0.4051660 0.1092741  0.69849860 -0.3186282
+## Item9  -1.223203e+00 0.1192650 -0.7726385 0.1124324 -0.45056403 -0.3186282
+## Item10  1.872148e+00 0.1353199  2.1299052 0.1442241 -0.25775737 -0.3186282
+##             new.bR DIF.correct
+## Item1   0.41895953  -0.4189579
+## Item2  -0.76271998  -0.4243530
+## Item3   1.24738700  -0.2458222
+## Item4   1.20384806  -0.3677340
+## Item5  -2.21591698   0.9065505
+## Item6   0.86050314   0.8568448
+## Item7   1.38131979   0.6591791
+## Item8  -0.08653783   0.3798704
+## Item9  -0.45401035  -0.7691922
+## Item10  2.44853338  -0.5763855
+```
+
+
+---
+
+
+---
+class: section, center, middle
+
+#  Esercitazione
+ 
+
+---
+
+## 
+
+Scaricare il dataset `difES.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Look at the data!
+
+Fittare i modelli IRT
+
+Scegliere il modello più appropriato 
+
+Valutarne la fit (sia del modello sia degli item)
+
+Valutare la DIF con i tre metodi
+
 
 
 ---

@@ -43,7 +43,7 @@ library(ggplot2)
 set.seed(999)
 
 # codice di Dr Enrico Toffaini per la simulazione di dati con dif
-n <- 250
+n <- 500
 nitem <- 10
 percDif <- 50
 
@@ -73,6 +73,9 @@ temp = temp[unique(d$item)]
 d2 = cbind( d2[, colnames(d2) %in% c("id", "gender", "ability")], 
             temp)
 data = d2
+data$ability = NULL
+
+
 ```
 
 
@@ -87,13 +90,30 @@ pre[class] {
 .scroll-100 {
   max-height: 500px;
   overflow-y: auto;
-  background-color: inherit;
+}
+
+.inverse {
+  background-color: #272822;
+  color: #d6d6d6;
+  text-shadow: 0 0 20px #333;
+}
+
+
+.scrollable {
+  height: 500px;
+  overflow-y: auto;
+}
+
+
+.scrollable-auto {
+  height: 80%;
+  overflow-y: auto;
+}
+
+.remark-slide-number {
+  display: none;
 }
 ```
-
-<style>
-.myClass {font-size: 14px;}
-</style>
 
 
 ---
@@ -104,7 +124,22 @@ class: section, center, middle
 ---
 
 
-## Devo capire quali dati 
+## Caricare i dati in R 
+
+
+.scrollable[
+Scaricare il file  `difClass.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Salvarlo all'interno della sottocartella `Dati` del progetto `R` che avete creato per il corso
+
+Usate questo codice: 
+
+```{r eval = F}
+data = read.csv("Dati/difClass.csv", header = T, sep = ",")
+```
+
+
+]
 
 
 ---
@@ -115,36 +150,56 @@ class: section, center, middle
 
 ---
 
+## Risposte agli item
+
+.scrollable[
+
 ```{r echo = F}
-p = data.frame(table(d$item, d$resp))
-p$prop = p$Freq/500
+
+small_gender = data[, c("id", "gender")]
+small_responses = data[, -2]
+
+responses = reshape(small_responses, direction = "long", varying = c(2:ncol(small_responses)), idvar = "id", v.names = "response", timevar = "item", times = names(small_responses)[-1])
+long_data = merge(small_gender, responses, by = "id")
+
+p = data.frame(table(long_data$item, 
+                     long_data$resp))
+p$prop = p$Freq/nrow(data)
 p$Var1 = factor(p$Var1, 
-                levels = unique(d$item))
+                levels = unique(long_data$item))
+colnames(p)[2] = "correct"
 ggplot(p, 
        aes(x = Var1, y=prop,  
  
-           fill = Var2)) + geom_bar(stat = "identity") + 
+           fill = correct)) + geom_bar(stat = "identity") + 
   theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50))
 
 ```
+
+]
+---
 
 
 ---
 
 ## Closer 
 
-
+.scrollable[
 ```{r}
-p = data.frame(table(d$item, d$resp, d$gender))
-p$prop = p$Freq/500
+p = data.frame(table(long_data$item, long_data$resp, long_data$gender))
+p$prop = p$Freq/nrow(data)
 p$Var1 = factor(p$Var1, 
-                levels = unique(d$item))
+                levels = unique(long_data$item))
+colnames(p)[3] = "gender"
 ggplot(p[p$Var2 %in% 1,], 
-       aes(x = Var1, y=prop, fill = Var3)) + 
+       aes(x = Var1, y=prop, fill = gender)) + 
   geom_bar(stat = "identity", position = "dodge") + 
   theme(axis.text = element_text(angle = 90)) + 
   geom_hline(aes(yintercept=.50)) 
 ```
+]
+
+
 
 
 ---
@@ -168,9 +223,17 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 
 ```
 
-
-1PL!
 ---
+
+## 1PL 
+
+```{r}
+summary(m1pl)
+```
+
+
+---
+
 
 ## Fit del modello 
 
@@ -189,7 +252,7 @@ f.m1pl$modelfit.test
 
 ## 1PL - Item fit
 
-
+.scrollable[
 ```{r}
 item.fit.1pl = IRT.itemfit(m1pl)
 
@@ -201,6 +264,9 @@ item.fit.1pl$RMSD_summary
 
 ```
 
+]
+
+
 ---
 
 class: section, center, middle
@@ -209,9 +275,11 @@ class: section, center, middle
 
 ---
 
+## Pacchetto `difR`
+
 Per investigare la DIF, utilizziamo il pacchetto `difR`
 
-`difR` permette di investigare la DIF anche con approcci IRT che però non sono il focus di questo corso 
+`difR` permette di investigare la DIF anche con approcci non IRT che però non sono il focus di questo corso 
 
 Il vantaggio di usare un approccio IRT è che la DIF viene investigata considerando il tratto latente $\rightarrow$ non dipende dal campione
 
@@ -225,12 +293,13 @@ Il vantaggio di usare un approccio IRT è che la DIF viene investigata considera
 
 ## Likelihood Ratio Test 
 
+.scrollable[
 Non è propriamente il LRT
 
 ```{r}
 est_theta = IRT.factor.scores(m1pl)$EAP
-lrt_dif = difGenLogistic(d2[, !colnames(d2) %in% c("id", "gender", "ability")],
-                           group = as.factor(d2$gender),
+lrt_dif = difGenLogistic(data[, !colnames(data) %in% c("id", "gender")],
+                           group = as.factor(data$gender),
                            focal.names = "f",
                            type = "udif",
                            alpha = .001,
@@ -240,25 +309,15 @@ lrt_dif = difGenLogistic(d2[, !colnames(d2) %in% c("id", "gender", "ability")],
 lrt_dif
 ```
 
+]
 
----
-
-## DIF Lord
-
-```{r}
-lordDif = difLord(d2[, !colnames(d2) %in% c("id", "ability")], 
-                  group = "gender", 
-                  focal.name = "m", 
-                  model = "1PL", 
-                  p.adjust.method = "BH")
-lordDif
-```
 
 ---
 
 
 ## DIF Raju 
 
+.scrollable[
 ```{r}
 rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")], 
                   group = "gender", 
@@ -268,6 +327,139 @@ rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")],
 rajDif
 
 ```
+
+]
+
+
+
+---
+
+## DIF Lord
+
+.scrollable[
+```{r}
+lordDif = difLord(data[, !colnames(data) %in% "id"], 
+                  group = "gender", 
+                  focal.name = "f", 
+                  model = "1PL", 
+                  p.adjust.method = "BH")
+lordDif
+```
+
+]
+
+
+---
+
+## DIF Lord I 
+
+`mF-mR` è la differenza tra i parametri de gruppo Focal e del gruppo reference 
+
+`deltaLord` è una misura dell'effetto ottenuta moltiplicando la differenza tra i parametri di difficoltà nei due gruppi per $-2.35$ (Penfield & Camilli, 2007)
+
+Il `deltaLord` può essere interpretato secondo i valori riportati nell'output (Holland & Thayer, 1985)
+
+I parametri nei due gruppi posso essere estrati con: 
+
+```{r eval = FALSE}
+lordDif$itemParInit
+```
+
+
+---
+
+## Attenzione ai paramteri degli item
+
+.scrollable[
+Le prime $i = 1, \ldots, I$ righe sono i parametri degli item **NEL GRUPPO DI RIFERIMENTO**
+
+```{r}
+item_par = lordDif$itemParInit
+
+item_par[1:10, ]
+
+```
+
+Le ultime righe sono i parametri **NEL GRUPPO FOCALE**
+
+```{r}
+item_par[11:nrow(item_par), ]
+```
+
+]
+
+
+---
+
+## Attenzione ai parametri degli item
+
+```{r}
+itemFR = data.frame(cbind(item_par[11:nrow(item_par), ], 
+               item_par[1:10, ]))
+colnames(itemFR)[c(1,3)] = paste0(rep("b",2),
+                                  c("F", "R"))
+itemFR$dif =itemFR$bF - itemFR$bR 
+itemFR
+```
+
+I valori sono diversi da quelli di `dif` sono dversi da quelli riportati nell'ouput in `mF-mR`!!
+
+Questo perché i parametri del gruppo focale vengono riscalati con equal means anchoring di Cook e Eignor (1991)
+
+
+---
+
+## Cook e Eignor (1991)
+
+Secondo il metodo dell'equal means ancrhoring, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
+
+Il rescaling viene fatto sottraendo una costante al parametro di difficoltà del gruppo di riferimeno: 
+
+$$c = \bar{b}_R - \bar{b}_F$$
+Questa costante va tolta a tutti i parametri di difficoltà del **gruppo di riferimento**
+
+Dopo aver applicato il rescaling, si può calcolare la DIF 
+
+---
+
+## Rescaling
+
+```{r}
+itemFR$constant = mean(itemFR$bR) - mean(itemFR$bF)
+
+itemFR$new.bR = itemFR$bR - itemFR$constant
+
+itemFR$DIF.correct = itemFR$bF- itemFR$new.bR
+
+itemFR
+```
+
+
+---
+
+
+---
+class: section, center, middle
+
+#  Esercitazione
+ 
+
+---
+
+## Esercitazione DIF 
+
+Scaricare il dataset `difES.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Look at the data!
+
+Fittare i modelli IRT
+
+Scegliere il modello più appropriato 
+
+Valutarne la fit (sia del modello sia degli item)
+
+Valutare la DIF con i tre metodi
+
 
 
 ---
