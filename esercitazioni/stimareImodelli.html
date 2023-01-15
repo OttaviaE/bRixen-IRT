@@ -263,8 +263,21 @@ class: section, center, middle
 
 ## Caricare i dati in R 
 
-poi la faccio devo vedere quali dati fare
 
+.scrollable[
+Scaricare il file  `dataClass.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Salvarlo all'interno della sottocartella `Dati` del progetto `R` che avete creato per il corso
+
+Usate questo codice: 
+
+
+```r
+data = read.csv("Dati/dataClass.csv", header = T, sep = ",")
+```
+
+
+]
 ---
 
 ## Look at the data - Item I
@@ -296,7 +309,7 @@ ggplot(prop_data,
 
 
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -316,7 +329,7 @@ sbj_data$sum = rowSums(sbj_data[,-1])
 boxplot(sbj_data$sum)
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-13-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -347,9 +360,9 @@ summary(m1pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 09:45:31 
-## Time difference of 0.07848716 secs
-## Computation time: 0.07848716 
+## Date of Analysis: 2023-01-15 10:55:00 
+## Time difference of 0.09509516 secs
+## Computation time: 0.09509516 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -503,7 +516,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m1pl)$icc.graph + theme_classic() 
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -523,9 +536,9 @@ summary(m2pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 09:45:32 
-## Time difference of 0.232769 secs
-## Computation time: 0.232769 
+## Date of Analysis: 2023-01-15 10:55:00 
+## Time difference of 0.1784768 secs
+## Computation time: 0.1784768 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -675,7 +688,7 @@ item.fit.1pl$RMSD_summary
 irt.icc(m2pl)$icc.graph + theme_classic()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -698,9 +711,9 @@ summary(m3pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 09:45:41 
-## Time difference of 8.88064 secs
-## Computation time: 8.88064 
+## Date of Analysis: 2023-01-15 10:55:06 
+## Time difference of 5.287084 secs
+## Computation time: 5.287084 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -709,12 +722,12 @@ summary(m3pl)
 ## tam.mml.3pl(resp = data, est.guess = colnames(data), verbose = F)
 ## 
 ## ------------------------------------------------------------
-## Number of iterations = 578 
+## Number of iterations = 576 
 ## 
 ## Skill space: Normal Distribution 
 ## Numeric integration with 21 integration points
 ## 
-## Deviance = 5309.34  | Log Likelihood = -2654.67 
+## Deviance = 5309.64  | Log Likelihood = -2654.82 
 ## Number of persons = 1000 
 ## Number of persons used = 1000 
 ## Number of items = 5 
@@ -727,13 +740,13 @@ summary(m3pl)
 ##     Variance/covariance parameters = 1 
 ##     Delta parameters     = 0 
 ## 
-## AIC = 5341  | penalty=32    | AIC=-2*LL + 2*p 
-## AIC3 = 5357  | penalty=48    | AIC3=-2*LL + 3*p 
+## AIC = 5342  | penalty=32    | AIC=-2*LL + 2*p 
+## AIC3 = 5358  | penalty=48    | AIC3=-2*LL + 3*p 
 ## BIC = 5420  | penalty=110.52    | BIC=-2*LL + log(n)*p 
 ## aBIC = 5369  | penalty=59.64    | aBIC=-2*LL + log((n-2)/24)*p  (adjusted BIC) 
 ## CAIC = 5436  | penalty=126.52    | CAIC=-2*LL + [log(n)+1]*p  (consistent AIC) 
 ## AICc = 5342  | penalty=32.55    | AICc=-2*LL + 2*p + 2*p*(p+1)/(n-p-1)  (bias corrected AIC) 
-## GHP = 0.53413     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
+## GHP = 0.53416     | GHP=( -LL + p ) / (#Persons * #Items)  (Gilula-Haberman log penalty) 
 ## 
 ## ------------------------------------------------------------
 ## EAP Reliability
@@ -741,11 +754,11 @@ summary(m3pl)
 ## ------------------------------------------------------------
 ## Covariances and Variances
 ##       [,1]
-## [1,] 1.475
+## [1,] 1.481
 ## ------------------------------------------------------------
 ## Correlations and Standard Deviations (in the diagonal)
 ##       [,1]
-## [1,] 1.215
+## [1,] 1.217
 ## ------------------------------------------------------------
 ## Regression Coefficients
 ##      [,1]
@@ -753,14 +766,14 @@ summary(m3pl)
 ## ------------------------------------------------------------
 ## Item Parameters -A*Xsi
 ##   item    N     M est.guess guess AXsi_.Cat1 B.Cat1.Dim1
-## 1  I01 1000 0.572         1 0.072     -0.357       1.090
-## 2  I02 1000 0.442         2 0.030      0.729       3.526
-## 3  I03 1000 0.729         3 0.068     -1.349       1.196
-## 4  I04 1000 0.262         4 0.053      1.731       1.623
-## 5  I05 1000 0.295         5 0.062      2.178       2.945
+## 1  I01 1000 0.572         1 0.072     -0.332       1.095
+## 2  I02 1000 0.442         2 0.030      0.802       3.544
+## 3  I03 1000 0.729         3 0.068     -1.324       1.195
+## 4  I04 1000 0.262         4 0.053      1.809       1.669
+## 5  I05 1000 0.295         5 0.062      2.278       3.016
 ## 
 ## Gammaslope Parameters
-## [1] 1.090 3.526 1.196 1.623 2.945
+## [1] 1.095 3.544 1.195 1.669 3.016
 ```
 
 ]
@@ -788,8 +801,8 @@ f.m3pl$statlist
 ```
 
 ```{.scroll-100}
-##   X100.MADCOV      SRMR     SRMSR     MADaQ3 pmaxX2
-## 1    3.513074 0.1362303 0.1383601 0.05930855      0
+##   X100.MADCOV     SRMR    SRMSR     MADaQ3 pmaxX2
+## 1    3.481883 0.135382 0.137495 0.06034752      0
 ```
 
 ```r
@@ -798,7 +811,7 @@ f.m3pl$modelfit.test
 
 ```{.scroll-100}
 ##      maxX2 Npairs p.holm
-## 1 121.0066     10      0
+## 1 116.1181     10      0
 ```
 
 ]
@@ -819,10 +832,10 @@ item.fit.3pl$chisquare_stat
 
 ```{.scroll-100}
 ##   item   Group1
-## 1  I01 22.18046
+## 1  I01 21.67682
 ## 2  I02      Inf
-## 3  I03 27.80196
-## 4  I04 88.67648
+## 3  I03 27.58752
+## 4  I04 86.01963
 ## 5  I05      Inf
 ```
 
@@ -832,11 +845,11 @@ item.fit.3pl$RMSD
 
 ```{.scroll-100}
 ##   item     Group1
-## 1  I01 0.06431136
-## 2  I02 0.14470552
-## 3  I03 0.07391311
-## 4  I04 0.12967412
-## 5  I05 0.23233843
+## 1  I01 0.06361902
+## 2  I02 0.13848673
+## 3  I03 0.07387837
+## 4  I04 0.12824780
+## 5  I05 0.22998383
 ```
 
 ```r
@@ -845,7 +858,7 @@ item.fit.3pl$RMSD_summary
 
 ```{.scroll-100}
 ##     Parm         M         SD        Min       Max
-## 1 Group1 0.1289885 0.06735193 0.06431136 0.2323384
+## 1 Group1 0.1268432 0.06629122 0.06361902 0.2299838
 ```
 
 ]
@@ -861,7 +874,7 @@ item.fit.3pl$RMSD_summary
 irt.icc(m3pl)$icc.graph + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-24-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -884,17 +897,17 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 ##   Model   loglike Deviance Npars Nobs      AIC      BIC     AIC3     AICc
 ## 1  m1pl -2706.625 5413.250     6 1000 5425.250 5454.697 5431.250 5425.335
 ## 2  m2pl -2654.262 5308.525    10 1000 5328.525 5377.602 5338.525 5328.747
-## 3  m3pl -2654.668 5309.336    16 1000 5341.336 5419.860 5357.336 5341.890
+## 3  m3pl -2654.822 5309.644    16 1000 5341.644 5420.168 5357.644 5342.197
 ##       CAIC       GHP
 ## 1 5460.697 0.5425250
 ## 2 5387.602 0.5328525
-## 3 5435.860 0.5341336
+## 3 5436.168 0.5341644
 ## 
 ## $LRtest
-##   Model1 Model2        Chi2 df p
-## 1   m1pl   m2pl 104.7253819  4 0
-## 2   m1pl   m3pl 103.9139966 10 0
-## 3   m2pl   m3pl  -0.8113853  6 1
+##   Model1 Model2       Chi2 df p
+## 1   m1pl   m2pl 104.725382  4 0
+## 2   m1pl   m3pl 103.606273 10 0
+## 3   m2pl   m3pl  -1.119109  6 1
 ## 
 ## attr(,"class")
 ## [1] "IRT.compareModels"
@@ -1092,7 +1105,7 @@ ggplot(info2pl$item_info,
        aes(x = theta, y = ii_item, group = item, color = item)) + geom_line(lwd = 1) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-30-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -1110,7 +1123,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -1127,7 +1140,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-33-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -1135,6 +1148,35 @@ ggplot(info2pl$test_info,
 
 
 ---
+
+---
+class: section, center, middle
+
+#  Esercitazione
+ 
+
+---
+
+## 
+
+Scaricare il dataset `dataES_stima.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Look at the data!
+
+Fittare i modelli IRT
+
+Scegliere il modello più appropriato 
+
+Valutarne la fit (sia del modello sia degli item)
+
+Valutare le assunzioni
+
+IIC, IIF, TIF
+
+
+
+---
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

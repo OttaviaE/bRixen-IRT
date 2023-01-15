@@ -47,7 +47,11 @@ a = c(runif(5, 0.4, 2))
 true_theta = seq(-4, 4, length.out = N)
 data <- sirt::sim.raschtype( true_theta, b=b, 
                              fixed.a = a)
+true_thetaES = seq(-5, 2, length.out = N-200)
+bES <- runif(8, -5,5)
+aES = rep(1, 8)
 
+dataES = sirt::sim.raschtype(true_thetaES, b = bES, fixed.a=aES)
 
 ```
 
@@ -289,8 +293,20 @@ class: section, center, middle
 
 ## Caricare i dati in R 
 
-poi la faccio devo vedere quali dati fare
 
+.scrollable[
+Scaricare il file  `dataClass.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Salvarlo all'interno della sottocartella `Dati` del progetto `R` che avete creato per il corso
+
+Usate questo codice: 
+
+```{r eval = F}
+data = read.csv("Dati/dataClass.csv", header = T, sep = ",")
+```
+
+
+]
 ---
 
 ## Look at the data - Item I
@@ -706,3 +722,32 @@ ggplot(info2pl$test_info,
 
 
 ---
+
+---
+class: section, center, middle
+
+#  Esercitazione
+ 
+
+---
+
+## 
+
+Scaricare il dataset `dataES_stima.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
+
+Look at the data!
+
+Fittare i modelli IRT
+
+Scegliere il modello più appropriato 
+
+Valutarne la fit (sia del modello sia degli item)
+
+Valutare le assunzioni
+
+IIC, IIF, TIF
+
+
+
+---
+
