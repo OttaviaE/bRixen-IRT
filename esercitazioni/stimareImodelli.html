@@ -45,7 +45,28 @@ pre[class] {
 .scroll-100 {
   max-height: 500px;
   overflow-y: auto;
-  background-color: inherit;
+}
+
+.inverse {
+  background-color: #272822;
+  color: #d6d6d6;
+  text-shadow: 0 0 20px #333;
+}
+
+
+.scrollable {
+  height: 500px;
+  overflow-y: auto;
+}
+
+
+.scrollable-auto {
+  height: 80%;
+  overflow-y: auto;
+}
+
+.remark-slide-number {
+  display: none;
 }
 &lt;/style&gt;
 
@@ -53,15 +74,12 @@ pre[class] {
 .myClass {font-size: 14px;}
 &lt;/style&gt;
 
+
+
 ---
 class: section, center, middle
 
 # Getting started
-
----
-
-
-One slide.
 
 ---
 
@@ -85,6 +103,7 @@ New file `\(\rightarrow\)` New project
 &lt;img src="img/project3.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ]
+
 
 
 ---
@@ -148,14 +167,16 @@ IRT &lt;- function(theta, a = 1, b = 0, c = 0,e = 1) {
 ```
 
 ---
+
 ## Codici utili II
 
 
+.scrollable[
+
+
 ```r
-# questa funzione estrae tutti gli item e i loro parametri 
-# e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
-# restituisce una lista con dentro il dataset usato 
-# e un grafico in ggplot
+# questa funzione estrae tutti gli item e i loro parametri e calcola la probabilità di risposta corretta per ogni item per ogni livello di theta
+# restituisce una lista con dentro il dataset usatoe un grafico in ggplot
 irt.icc = function(model) {
   item_par = model$item
   est_theta = IRT.factor.scores(model, 
@@ -191,12 +212,15 @@ irt.icc = function(model) {
 return(object)
 }
 ```
+]
+
 
 
 ---
 
 ## Codici utili III
 
+.scrollable[
 
 ```r
 irt.iif = function(model) {
@@ -223,6 +247,9 @@ info_tot = list(test_info = test_info,
 return(info_tot)
 }
 ```
+
+]
+
 
 
 ---
@@ -262,7 +289,7 @@ ggplot(prop_data,
        aes(x = item, y=proportion,  
  
            fill = response)) + geom_bar(stat = "identity") + 
-  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw()
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw() 
 ```
 
 ---
@@ -274,6 +301,7 @@ ggplot(prop_data,
 
 
 ---
+
 
 ## Look at the data - Respondents
 
@@ -288,7 +316,7 @@ sbj_data$sum = rowSums(sbj_data[,-1])
 boxplot(sbj_data$sum)
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -306,6 +334,7 @@ class: section, center, middle
 
 ## 1PL - Stima
 
+.scrollable[
 
 ```r
 m1pl = tam.mml(data, verbose = F)
@@ -318,9 +347,9 @@ summary(m1pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 16:07:49 
-## Time difference of 0.1027279 secs
-## Computation time: 0.1027279 
+## Date of Analysis: 2023-01-15 09:45:31 
+## Time difference of 0.07848716 secs
+## Computation time: 0.07848716 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -384,6 +413,9 @@ summary(m1pl)
 ## 5  I05     1  1.421
 ```
 
+]
+
+
 
 ---
 
@@ -417,7 +449,7 @@ f.m1pl$modelfit.test
 
 ## 1PL - Item fit
 
-
+.scrollable[
 
 ```r
 item.fit.1pl = IRT.itemfit(m1pl)
@@ -456,6 +488,8 @@ item.fit.1pl$RMSD_summary
 ## 1 Group1 0.02889484 0.01437571 0.008875834 0.04564493
 ```
 
+]
+
 ---
 
 
@@ -466,16 +500,17 @@ item.fit.1pl$RMSD_summary
 
 
 ```r
-irt.icc(m1pl)$icc.graph + theme_classic()
+irt.icc(m1pl)$icc.graph + theme_classic() 
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 
 ---
 ## 2PL 
 
+.scrollable[
 
 ```r
 m2pl = tam.mml.2pl(data, irtmodel = "2PL", verbose = F)
@@ -488,9 +523,9 @@ summary(m2pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 16:07:50 
-## Time difference of 0.203202 secs
-## Computation time: 0.203202 
+## Date of Analysis: 2023-01-15 09:45:32 
+## Time difference of 0.232769 secs
+## Computation time: 0.232769 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -554,22 +589,17 @@ summary(m2pl)
 ## 5  I05 3.616  0.610
 ```
 
+]
+
+
 ---
 
 ## 2PL - Fit 
 
 
 ```r
-f.m2pl = tam.modelfit(m2pl)
-```
+f.m2pl = tam.modelfit(m2pl, progress = F)
 
-```{.scroll-100}
-## **** Calculate Residuals 
-## **** Calculate Counts 
-## **** Calculate Covariances
-```
-
-```r
 f.m2pl$statlist
 ```
 
@@ -592,7 +622,7 @@ f.m2pl$modelfit.test
 
 ## 2PL - Item fit
 
-
+.scrollable[
 
 ```r
 item.fit.2pl = IRT.itemfit(m2pl)
@@ -631,6 +661,9 @@ item.fit.1pl$RMSD_summary
 ## 1 Group1 0.02889484 0.01437571 0.008875834 0.04564493
 ```
 
+]
+
+
 ---
 
 
@@ -639,10 +672,10 @@ item.fit.1pl$RMSD_summary
 
 
 ```r
-irt.icc(m2pl)$icc.graph + theme_classic() 
+irt.icc(m2pl)$icc.graph + theme_classic()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -651,6 +684,7 @@ irt.icc(m2pl)$icc.graph + theme_classic()
 
 ## 3PL 
 
+.scrollable[
 
 ```r
 m3pl = tam.mml.3pl(data, est.guess = colnames(data),
@@ -664,9 +698,9 @@ summary(m3pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2022-12-30 16:07:56 
-## Time difference of 4.928281 secs
-## Computation time: 4.928281 
+## Date of Analysis: 2023-01-15 09:45:41 
+## Time difference of 8.88064 secs
+## Computation time: 8.88064 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -729,11 +763,15 @@ summary(m3pl)
 ## [1] 1.090 3.526 1.196 1.623 2.945
 ```
 
+]
+
+
 
 --- 
 
 ## 3PL - Fit 
 
+.scrollable[
 
 ```r
 f.m3pl = tam.modelfit(m3pl)
@@ -763,12 +801,15 @@ f.m3pl$modelfit.test
 ## 1 121.0066     10      0
 ```
 
+]
+
+
 
 ---
 
 ## 3PL - Item fit
 
-
+.scrollable[
 
 ```r
 item.fit.3pl = IRT.itemfit(m3pl)
@@ -807,6 +848,9 @@ item.fit.3pl$RMSD_summary
 ## 1 Group1 0.1289885 0.06735193 0.06431136 0.2323384
 ```
 
+]
+
+
 
 ---
 
@@ -820,6 +864,8 @@ irt.icc(m3pl)$icc.graph + theme_bw()
 &lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-24-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
+
+class: section, center, middle
 
 # Scelta del modello
 
@@ -863,6 +909,7 @@ Il 2PL è il modello migliore
 
 
 ---
+class: section, center, middle
 
 # Verifica delle assunzioni
 
@@ -870,6 +917,7 @@ Il 2PL è il modello migliore
 
 ## Unidimensionalità 
 
+.scrollable[
 
 ```r
 item_lab = paste(colnames(data), collapse = " + ")
@@ -986,6 +1034,8 @@ summary(model, fit.measures = T)
 ##     I05               1.000
 ```
 
+]
+
 
 ---
 
@@ -1024,7 +1074,7 @@ f.m2pl$Q3_summary
 
 
 ---
-
+class: section, center, middle
 
 #  Item Information Function
  
@@ -1033,6 +1083,7 @@ f.m2pl$Q3_summary
 
 ## IIF per il 2PL 
 
+.scrollable[
 
 ```r
 info2pl = irt.iif(m2pl)
@@ -1042,6 +1093,9 @@ ggplot(info2pl$item_info,
 ```
 
 &lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-30-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+
 
 
 ---
@@ -1049,26 +1103,33 @@ ggplot(info2pl$item_info,
 
 ## TIF per il 2PL
 
+.scrollable[
 
 ```r
 ggplot(info2pl$test_info, 
        aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
 
 
 ---
 
-## SE per il 2 PL 
+## SE per il 2PL 
 
+.scrollable[
 
 ```r
 ggplot(info2pl$test_info, 
        aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+]
 
 
 
