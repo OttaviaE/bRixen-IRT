@@ -92,11 +92,6 @@ pre[class] {
 }
 ```
 
-<style>
-.myClass {font-size: 14px;}
-</style>
-
-
 
 ---
 class: section, center, middle
@@ -731,7 +726,7 @@ class: section, center, middle
 
 ---
 
-## 
+## Esercitazione stima
 
 Scaricare il dataset `dataES_stima.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
 
