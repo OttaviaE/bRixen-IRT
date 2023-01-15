@@ -13,4 +13,4 @@ Il corso prevede una forte componente pratica con R e si struttura come segue:
 
 ## Dati
 
-- Dati: Stima dei modelli: [Dati]([Dati/dataClass.csv](https://drive.google.com/file/d/1lGR-LHeeb5riYHQU2UcsB8qFB4zFEbID/view?usp=sharing))
+In questa cartella sono disponibili i dati da usare per le esrecitazioni
