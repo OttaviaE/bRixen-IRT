@@ -3,7 +3,7 @@ title: "Item Response Theory for beginners"
 subtitle: "Stimare, scegliere i modelli e verificare le assunzioni in R"
 institute: "Bressanone"
 author: "Dr. Ottavia M. Epifania"
-date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 17-18 Gennaio 2023"
 output:
   xaringan::moon_reader:
     lib_dir: libs
