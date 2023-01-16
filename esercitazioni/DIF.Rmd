@@ -154,7 +154,7 @@ class: section, center, middle
 
 .scrollable[
 
-```{r echo = F}
+```{r echo = T, out.height="60%"}
 
 small_gender = data[, c("id", "gender")]
 small_responses = data[, -2]
@@ -210,6 +210,9 @@ class: section, center, middle
 
 ---
 
+## Model comparison
+
+.scrollable[
 ```{r}
 
 m1pl = tam.mml(data[, grep("item", colnames(data))], verbose = F)
@@ -223,13 +226,18 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 
 ```
 
+]
+
 ---
 
 ## 1PL 
 
+.scrollable{
 ```{r}
 summary(m1pl)
 ```
+
+}
 
 
 ---
@@ -321,7 +329,7 @@ lrt_dif
 ```{r}
 rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")], 
                   group = "gender", 
-                  focal.name = "m", 
+                  focal.name = "f", 
                   model = "1PL", 
                   p.adjust.method = "BH")
 rajDif
@@ -353,13 +361,13 @@ lordDif
 
 ## DIF Lord I 
 
-`mF-mR` è la differenza tra i parametri de gruppo Focal e del gruppo reference 
+`mF-mR` è la differenza tra i parametri del gruppo focale e del gruppo di riferimento
 
 `deltaLord` è una misura dell'effetto ottenuta moltiplicando la differenza tra i parametri di difficoltà nei due gruppi per $-2.35$ (Penfield & Camilli, 2007)
 
 Il `deltaLord` può essere interpretato secondo i valori riportati nell'output (Holland & Thayer, 1985)
 
-I parametri nei due gruppi posso essere estrati con: 
+I valori delle stime dei parametri nei due gruppi posso essere estratti con: 
 
 ```{r eval = FALSE}
 lordDif$itemParInit
@@ -386,6 +394,8 @@ Le ultime righe sono i parametri **NEL GRUPPO FOCALE**
 item_par[11:nrow(item_par), ]
 ```
 
+Questo si applica anche al metodo di Raju
+
 ]
 
 
@@ -393,6 +403,7 @@ item_par[11:nrow(item_par), ]
 
 ## Attenzione ai parametri degli item
 
+.scrollable[
 ```{r}
 itemFR = data.frame(cbind(item_par[11:nrow(item_par), ], 
                item_par[1:10, ]))
@@ -404,14 +415,17 @@ itemFR
 
 I valori sono diversi da quelli di `dif` sono dversi da quelli riportati nell'ouput in `mF-mR`!!
 
-Questo perché i parametri del gruppo focale vengono riscalati con equal means anchoring di Cook e Eignor (1991)
+Questo perché i parametri del gruppo focale vengono riscalati con *equal means anchoring* di Cook e Eignor (1991)
+
+
+]
 
 
 ---
 
 ## Cook e Eignor (1991)
 
-Secondo il metodo dell'equal means ancrhoring, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
+Secondo il metodo dell'*equal means ancrhoring*, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
 
 Il rescaling viene fatto sottraendo una costante al parametro di difficoltà del gruppo di riferimeno: 
 
@@ -424,6 +438,7 @@ Dopo aver applicato il rescaling, si può calcolare la DIF
 
 ## Rescaling
 
+.scrollable[
 ```{r}
 itemFR$constant = mean(itemFR$bR) - mean(itemFR$bF)
 
@@ -433,6 +448,9 @@ itemFR$DIF.correct = itemFR$bF- itemFR$new.bR
 
 itemFR
 ```
+
+]
+
 
 
 ---

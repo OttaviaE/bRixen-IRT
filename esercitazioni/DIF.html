@@ -110,7 +110,28 @@ class: section, center, middle
 
 .scrollable[
 
-&lt;img src="DIF_files/figure-html/unnamed-chunk-3-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+```r
+small_gender = data[, c("id", "gender")]
+small_responses = data[, -2]
+
+responses = reshape(small_responses, direction = "long", varying = c(2:ncol(small_responses)), idvar = "id", v.names = "response", timevar = "item", times = names(small_responses)[-1])
+long_data = merge(small_gender, responses, by = "id")
+
+p = data.frame(table(long_data$item, 
+                     long_data$resp))
+p$prop = p$Freq/nrow(data)
+p$Var1 = factor(p$Var1, 
+                levels = unique(long_data$item))
+colnames(p)[2] = "correct"
+ggplot(p, 
+       aes(x = Var1, y=prop,  
+ 
+           fill = correct)) + geom_bar(stat = "identity") + 
+  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50))
+```
+
+&lt;img src="DIF_files/figure-html/unnamed-chunk-3-1.png" width="90%" height="60%" style="display: block; margin: auto;" /&gt;
 
 ]
 ---
@@ -149,6 +170,9 @@ class: section, center, middle
 
 ---
 
+## Model comparison
+
+.scrollable[
 
 ```r
 m1pl = tam.mml(data[, grep("item", colnames(data))], verbose = F)
@@ -182,10 +206,13 @@ IRT.compareModels(m1pl, m2pl, m3pl)
 ## [1] "IRT.compareModels"
 ```
 
+]
+
 ---
 
 ## 1PL 
 
+.scrollable{
 
 ```r
 summary(m1pl)
@@ -196,9 +223,9 @@ summary(m1pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 12:38:35 
-## Time difference of 0.04405689 secs
-## Computation time: 0.04405689 
+## Date of Analysis: 2023-01-16 15:22:02 
+## Time difference of 0.04287505 secs
+## Computation time: 0.04287505 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -271,6 +298,8 @@ summary(m1pl)
 ## 9   item9     1 -0.988
 ## 10 item10     1  1.992
 ```
+
+}
 
 
 ---
@@ -476,7 +505,7 @@ lrt_dif
 ```r
 rajDif = difRaju(d2[, !colnames(d2) %in% c("id", "ability")], 
                   group = "gender", 
-                  focal.name = "m", 
+                  focal.name = "f", 
                   model = "1PL", 
                   p.adjust.method = "BH")
 rajDif
@@ -500,16 +529,16 @@ rajDif
 ## Raju's statistic: 
 ##  
 ##        Stat.   P-value Adj. P     
-## item1   2.7358  0.0062  0.0104 *  
-## item2   2.5503  0.0108  0.0154 *  
-## item3   1.5133  0.1302  0.1302    
-## item4   2.2916  0.0219  0.0244 *  
-## item5  -4.4742  0.0000  0.0000 ***
-## item6  -5.0150  0.0000  0.0000 ***
-## item7  -3.6098  0.0003  0.0008 ***
-## item8  -2.4605  0.0139  0.0173 *  
-## item9   4.6929  0.0000  0.0000 ***
-## item10  2.9145  0.0036  0.0071 ** 
+## item1  -2.7358  0.0062  0.0104 *  
+## item2  -2.5503  0.0108  0.0154 *  
+## item3  -1.5133  0.1302  0.1302    
+## item4  -2.2916  0.0219  0.0244 *  
+## item5   4.4742  0.0000  0.0000 ***
+## item6   5.0150  0.0000  0.0000 ***
+## item7   3.6098  0.0003  0.0008 ***
+## item8   2.4605  0.0139  0.0173 *  
+## item9  -4.6929  0.0000  0.0000 ***
+## item10 -2.9145  0.0036  0.0071 ** 
 ## 
 ## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1  
 ## 
@@ -535,16 +564,16 @@ rajDif
 ##  'C': large effect 
 ##  
 ##        mF-mR   deltaRaju  
-## item1   0.4190 -0.9846   A
-## item2   0.4244 -0.9973   A
-## item3   0.2458 -0.5776   A
-## item4   0.3677 -0.8641   A
-## item5  -0.9066  2.1305   C
-## item6  -0.8568  2.0135   C
-## item7  -0.6592  1.5491   C
-## item8  -0.3799  0.8928   A
-## item9   0.7692 -1.8076   C
-## item10  0.5764 -1.3545   B
+## item1  -0.4190  0.9846   A
+## item2  -0.4244  0.9973   A
+## item3  -0.2458  0.5776   A
+## item4  -0.3677  0.8641   A
+## item5   0.9066 -2.1305   C
+## item6   0.8568 -2.0135   C
+## item7   0.6592 -1.5491   C
+## item8   0.3799 -0.8928   A
+## item9  -0.7692  1.8076   C
+## item10 -0.5764  1.3545   B
 ## 
 ## Effect size codes: 0 'A' 1.0 'B' 1.5 'C' 
 ##  (for absolute values of 'deltaRaju') 
@@ -644,13 +673,13 @@ lordDif
 
 ## DIF Lord I 
 
-`mF-mR` è la differenza tra i parametri de gruppo Focal e del gruppo reference 
+`mF-mR` è la differenza tra i parametri del gruppo focale e del gruppo di riferimento
 
 `deltaLord` è una misura dell'effetto ottenuta moltiplicando la differenza tra i parametri di difficoltà nei due gruppi per `\(-2.35\)` (Penfield &amp; Camilli, 2007)
 
 Il `deltaLord` può essere interpretato secondo i valori riportati nell'output (Holland &amp; Thayer, 1985)
 
-I parametri nei due gruppi posso essere estrati con: 
+I valori delle stime dei parametri nei due gruppi posso essere estratti con: 
 
 
 ```r
@@ -707,6 +736,8 @@ item_par[11:nrow(item_par), ]
 ## Item10  1.872148e+00 0.1353199
 ```
 
+Questo si applica anche al metodo di Raju
+
 ]
 
 
@@ -714,6 +745,7 @@ item_par[11:nrow(item_par), ]
 
 ## Attenzione ai parametri degli item
 
+.scrollable[
 
 ```r
 itemFR = data.frame(cbind(item_par[11:nrow(item_par), ], 
@@ -740,14 +772,17 @@ itemFR
 
 I valori sono diversi da quelli di `dif` sono dversi da quelli riportati nell'ouput in `mF-mR`!!
 
-Questo perché i parametri del gruppo focale vengono riscalati con equal means anchoring di Cook e Eignor (1991)
+Questo perché i parametri del gruppo focale vengono riscalati con *equal means anchoring* di Cook e Eignor (1991)
+
+
+]
 
 
 ---
 
 ## Cook e Eignor (1991)
 
-Secondo il metodo dell'equal means ancrhoring, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
+Secondo il metodo dell'*equal means ancrhoring*, i parametri del gruppo di riferimento e del gruppo focale devono essere riscalati (viene fatto in automatico dal software)
 
 Il rescaling viene fatto sottraendo una costante al parametro di difficoltà del gruppo di riferimeno: 
 
@@ -760,6 +795,7 @@ Dopo aver applicato il rescaling, si può calcolare la DIF
 
 ## Rescaling
 
+.scrollable[
 
 ```r
 itemFR$constant = mean(itemFR$bR) - mean(itemFR$bF)
@@ -796,6 +832,9 @@ itemFR
 ## Item10  2.44853338  -0.5763855
 ```
 
+]
+
+
 
 ---
 
@@ -808,7 +847,7 @@ class: section, center, middle
 
 ---
 
-## 
+## Esercitazione DIF 
 
 Scaricare il dataset `difES.csv` dalla cartella [Dati](https://drive.google.com/drive/folders/1PXDG7HhjRDMdFEQjk5WQQWdiorDpSgtw?usp=sharing)
 
