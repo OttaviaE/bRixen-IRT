@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  16 JAN 2023 12:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  16 JAN 2023 15:32
 entering extended mode
 **./intro.tex
 (intro.tex
@@ -2024,7 +2024,7 @@ LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <12> not available
 [76
 
 ]
-Overfull \vbox (10.46172pt too high) detected at line 1196
+Overfull \vbox (10.46172pt too high) detected at line 1195
  []
 
 [77
@@ -2064,7 +2064,7 @@ ic/lm/lmssbx10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/lm/lmsso10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/lm/lmsso8.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type
 1/public/lm/lmsy10.pfb>
-Output written on intro.pdf (77 pages, 2501201 bytes).
+Output written on intro.pdf (77 pages, 2501158 bytes).
 PDF statistics:
  6578 PDF objects out of 7423 (max. 8388607)
  226 named destinations out of 1000 (max. 500000)

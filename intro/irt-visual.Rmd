@@ -3,7 +3,7 @@ title: "IRT for beginners"
 subtitle: "Visualizzare aiuta"
 institute: "Bressanone"
 author: "Dr. Ottavia M. Epifania"
-date: "Corso IRT @ Università Libera di Bolzano, \\ 16-18 Gennaio 2023"
+date: "Corso IRT @ Università Libera di Bolzano, \\ 17-18 Gennaio 2023"
 output: ioslides_presentation
 runtime: shiny
 ---
@@ -339,21 +339,3 @@ plot(grm, type = "ICC")
 ```
 
 
-## PRM, PCM, GRM: TIF
-
-```{r,  out.width="60%", fig.align='center'}
-plot(prm, type = "IIC", items = 0,main = "PRM")
-```
-
-```{r fig.show="hold", out.width="50%"}
-plot(pcm, type = "IIC", items = 0, main = "PCM")
-plot(grm, type = "IIC", items = 0, main = "GRM")
-```
-
-## Ackoejkl nkjgnkg
-
-- Caterina Primi
-
-- Francesca Chiesi
-
-- Egidio Robusto

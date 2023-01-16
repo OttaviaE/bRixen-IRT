@@ -1,0 +1,400 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usetheme[]{metropolis}
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{tabularx}
+\usepackage[english]{babel}
+\usepackage{tikzsymbols}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{spot}
+\usepackage{tabularx}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{booktabs}
+\setbeamertemplate{navigation symbols}{}
+\newcommand\Factor{1.2}
+\setbeamerfont{subtitle}{size=\large, series=\bfseries}
+\useinnertheme{circles}
+\useoutertheme{tree}
+\definecolor{latenti}{RGB}{54, 114, 89}
+\definecolor{manifeste}{RGB}{179, 7, 27}
+\definecolor{background}{RGB}{251, 251, 251}
+\definecolor{highlight}{RGB}{18, 10, 143}
+\setbeamercolor{frametitle}{bg=background}
+\setbeamertemplate{frametitle}[default][center]
+\AtBeginSubsection{\frame{\subsectionpage}}
+\setbeamercolor{section name}{fg=white}
+\setbeamersize{text margin left=5mm,text margin right=5mm}
+\def\tikzoverlay{\tikz[remember picture, overlay]\node[every overlay node]}
+\definecolor{person}{RGB}{33, 113, 181}
+\definecolor{question}{RGB}{181, 102, 33}
+\newcommand*{\sbj}[1]{\textcolor{person}{#1}}
+\newcommand*{\colit}[1]{\textcolor{question}{#1}}
+\newcommand*{\high}[1]{\textcolor{highlight}{#1}}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Item Response Theory for beginners},
+  pdfauthor={Dr.~Ottavia M. Epifania},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Item Response Theory for beginners}
+\subtitle{Assuzioni e stima dei parametri}
+\author{Dr.~Ottavia M. Epifania}
+\date{Corso IRT @ Università Libera di Bolzano, ~17-18 Gennaio 2023}
+\institute{Bressanone}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}[allowframebreaks]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+\hypertarget{assunzioni}{%
+\section{Assunzioni}\label{assunzioni}}
+
+\hypertarget{unidimensionalituxe0}{%
+\subsection{Unidimensionalità}\label{unidimensionalituxe0}}
+
+\begin{frame}{}
+\protect\hypertarget{section}{}
+L'assunzione di \textcolor{highlight}{\textbf{unidimensionalità}} indica
+che un solo tratto latente è responsabile delle risposte agli item
+
+Tale assunzione viene spesso valutata mediante modelli di
+\textcolor{highlight}{analisi fattoriale confermativa}
+
+I modelli IRT multidimensionali consentono di gestire la presenza di più
+tratti latenti ma sono modelli più complessi e meno diffusi
+
+\begin{block}{In caso di violazione}
+
+\vspace{3mm}
+Il modello IRT scelto può essere applicato, ma: 
+
+- si possono ottenere stime dei parametri distorte/non intepretabili
+
+- anche se si ottenessero delle stime interpretabili, queste non hanno senso perché il modello non ha senso
+
+\end{block}
+\end{frame}
+
+\begin{frame}{Come si valuta}
+\protect\hypertarget{come-si-valuta}{}
+Solitamente, si utilizza l'analisi fattoriale confermativa
+\textcolor{highlight}{(CFA)}.
+
+Se la soluzione ad un fattore presenta una buona fit, si suppone
+l'unidimensionalità
+
+\begin{block}{Indici di fit CFA}
+
+\vspace{3mm}
+Comparative Fit Index (CFI) $> .90$
+
+
+Standardized Root Mean Square Residual (SRMSR) $<.08$
+
+Root Mean Sqaure Error of Approximation (RMSEA) $<. 08$
+
+\end{block}
+\end{frame}
+
+\hypertarget{indipedenza-locale}{%
+\subsection{Indipedenza locale}\label{indipedenza-locale}}
+
+\begin{frame}{}
+\protect\hypertarget{section-1}{}
+L'assunzione di \textcolor{highlight}{\textbf{indipendenza locale}}
+indica che non esiste alcuna relazione tra le risposte di un soggetto ad
+item diversi dopo aver controllato per il tratto latente
+
+Le risposte di un soggetto a un insieme di item sono indipendenti quando
+la probabilità associata alle risposte fornite dal soggetto agli item è
+uguale al prodotto delle probabilità relative alle singole risposte
+
+\begin{block}{In caso di violazione}
+
+
+\vspace{3mm}
+Si rischia di sovrastimare l’informatività (attendibilità) del test
+\end{block}
+\end{frame}
+
+\begin{frame}{Come si valuta}
+\protect\hypertarget{come-si-valuta-1}{}
+Si correlano i \textcolor{highlight}{\textbf{residui}} (i.e., differenza
+tra la risposta data da un soggetto ad un item e il valore atteso per
+quella risposta)
+
+La correlazione tra i residui si interpreta attraverso la statistica
+\(Q3\) (Yen, 1984)
+
+In genere, \(Q3\geq .20\) per una coppia di item è indicativo di
+dipendenza locale (sono disponibili anche altri cut-off)
+\end{frame}
+
+\begin{frame}{Cosa fare}
+\protect\hypertarget{cosa-fare}{}
+Eliminare uno dei due item della coppia (solitamentem quello con minore
+discriminatività o che ha una fit peggiore)
+
+Se si utilizza una procedura adattiva (e.g., Computerized Adaptive
+Testing) \(\rightarrow\) vincolare la somministrazione di uno solo dei
+due item
+
+Se possibile \(\rightarrow\) combinare i due item in unico item
+\includegraphics[width=.10\linewidth]{"img/frank.jpg"}
+\end{frame}
+
+\hypertarget{monotonicituxe0}{%
+\subsection{Monotonicità}\label{monotonicituxe0}}
+
+\begin{frame}{}
+\protect\hypertarget{section-2}{}
+\textcolor{highlight}{\textbf{Monotonicità}}: La probabilità di
+rispondere correttamente aumenta all'aumentare del livello di tratto
+latente
+
+\begin{block}{Come si valuta}
+
+\vspace{3mm}
+Si valuta per ogni item
+
+Coefficiente $H$ di Mokken (Originariamente di Loevinger). 
+
+$H \geq .3$: Item accettabile 
+
+$H \geq .5$: Item eccellente 
+
+$H < .3$: Item non accettabile 
+
+
+\end{block}
+
+\begin{block}{In caso di violazione}
+
+\vspace{3mm}
+Effetti negativi sull'attendibilità e validità della scala
+\end{block}
+\end{frame}
+
+\hypertarget{fit-del-modello}{%
+\section{Fit del modello}\label{fit-del-modello}}
+
+\begin{frame}{}
+\protect\hypertarget{section-3}{}
+Dopo aver verificato le assunzioni, si può procedere alla verifica della
+fit del modello mediante due statistiche principali:
+
+\begin{itemize}
+\item
+  \textcolor{highlight}{\textbf{$M^2$}} (Meyedeu-olivares \& Joe, 2005):
+  si basa sulla classificazione dei soggetti in base al loro pattern di
+  risposta. Si basa sulla distribuzione \(\chi^2\) per cui tende ad
+  essere significativo per campioni ampi (anche se il modello ha una
+  buona fit)
+\item
+  \textcolor{highlight}{\textbf{Root Mean Square Error of Approximation}}
+  (\textcolor{highlight}{\textbf{RMSEA}}): Misura di quanto il modello
+  si avvicina alla realtà:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\leq .05\) Perfetto
+  \item
+    \(\leq .08\): Accettabile
+  \item
+    \(> .08\): No fit
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\hypertarget{stima-dei-parametri}{%
+\section{Stima dei parametri}\label{stima-dei-parametri}}
+
+\hypertarget{massima-verosimiglianza}{%
+\subsection{Massima verosimiglianza}\label{massima-verosimiglianza}}
+
+\begin{frame}{}
+\protect\hypertarget{section-4}{}
+\textcolor{highlight}{Massima verosimiglianza}
+(\textcolor{highlight}{Maximum Likelihood}, \textcolor{highlight}{ML})
+\(\rightarrow\) trova i valori dei parametri che massimizzano la
+probabilità di ottenere i dati osservati (i.e., i valori che
+massimizzano la funzione di verosimiglianza dei dati osservati)
+
+Due tipologie:
+
+\begin{enumerate}
+\item
+  \textcolor{highlight}{\textbf{Massima verosimiglianza congiunta}}
+  (Joint Maximum Likelihood, JML): Permette di stimare per massima
+  verosimiglianza \textbf{congiuntamente} i parametri degli item e delle
+  persone
+\item
+  \textcolor{highlight}{\textbf{Massima verosimiglianza marginale}}
+  (Marginal Maximum Likelihood, MML): Permette di stimare per massima
+  verosimiglianza i parametri degli item, i parametri delle persone sono
+  stimati successivamente con procedure bayesiane
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section-5}{}
+\begin{exampleblock}{Vantaggi ML}
+
+\vspace{3mm}
+All'aumentare dell'ampiezza campionaria $\rightarrow$ le stime per ML covergono al valore vero (\textcolor{highlight}{unbiased})
+
+\end{exampleblock}
+
+\begin{alertblock}{Svantaggi ML}
+
+\vspace{3mm}
+Le stime di soggetti/item con punteggi estremi sono $+$ o $-$ $\infty$
+
+Per ovviare a questo problema: 
+
+$\rightarrow$ Sottrarre $.30$ se il punteggio è massimo
+
+$\rightarrow$ Aggiungere $.30$ se il punteggio è minimo
+
+\end{alertblock}
+
+\begin{center}
+Puteggi estremi:
+\end{center}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+Soggetti che hanno dato solo risposte giuste o solo risposte errate
+\end{column}
+
+\begin{column}{0.48\textwidth}
+Item che hanno ricevuto solo risposte giuste o solo risposte errate
+\end{column}
+\end{columns}
+\end{frame}
+
+\hypertarget{approccio-bayesiano}{%
+\subsection{Approccio Bayesiano}\label{approccio-bayesiano}}
+
+\begin{frame}{}
+\protect\hypertarget{section-6}{}
+Moltiplicando la funzione di verosimiglianza per una distribuzione a
+priori si ottiene la \textbf{distribuzione a posteriori}
+
+Le stime dei parametri si ottengono dalla distribuzione a posteriori
+\(\rightarrow\) \textcolor{highlight}{stime bayesiane}
+
+Due tipologie:
+
+\begin{itemize}
+\item
+  \textcolor{highlight}{\textbf{Maximum a Posteriori}} (MAP): La stima
+  del parametro è la moda della distribuzione a posteriori di quel
+  parametro
+\item
+  \textcolor{highlight}{\textbf{Expected a Posteriori}} (EAP): La stima
+  del parametro è la media della distribuzione a posteriori di quel
+  parametro
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\protect\hypertarget{section-7}{}
+\begin{exampleblock}{Vantaggi approcci bayesiani}
+
+\vspace{3mm}
+Permettono la stima \textbf{finita} dei parametri dei soggetti e degli item anche in caso di punteggi estremi
+
+\end{exampleblock}
+\end{frame}
+
+\end{document}
