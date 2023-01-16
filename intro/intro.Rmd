@@ -233,7 +233,7 @@ $3 + 2 = ?$
 \end{minipage}
 \begin{minipage}{.25\textwidth}
 \begin{center}
-\textbf{Q1}
+\textbf{Q2}
 
 $3x - 2y + 4 = ?$
 
@@ -810,7 +810,7 @@ $5 + 14 = ?$
 
 \vspace*{-10mm}
 
-```{r}
+```{r out.width ="70%"}
 plot(theta, IRT(theta, a = -0.5, b = 0), 
      type = "l", cex.main = 3, 
      ylab = "P(x = 1)", ylim = c(0,1 ), cex.lab= 2, 
@@ -1092,7 +1092,7 @@ plot(theta, IRT(theta, a = a[1], b = b[1], c= g[1]),
      ylab = "P(x = 1)", ylim = c(0,1 ), cex.lab= 2, 
      cex.axis =1.5, 
      xlab = expression(theta), lwd = 3, col = my_colors[1])
-text(x= 3.2, 
+text(x= -0.4, 
      y = 0.90, "item1", 
      col = my_colors[1], cex = 2)
 
@@ -1100,7 +1100,7 @@ abline(h = .20, lty = 2, lwd = 2, col = "red")
 abline(h = .30, lty = 2, lwd = 2, col = "red")
 lines(theta, IRT(theta, a = a[2], b = b[2], c= g[2]), 
      col = my_colors[5], lwd = 3)
-text(x= -0.4, 
+text(x= 3.2, 
      y = 0.90, "item2", 
      col = my_colors[5], cex = 2)
 
@@ -1124,7 +1124,7 @@ plot(theta, IRT(theta, a = a[1], b = b[1], c= g[1]),
      ylab = "P(x = 1)", ylim = c(0,1 ), cex.lab= 2, 
      cex.axis =1.5, 
      xlab = expression(theta), lwd = 3, col = my_colors[1])
-text(x= 3.2, 
+text(x= -0.4, 
      y = 0.90, "item1", 
      col = my_colors[1], cex = 2)
 
@@ -1132,9 +1132,10 @@ abline(h = .20, lty = 2, lwd = 2, col = "red")
 abline(h = .30, lty = 2, lwd = 2, col = "red")
 lines(theta, IRT(theta, a = a[2], b = b[2], c= g[2]), 
      col = my_colors[5], lwd = 3)
-text(x= -0.4, 
+text(x= 3.2, 
      y = 0.90, "item2", 
      col = my_colors[5], cex = 2)
+
 
 ```
 
@@ -1340,7 +1341,7 @@ Dove:
 
 $\theta_p$: livello di tratto latente della persona
 
-$b_i$,$a_i$, $c_i$; difficoltà, discriminatività e pseduo-guessing dell'item $i$
+$b_i$, $a_i$, $c_i$; difficoltà, discriminatività e pseduo-guessing dell'item $i$
 
 $d_i$: careless-error, probabilità di una risposta corretta (o affermativa) quando il livello di
 tratto latente si avvicina a $+ \infty$
@@ -1371,8 +1372,8 @@ plot(theta, IRT(theta, a = a[1], b = b[1], c= g[1], e = d[1]),
      ylab = "P(x = 1)", ylim = c(0,1 ), cex.lab= 2, 
      cex.axis =1.5, 
      xlab = expression(theta), lwd = 3, col = my_colors[1])
-text(x= 3.2, 
-     y = 0.80, "item1", 
+text(x= -0.4, 
+     y = 0.90,  "item1", 
      col = my_colors[1], cex = 2)
 
 abline(h = .90, lty = 2, lwd = 2, col = "red")
@@ -1381,13 +1382,13 @@ abline(h = .20, lty = 2, lwd = 2, col = "red")
 abline(h = .30, lty = 2, lwd = 2, col = "red")
 lines(theta, IRT(theta, a = a[2], b = b[2], c= g[2], e = d[2]), 
      col = my_colors[5], lwd = 3)
-text(x= -0.4, 
-     y = 0.90, "item2", 
+text(x= 3.2, 
+     y = 0.80, "item2", 
      col = my_colors[5], cex = 2)
 ```
 
 
-# Relazione tra i modelli considerati
+# Relazione tra i modelli
 
 
 
@@ -1466,7 +1467,7 @@ La scelta migliore è considerarli sempre tutti insieme (quando si hanno modelli
 
 ### $-$\emph{2loglikelihood}
 
-Per intepretare la $-$\emph{2loglikelihood}, va calcolata la differenza tra la \emph{likelihood} di due modelli nested moltiplicata per $-2$ ($-2$\emph{LogLikelihood}) e la differenza tra i gradi di libertà dei due modelli nested
+Per intepretare la $-$\emph{2loglikelihood}, va calcolata la differenza tra la \emph{LogLikelihood} di due modelli nested moltiplicata per $-2$ ($-2$\emph{LogLikelihood}) e la differenza tra i gradi di libertà dei due modelli nested
 
 Si calcola la probabilità associata alla differenza tra la $-$\emph{2loglikelihood} dei due modelli secondo una distribuzione $\chi^2$ con gradi di libertà uguali alla differenza tra i gradi di libertà dei due modelli: 
 
@@ -1483,7 +1484,7 @@ L'AIC penalizza i modelli più complessi indipendentemente dall'ampiezza campion
 $$AIC = -2logLik + 2p$$
 
 
-Il BIC penalizza i modelli più complessi tenendo conto dell'ampiezza campionaria $\rightarrow$ particolarmente conservativo su campioni piccoli
+Il BIC penalizza i modelli più complessi tenendo conto dell'ampiezza campionaria
 
 $$BIC = -2logLik + p \cdot log(N)$$
 

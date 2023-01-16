@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  10 JAN 2023 14:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.10) (preloaded format=pdflatex 2022.6.6)  16 JAN 2023 12:11
 entering extended mode
 **./intro.tex
 (intro.tex
@@ -1478,42 +1478,14 @@ Package microtype Info: Loading generic protrusion settings for font family
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 (intro.nav)
-Overfull \hbox (8.18362pt too wide) detected at line 132
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-
 Overfull \vbox (69.22235pt too high) detected at line 133
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
  []
 
 [1{C:/Users/huawei/AppData/Local/MiKTeX/pdftex/config/pdftex.map}
 
-] (intro.toc)
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] (intro.toc) [2
 
-[2
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[3
+] [3
 
 ]
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
@@ -1568,54 +1540,19 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 142.
 [4
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] [5
 
-[5
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[6
+] [6
 
 ]
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10.95> not available
 (Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 185.
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [7
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] [8
 
-[8
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[9
+] [9
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1639,13 +1576,6 @@ Package pdftex.def Info: img/latenti.png  used on input line 237.
 Overfull \vbox (23.0027pt too high) detected at line 237
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [10
 
  <./img/latenti.png>]
@@ -1658,50 +1588,15 @@ Package pdftex.def Info: img/mavl.png  used on input line 245.
 Overfull \vbox (10.04962pt too high) detected at line 245
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [11
 
- <./img/mavl.png>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./img/mavl.png>] [12
 
-[12
+] [13
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] [14
 
-[13
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[14
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[15
+] [15
 
 ]
 <img/lisa.png, id=1403, 541.02126pt x 611.28375pt>
@@ -1714,70 +1609,21 @@ File: img/bart.png Graphic file (type png)
 <use img/bart.png>
 Package pdftex.def Info: img/bart.png  used on input line 339.
 (pdftex.def)             Requested size: 67.14749pt x 100.05093pt.
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [16
 
- <./img/lisa.png> <./img/bart.png>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./img/lisa.png> <./img/bart.png>] [17
 
-[17
+] [18
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[18
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[19
+] [19
 
 ] [20
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] [21
 
-[21
+] [22
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[22
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[23
+] [23
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-3-1.pdf, id=2008, 722.7pt x 505.89pt>
@@ -1788,13 +1634,6 @@ on input line 442.
 (pdftex.def)             Requested size: 335.74263pt x 235.02026pt.
 
 Overfull \vbox (15.45607pt too high) detected at line 442
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
  []
 
 [24
@@ -1810,32 +1649,11 @@ on input line 462.
 Overfull \vbox (19.2909pt too high) detected at line 462
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [25
 
- <./intro_files/figure-beamer/unnamed-chunk-4-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-4-1.pdf>] [26
 
-[26
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[27
+] [27
 
 ]
 <intro_files/figure-beamer/prova-1.pdf, id=2363, 722.7pt x 505.89pt>
@@ -1848,23 +1666,9 @@ ine 487.
 Overfull \vbox (27.53825pt too high) detected at line 487
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [28
 
- <./intro_files/figure-beamer/prova-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[29
+ <./intro_files/figure-beamer/prova-1.pdf>] [29
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-6-1.pdf, id=2539, 722.7pt x 505.89pt>
@@ -1877,32 +1681,11 @@ on input line 536.
 Overfull \vbox (19.2909pt too high) detected at line 536
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [30
 
- <./intro_files/figure-beamer/unnamed-chunk-6-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-6-1.pdf>] [31
 
-[31
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[32
+] [32
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-8-1.pdf, id=2803, 722.7pt x 505.89pt>
@@ -1915,23 +1698,9 @@ on input line 570.
 Overfull \vbox (20.01495pt too high) detected at line 570
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [33
 
- <./intro_files/figure-beamer/unnamed-chunk-8-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[34
+ <./intro_files/figure-beamer/unnamed-chunk-8-1.pdf>] [34
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-10-1.pdf, id=2978, 722.7pt x 505.89pt>
@@ -1945,34 +1714,13 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-10-1.pdf  used
 Overfull \vbox (20.01495pt too high) detected at line 603
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [35
 
  <./intro_files/figure-beamer/unnamed-chunk-10-1.pdf>] [36
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+] [37
 
-[37
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[38
+] [38
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-12-1.pdf, id=3246, 722.7pt x 505.89pt>
@@ -1998,13 +1746,6 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-14-1.pdf  used
 (pdftex.def)             Requested size: 302.1663pt x 211.51515pt.
 
 Overfull \vbox (13.28827pt too high) detected at line 708
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
  []
 
 [39
@@ -2035,13 +1776,6 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-14-1.pdf  used
 Overfull \vbox (13.28827pt too high) detected at line 708
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [40
 
  <./intro_files/figure-beamer/unnamed-chunk-13-1.pdf>]pdfTeX warning (ext4): de
@@ -2070,13 +1804,6 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-14-1.pdf  used
 Overfull \vbox (13.28827pt too high) detected at line 708
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [41
 
  <./intro_files/figure-beamer/unnamed-chunk-14-1.pdf>]
@@ -2086,18 +1813,7 @@ File: intro_files/figure-beamer/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use intro_files/figure-beamer/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-15-1.pdf  used
  on input line 722.
-(pdftex.def)             Requested size: 302.1663pt x 211.51515pt.
-
-Overfull \vbox (33.88734pt too high) detected at line 722
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
+(pdftex.def)             Requested size: 235.01881pt x 164.51265pt.
 [42
 
  <./intro_files/figure-beamer/unnamed-chunk-15-1.pdf>]
@@ -2112,32 +1828,11 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-16-1.pdf  used
 Overfull \vbox (19.5885pt too high) detected at line 745
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [43
 
- <./intro_files/figure-beamer/unnamed-chunk-16-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-16-1.pdf>] [44
 
-[44
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[45
+] [45
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-18-1.pdf, id=3889, 722.7pt x 505.89pt>
@@ -2151,32 +1846,11 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-18-1.pdf  used
 Overfull \vbox (19.5885pt too high) detected at line 780
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [46
 
- <./intro_files/figure-beamer/unnamed-chunk-18-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-18-1.pdf>] [47
 
-[47
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[48
+] [48
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-20-1.pdf, id=4150, 722.7pt x 505.89pt>
@@ -2190,23 +1864,9 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-20-1.pdf  used
 Overfull \vbox (19.5885pt too high) detected at line 813
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [49
 
- <./intro_files/figure-beamer/unnamed-chunk-20-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[50
+ <./intro_files/figure-beamer/unnamed-chunk-20-1.pdf>] [50
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-22-1.pdf, id=4326, 722.7pt x 505.89pt>
@@ -2220,35 +1880,14 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-22-1.pdf  used
 Overfull \vbox (19.5885pt too high) detected at line 842
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [51
 
  <./intro_files/figure-beamer/unnamed-chunk-22-1.pdf>] [52
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[53
+] [53
 
 ]
 Overfull \vbox (5.5525pt too high) detected at line 870
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
  []
 
 [54
@@ -2265,13 +1904,6 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-24-1.pdf  used
 Overfull \vbox (17.53468pt too high) detected at line 885
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [55
 
  <./intro_files/figure-beamer/unnamed-chunk-24-1.pdf>]
@@ -2282,41 +1914,13 @@ File: intro_files/figure-beamer/unnamed-chunk-25-1.pdf Graphic file (type pdf)
 Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-25-1.pdf  used
  on input line 896.
 (pdftex.def)             Requested size: 235.01881pt x 164.51265pt.
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [56
 
- <./intro_files/figure-beamer/unnamed-chunk-25-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-25-1.pdf>] [57
 
-[57
+] [58
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[58
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[59
+] [59
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-26-1.pdf, id=5030, 722.7pt x 505.89pt>
@@ -2330,32 +1934,11 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-26-1.pdf  used
 Overfull \vbox (27.69786pt too high) detected at line 950
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [60
 
- <./intro_files/figure-beamer/unnamed-chunk-26-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./intro_files/figure-beamer/unnamed-chunk-26-1.pdf>] [61
 
-[61
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[62
+] [62
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-28-1.pdf, id=5292, 722.7pt x 505.89pt>
@@ -2369,23 +1952,9 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-28-1.pdf  used
 Overfull \vbox (19.16203pt too high) detected at line 984
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [63
 
- <./intro_files/figure-beamer/unnamed-chunk-28-1.pdf>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[64
+ <./intro_files/figure-beamer/unnamed-chunk-28-1.pdf>] [64
 
 ]
 <intro_files/figure-beamer/unnamed-chunk-30-1.pdf, id=5467, 722.7pt x 505.89pt>
@@ -2399,35 +1968,14 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-30-1.pdf  used
 Overfull \vbox (19.16203pt too high) detected at line 1014
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [65
 
  <./intro_files/figure-beamer/unnamed-chunk-30-1.pdf>] [66
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[67
+] [67
 
 ]
 Overfull \vbox (21.80078pt too high) detected at line 1045
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
  []
 
 [68
@@ -2444,95 +1992,39 @@ Package pdftex.def Info: intro_files/figure-beamer/unnamed-chunk-32-1.pdf  used
 Overfull \vbox (25.96829pt too high) detected at line 1059
  []
 
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [69
 
  <./intro_files/figure-beamer/unnamed-chunk-32-1.pdf>] [70
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[71
+] [71
 
 ]
 <img/procuste.jpg, id=5915, 271.0125pt x 187.70125pt>
 File: img/procuste.jpg Graphic file (type jpg)
 <use img/procuste.jpg>
-Package pdftex.def Info: img/procuste.jpg  used on input line 1112.
+Package pdftex.def Info: img/procuste.jpg  used on input line 1111.
 (pdftex.def)             Requested size: 80.5775pt x 55.80672pt.
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [72
 
- <./img/procuste.jpg>]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
+ <./img/procuste.jpg>] [73
 
-[73
+] [74
 
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[74
-
-]
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
-[75
+] [75
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 1180.
+(Font)              <12> on input line 1179.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 1180.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 1179.
 
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <12> not available
-(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1180
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1179
 .
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
- []
-
 [76
 
 ]
-Overfull \vbox (10.46172pt too high) detected at line 1197
- []
-
-
-Overfull \hbox (8.18362pt too wide) has occurred while \output is active
-  [] [][][][][][][][][][][][][][][][][] [][][][][][][][][][][][][][][][][] [][]
-[][][][][][][][][][][][][] [][][][][][][][][][][][][][][] [][][][][] [][][][][]
-[][][][]  
+Overfull \vbox (10.46172pt too high) detected at line 1196
  []
 
 [77
@@ -2551,7 +2043,7 @@ Overfull \hbox (8.18362pt too wide) has occurred while \output is active
 Here is how much of TeX's memory you used:
  33579 strings out of 480236
  685922 string characters out of 2880084
- 1118460 words of memory out of 3000000
+ 1118303 words of memory out of 3000000
  49077 multiletter control sequences out of 15000+200000
  627615 words of font info for 123 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2572,7 +2064,7 @@ ic/lm/lmssbx10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/lm/lmsso10.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/lm/lmsso8.pfb><C:/Users/huawei/AppData/Local/Programs/MiKTeX/fonts/type
 1/public/lm/lmsy10.pfb>
-Output written on intro.pdf (77 pages, 2502175 bytes).
+Output written on intro.pdf (77 pages, 2501201 bytes).
 PDF statistics:
  6578 PDF objects out of 7423 (max. 8388607)
  226 named destinations out of 1000 (max. 500000)
