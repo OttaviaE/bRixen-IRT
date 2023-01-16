@@ -203,7 +203,7 @@ Dopo aver verificato le assunzioni, si può procedere alla verifica della fit de
 - \high{\textbf{Root Mean Square Error of Approximation}} (\high{\textbf{RMSEA}}): Misura di quanto il modello si avvicina alla realtà: 
   - $\leq .05$ Perfetto
   - $\leq .08$: Accettabile
-  - $> .80$: No fit
+  - $> .08$: No fit
 
 # Stima dei parametri 
 

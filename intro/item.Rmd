@@ -99,6 +99,41 @@ Statistiche più usate:
 
 # Differential Item Functioning
 
+## Un esempio 
+
+### 
+
+
+La massa dello Iodio 131 decrese di 1/2 ogni 8 giorni.
+
+In un laboratorio ci sono 2gr di Iodio 131. Quanti grammi ci sono dopo 16 giorni? 
+\pause 
+
+Risposta corretta: 0.5gr
+
+###
+
+```{r}
+b = c(-0.5616, -0.07)
+a = c(1,1)
+
+
+par(mar = c(5,7,4,2) + 0.1) 
+plot(theta, IRT(theta, b = b[1], a = a[1]),
+     cex.lab= 2.5, 
+     cex.axis =1.5, cex.main = 3,
+       xlab = expression(theta), ylab = "Probabilità di \n rispondere correttamente",
+       xlim = c(-4, 4), ylim = c(0, 1), 
+     type = "l", lwd = 3, 
+     col = "royalblue", main = "Item Charcteristic Curve (ICC)")
+text(x= -1.5, y = 0.6, "M", col = "royalblue", cex = 2)
+lines(theta, IRT(theta, b=b[2], 
+                a = 1), 
+      lty = 1, lwd=3, col = "magenta")
+text(x= 1.5, y = 0.6, "F", col = "magenta", cex = 2)
+```
+
+
 ### 
 
 Lo stesso item presentato a due gruppi appaiati per livello di tratto latente... non funziona nello stesso modo 
@@ -187,7 +222,7 @@ Esistono metodi basati sui modelli IRT e metodi basati sul punteggio osservato p
 
 I metodi basati sui modelli IRT utilizzano la stima del tratto latenmte ottenuta tramite il modello per appaiare i soggetti 
 
-La DIF uniforme viene valutata sui parametri di diffcoltà, mentre la DIF non uniforme viene valutata sui parametri di discriminatività
+La DIF uniforme viene valutata sui parametri di difficoltà, mentre la DIF non uniforme viene valutata sui parametri di discriminatività
 
 ::: columns
 
@@ -237,7 +272,7 @@ I due modelli vengono confrontati. Se la differenza tra l'adattamento dei due mo
 
 Di fatto, funziona come una regressione lineare, in cui il gruppo di appartenenza viene inserito come predittore 
 
-## $chi^2$ di Lord 
+## Lord 
 
 Lord (1980)
 
