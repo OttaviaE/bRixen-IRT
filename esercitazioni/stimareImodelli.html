@@ -174,8 +174,7 @@ IRT &lt;- function(theta, a = 1, b = 0, c = 0,e = 1) {
 # restituisce una lista con dentro il dataset usatoe un grafico in ggplot
 irt.icc = function(model) {
   item_par = model$item
-  est_theta = IRT.factor.scores(model, 
-                              type = "EAP")$EAP
+  est_theta = seq(-4,4, length.out=1000)
   item_prob = list()
   if (any(grep("guess", colnames(item_par))) == F) {
     for (i in 1:nrow(item_par)) {
@@ -277,6 +276,8 @@ data = read.csv("Dati/dataClass.csv", header = T, sep = ",")
 
 ## Look at the data - Item I
 
+.scrollable[
+
 
 ```r
 vis_data = data
@@ -300,19 +301,17 @@ ggplot(prop_data,
   theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw() 
 ```
 
----
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-11-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
-
-
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
-
-
+]
 
 ---
+
+
 
 
 ## Look at the data - Respondents
-
+.scrollable[
 
 ```r
 sbj_data = data
@@ -324,7 +323,10 @@ sbj_data$sum = rowSums(sbj_data[,-1])
 boxplot(sbj_data$sum)
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-13-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+
 
 
 
@@ -355,9 +357,9 @@ summary(m1pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 12:39:26 
-## Time difference of 0.06895208 secs
-## Computation time: 0.06895208 
+## Date of Analysis: 2023-01-16 14:26:33 
+## Time difference of 0.06310511 secs
+## Computation time: 0.06310511 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -506,12 +508,15 @@ item.fit.1pl$RMSD_summary
 
 ## 1PL - ICC
 
+.scrollable[
 
 ```r
 irt.icc(m1pl)$icc.graph + theme_classic() 
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-16-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
 
 
 
@@ -531,9 +536,9 @@ summary(m2pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 12:39:27 
-## Time difference of 0.1708801 secs
-## Computation time: 0.1708801 
+## Date of Analysis: 2023-01-16 14:26:34 
+## Time difference of 0.171469 secs
+## Computation time: 0.171469 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -678,12 +683,15 @@ item.fit.1pl$RMSD_summary
 
 ## 2PL - ICC
 
+.scrollable[
 
 ```r
 irt.icc(m2pl)$icc.graph + theme_classic()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-21-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
 
 
 
@@ -706,9 +714,9 @@ summary(m3pl)
 ## TAM 4.0-16 (2022-05-13 13:23:23) 
 ## R version 4.2.2 (2022-10-31 ucrt) x86_64, mingw32 | nodename=LAPTOP-OTTAVIA | login=huawei 
 ## 
-## Date of Analysis: 2023-01-15 12:39:32 
-## Time difference of 4.846969 secs
-## Computation time: 4.846969 
+## Date of Analysis: 2023-01-16 14:26:39 
+## Time difference of 4.672111 secs
+## Computation time: 4.672111 
 ## 
 ## Multidimensional Item Response Model in TAM 
 ## 
@@ -863,13 +871,15 @@ item.fit.3pl$RMSD_summary
 ---
 
 ## 3PL - ICC
-
+.scrollable[
 
 ```r
 irt.icc(m3pl)$icc.graph + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-25-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-24-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
 
 ---
 
@@ -1100,7 +1110,7 @@ ggplot(info2pl$item_info,
        aes(x = theta, y = ii_item, group = item, color = item)) + geom_line(lwd = 1) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-30-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -1118,7 +1128,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = info)) + geom_line(lwd = 2) + theme_bw()
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-31-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -1135,7 +1145,7 @@ ggplot(info2pl$test_info,
        aes(x = theta, y = se, col = "red")) + geom_line(lwd = 2) + theme_bw() + theme(legend.position = "none")
 ```
 
-&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-33-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="stimareImodelli_files/figure-html/unnamed-chunk-32-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ]
 

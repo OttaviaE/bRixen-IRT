@@ -204,8 +204,7 @@ IRT <- function(theta, a = 1, b = 0, c = 0,e = 1) {
 # restituisce una lista con dentro il dataset usatoe un grafico in ggplot
 irt.icc = function(model) {
   item_par = model$item
-  est_theta = IRT.factor.scores(model, 
-                              type = "EAP")$EAP
+  est_theta = seq(-4,4, length.out=1000)
   item_prob = list()
   if (any(grep("guess", colnames(item_par))) == F) {
     for (i in 1:nrow(item_par)) {
@@ -306,7 +305,9 @@ data = read.csv("Dati/dataClass.csv", header = T, sep = ",")
 
 ## Look at the data - Item I
 
-```{r eval = F}
+.scrollable[
+
+```{r eval = T}
 vis_data = data
 vis_data$id = paste0("s", 1:nrow(data))
 
@@ -330,40 +331,16 @@ ggplot(prop_data,
 
 ```
 
----
-
-
-
-```{r echo = F}
-vis_data = data
-vis_data$id = paste0("s", 1:nrow(data))
-
-vis_data = vis_data[, c(ncol(vis_data), 1:ncol(data))]
-
-vis_data = reshape(vis_data, idvar = "id", direction = "long", varying = list(2:ncol(vis_data)), v.names = "resp", 
-        times = names(vis_data)[-1], timevar = "item")
-
-prop_data = data.frame(table(vis_data$item, vis_data$resp))
-
-colnames(prop_data)[1:2] = c("item", "response")
-
-prop_data$proportion = prop_data$Freq/nrow(data)
-
-ggplot(prop_data, 
-       aes(x = item, y=proportion,  
- 
-           fill = response)) + geom_bar(stat = "identity") + 
-  theme(axis.text = element_text(angle = 90)) + geom_hline(aes(yintercept=.50)) + theme_bw() 
-```
-
-
+]
 
 ---
+
+
 
 
 ## Look at the data - Respondents
-
-```{r out.width="50%"}
+.scrollable[
+```{r}
 sbj_data = data
 sbj_data$id = paste0("s", 1:nrow(data))
 sbj_data = sbj_data[, c(ncol(sbj_data), 1:ncol(data))]
@@ -373,6 +350,9 @@ sbj_data$sum = rowSums(sbj_data[,-1])
 boxplot(sbj_data$sum)
 
 ```
+]
+
+
 
 
 
@@ -446,9 +426,12 @@ item.fit.1pl$RMSD_summary
 
 ## 1PL - ICC
 
-```{r out.width="60%"}
+.scrollable[
+```{r }
 irt.icc(m1pl)$icc.graph + theme_classic() 
 ```
+
+]
 
 
 
@@ -506,12 +489,15 @@ item.fit.1pl$RMSD_summary
 
 ## 2PL - ICC
 
-```{r out.width="60%"}
+.scrollable[
+```{r}
 
 irt.icc(m2pl)$icc.graph + theme_classic()
 
 
 ```
+
+]
 
 
 
@@ -577,11 +563,13 @@ item.fit.3pl$RMSD_summary
 ---
 
 ## 3PL - ICC
-
+.scrollable[
 ```{r}
 
 irt.icc(m3pl)$icc.graph + theme_bw()
 ```
+
+]
 
 ---
 
