@@ -9,7 +9,7 @@ Il corso prevede una forte componente pratica con R e si struttura come segue:
 - Assunzioni alla base dei modelli IRT, verifica delle stesse, stima dei parametri e fit dei modelli [PDF](intro/assunzioni.pdf)
 - I veri protagonisti: Gli item. Fit degli item al modello e Differential Item Functioning (DIF) [PDF](intro/item.pdf)
 - Esercitazione pratica: Stimare i modelli, scegliere il più appropriato e verificarne la fit [HTML](esercitazioni/stimareImodelli.html) [RCode](esercitazioni/stimareImodelli.R)
-- Esercitazione pratica: Investigare la DIF [HTML](esercitazioni/DIF.html)[RCode](esercitazioni/DIF.R)
+- Esercitazione pratica: Investigare la DIF [HTML](esercitazioni/DIF.html) [RCode](esercitazioni/DIF.R)
 
 ## Dati
 
