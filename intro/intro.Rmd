@@ -145,7 +145,7 @@ I comportamenti di Alessandra (\color{manifeste}**variabili manifeste**\normalco
 
 ### 
 
-Modelli matematici che permettono di collegare le \color{latenti}variabili latenti\normalcolor con le \color{manifeste}variabili manifeste \normalcolor 
+Modelli matematici che permettono di collegare le \color{latenti}variabili latenti \normalcolor con le \color{manifeste} variabili manifeste \normalcolor 
 
 \small
 Assunzioni: 
